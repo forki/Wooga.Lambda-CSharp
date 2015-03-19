@@ -5,9 +5,14 @@ using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Concurrent
 {
+    /// <summary>
+    /// A delegate to label lambdas as Async
+    /// </summary>
+    /// <typeparam name="T">Result type</typeparam>
+    /// <returns>Result</returns>
     public delegate T Async<T>();
 
-    public sealed class AsyncEventHandle<T>
+    internal sealed class AsyncEventHandle<T>
     {
         public readonly ManualResetEvent DoneEvent = new ManualResetEvent(false);
 

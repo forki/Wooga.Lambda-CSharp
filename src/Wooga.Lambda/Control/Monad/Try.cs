@@ -3,6 +3,11 @@ using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Monad
 {
+    /// <summary>
+    /// A delegate to label lambdas as Try
+    /// </summary>
+    /// <typeparam name="T">Result type</typeparam>
+    /// <returns>Either lambda wrapping the computation with System.Exception as default failure type</returns>
     public delegate Either<Exception, T> Try<T>();
 
     public static class Try

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Wooga.Lambda.Data
 {
+    /// <summary>
+    /// System.Collection.Generics.Dictionary extension methods
+    /// </summary>
     public static class DictionaryExt
     {
         public static T3 Fold<T1, T2, T3>(this Dictionary<T1, T2> self, Func<T3, T1, T2, T3> func, T3 accumulator)

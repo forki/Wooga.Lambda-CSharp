@@ -2,6 +2,12 @@
 
 namespace Wooga.Lambda.Data
 {
+    /// <summary>
+    /// A delegate to label lambdas as Either
+    /// </summary>
+    /// <typeparam name="TLeft">The type of the left/failure value.</typeparam>
+    /// <typeparam name="TRight">The type of the right/success value.</typeparam>
+    /// <returns>EitherData containing either a success or failure value.</returns>
     public delegate Either.EitherData<TLeft, TRight> Either<TLeft, TRight>();
 
     public static class Either

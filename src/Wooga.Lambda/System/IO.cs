@@ -1,7 +1,12 @@
 ﻿using System;
 
-namespace Devboy.Lambda.System
+namespace Wooga.Lambda.System
 {
+    /// <summary>
+    /// A delegate to label lambdas as IO
+    /// </summary>
+    /// <typeparam name="T">Result type</typeparam>
+    /// <returns>Result of the lambda</returns>
     public delegate T IO<T>();
 
     public static class IO

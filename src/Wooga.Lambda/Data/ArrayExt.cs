@@ -2,6 +2,9 @@
 
 namespace Wooga.Lambda.Data
 {
+    /// <summary>
+    /// System.Array extension methods
+    /// </summary>
     public static class ArrayExt
     {
         public static Maybe<T> TryHead<T>(this T[] xs)

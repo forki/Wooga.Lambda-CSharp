@@ -5,6 +5,11 @@ using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Concurrent
 {
+    /// <summary>
+    /// Actor/Agent implementation similar to Control.Async.MailboxProcessor in F#
+    /// </summary>
+    /// <typeparam name="TM">The type of the message consumed by the agent.</typeparam>
+    /// <typeparam name="TR">The type of the response produced by the agent.</typeparam>
     public class Agent<TM, TR>
     {
         private readonly Queue<TM> _inbox = new Queue<TM>();

@@ -9,7 +9,6 @@ namespace Wooga.Lambda.Tests.Control.Monad
     [TestFixture]
     public class TryTests
     {
-        /// <summary> Without exception either should be right.</summary>
         [Test]
         public void WithoutExceptionEitherShouldBeRight()
         {

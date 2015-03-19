@@ -2,6 +2,11 @@
 
 namespace Wooga.Lambda.Data
 {
+    /// <summary>
+    /// A delegate to label lambdas as Maybe
+    /// </summary>
+    /// <typeparam name="T">Result type</typeparam>
+    /// <returns>MaybeData representing a value or Nothing.</returns>
     public delegate Maybe.MaybeData<T> Maybe<T>();
 
     public static class Maybe
