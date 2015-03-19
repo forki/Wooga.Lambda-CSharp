@@ -4,7 +4,7 @@
 // --------------------------------------------------------------------------------------
 
 // Web site location for the generated documentation
-let website = "/Wooga.Lambda"
+let website = "/Wooga.Lambda-CSharp"
 
 let githubLink = "http://github.com/wooga/Wooga.Lambda-CSharp"
 
