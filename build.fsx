@@ -55,7 +55,7 @@ let gitOwner = "wooga"
 let gitHome = "https://github.com/" + gitOwner
 
 // The name of the project on GitHub
-let gitName = "Wooga.Lambda"
+let gitName = "Wooga.Lambda-CSharp"
 
 // The url for the raw files hosted
 let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/wooga"
