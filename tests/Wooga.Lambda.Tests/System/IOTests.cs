@@ -1,5 +1,5 @@
-﻿using Devboy.Lambda.System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using Wooga.Lambda.System;
 
 namespace Wooga.Lambda.Tests.System
 {
