@@ -88,6 +88,7 @@ let binaries =
     directoryInfo bin 
     |> subDirectories
     |> Array.map (fun d -> d.FullName @@ (sprintf "%s.dll" d.Name))
+    |> Array.filter (fun f -> File.Exists f)
     |> List.ofArray
 
 let libDirs =

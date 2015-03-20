@@ -1,8 +1,7 @@
-type project
-owners
-    wooga
-authors 
-    devboy
+type file
+id Wooga.Lambda.Unity3D.Source
+owners wooga
+authors devboy
 projectUrl
     http://github.com/wooga/Wooga.Lambda
 iconUrl
@@ -19,3 +18,7 @@ summary
     Functional utilities for C#
 description
     Functional utilites for C# - inspired by csharp-monads, Haskell & F# - compatible with Unity3D
+files
+	../Wooga.Lambda/Control/**/*.cs ==> content/Wooga.Lambda/Control
+	../Wooga.Lambda/Data/**/*.cs ==> content/Wooga.Lambda/Data
+	../Wooga.Lambda/System/**/*.cs ==> content/Wooga.Lambda/System
