@@ -44,7 +44,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
             .Then(Async.Sleep(wait))
             .RunSynchronously();
             watch.Stop();
-            Assert.GreaterOrEqual(watch.ElapsedMilliseconds, wait);
+            Assert.GreaterOrEqual(watch.ElapsedMilliseconds, wait-3);
         }
 
         [Test]
