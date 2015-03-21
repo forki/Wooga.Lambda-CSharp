@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>IO - Wooga.Lambda</title>
+    <title>Either - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -35,7 +35,7 @@
 
 
 
-<h1>IO</h1>
+<h1>Either</h1>
 <div class="xmldoc">
 </div>
   <h3>Static members</h3>
@@ -47,12 +47,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '151', 151)" onmouseover="showTip(event, '151', 151)">
+          <code onmouseout="hideTip(event, '36', 36)" onmouseover="showTip(event, '36', 36)">
             Bind(m, f)
           </code>
-          <div class="tip" id="151">
-            <strong>Signature:</strong> (m:IO&lt;&#39;T1&gt; * f:Func&lt;&#39;T1,IO&lt;&#39;T2&gt;&gt;) -&gt; IO&lt;&#39;T2&gt;<br />
-                          <strong>Type parameters:</strong> 'T1, 'T2          </div>
+          <div class="tip" id="36">
+            <strong>Signature:</strong> (m:Either&lt;&#39;TLeft,&#39;TRight&gt; * f:Func&lt;&#39;TRight,Either&lt;&#39;TLeft,&#39;TRight2&gt;&gt;) -&gt; Either&lt;&#39;TLeft,&#39;TRight2&gt;<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight, 'TRight2          </div>
         </td>
         <td class="xmldoc">
           
@@ -61,12 +61,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '152', 152)" onmouseover="showTip(event, '152', 152)">
-            Do(m, h, f)
+          <code onmouseout="hideTip(event, '37', 37)" onmouseover="showTip(event, '37', 37)">
+            FromLeft(m)
           </code>
-          <div class="tip" id="152">
-            <strong>Signature:</strong> (m:IO&lt;&#39;T1&gt; * h:IO&lt;&#39;T2&gt; * f:Func&lt;&#39;T1,&#39;T2,&#39;TReturn&gt;) -&gt; &#39;TReturn<br />
-                          <strong>Type parameters:</strong> 'T1, 'T2, 'TReturn          </div>
+          <div class="tip" id="37">
+            <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; &#39;TLeft<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
         </td>
         <td class="xmldoc">
           
@@ -75,12 +75,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '153', 153)" onmouseover="showTip(event, '153', 153)">
-            Do(m, h, i, f)
+          <code onmouseout="hideTip(event, '38', 38)" onmouseover="showTip(event, '38', 38)">
+            FromRight(m)
           </code>
-          <div class="tip" id="153">
-            <strong>Signature:</strong> (m:IO&lt;&#39;T1&gt; * h:IO&lt;&#39;T2&gt; * i:IO&lt;&#39;T3&gt; * f:Func&lt;&#39;T1,&#39;T2,&#39;T3,&#39;TReturn&gt;) -&gt; &#39;TReturn<br />
-                          <strong>Type parameters:</strong> 'T1, 'T2, 'T3, 'TReturn          </div>
+          <div class="tip" id="38">
+            <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; &#39;TRight<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
         </td>
         <td class="xmldoc">
           
@@ -89,12 +89,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '154', 154)" onmouseover="showTip(event, '154', 154)">
-            Do(m, h, i, k, f)
+          <code onmouseout="hideTip(event, '39', 39)" onmouseover="showTip(event, '39', 39)">
+            IsLeft(m)
           </code>
-          <div class="tip" id="154">
-            <strong>Signature:</strong> (m:IO&lt;&#39;T1&gt; * h:IO&lt;&#39;T2&gt; * i:IO&lt;&#39;T3&gt; * k:IO&lt;&#39;T4&gt; * f:Func&lt;&#39;T1,&#39;T2,&#39;T3,&#39;T4,&#39;TReturn&gt;) -&gt; &#39;TReturn<br />
-                          <strong>Type parameters:</strong> 'T1, 'T2, 'T3, 'T4, 'TReturn          </div>
+          <div class="tip" id="39">
+            <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; bool<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
         </td>
         <td class="xmldoc">
           
@@ -103,12 +103,40 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '155', 155)" onmouseover="showTip(event, '155', 155)">
+          <code onmouseout="hideTip(event, '40', 40)" onmouseover="showTip(event, '40', 40)">
+            IsRight(m)
+          </code>
+          <div class="tip" id="40">
+            <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; bool<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '41', 41)" onmouseover="showTip(event, '41', 41)">
+            Left(m)
+          </code>
+          <div class="tip" id="41">
+            <strong>Signature:</strong> m:&#39;TLeft -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '42', 42)" onmouseover="showTip(event, '42', 42)">
             Return(f)
           </code>
-          <div class="tip" id="155">
-            <strong>Signature:</strong> f:Func&lt;&#39;T&gt; -&gt; IO&lt;&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> 'T          </div>
+          <div class="tip" id="42">
+            <strong>Signature:</strong> f:Func&lt;&#39;TRight&gt; -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
         </td>
         <td class="xmldoc">
           
@@ -117,12 +145,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '156', 156)" onmouseover="showTip(event, '156', 156)">
+          <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
             Return(v)
           </code>
-          <div class="tip" id="156">
-            <strong>Signature:</strong> v:&#39;T -&gt; IO&lt;&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> 'T          </div>
+          <div class="tip" id="43">
+            <strong>Signature:</strong> v:&#39;TRight -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
         </td>
         <td class="xmldoc">
           
@@ -131,12 +159,26 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '157', 157)" onmouseover="showTip(event, '157', 157)">
+          <code onmouseout="hideTip(event, '44', 44)" onmouseover="showTip(event, '44', 44)">
+            Right(m)
+          </code>
+          <div class="tip" id="44">
+            <strong>Signature:</strong> m:&#39;TRight -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
             Then(m, h)
           </code>
-          <div class="tip" id="157">
-            <strong>Signature:</strong> (m:IO&lt;&#39;T1&gt; * h:IO&lt;&#39;T2&gt;) -&gt; IO&lt;&#39;T2&gt;<br />
-                          <strong>Type parameters:</strong> 'T1, 'T2          </div>
+          <div class="tip" id="45">
+            <strong>Signature:</strong> (m:Either&lt;&#39;TLeft,&#39;TRight&gt; * h:Either&lt;&#39;TLeft,&#39;TRight2&gt;) -&gt; Either&lt;&#39;TLeft,&#39;TRight2&gt;<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight, 'TRight2          </div>
         </td>
         <td class="xmldoc">
           

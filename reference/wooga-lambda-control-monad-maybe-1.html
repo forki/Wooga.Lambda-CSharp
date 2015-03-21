@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Tuple<'T1, 'T2, 'T3> - Wooga.Lambda</title>
+    <title>Maybe<'T> - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -35,9 +35,9 @@
 
 
 
-<h1>Tuple<'T1, 'T2, 'T3></h1>
+<h1>Maybe<'T></h1>
 <div class="xmldoc">
-<p>Represent a value triplet.</p>
+<p>A delegate to label lambdas as Maybe</p>
 </div>
   <h3>Constructors</h3>
   <table class="table table-bordered member-list">
@@ -48,11 +48,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '87', 87)" onmouseover="showTip(event, '87', 87)">
-            new(item1, item2, item3)
+          <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
+            new(object, method)
           </code>
-          <div class="tip" id="87">
-            <strong>Signature:</strong> (item1:&#39;T1 * item2:&#39;T2 * item3:&#39;T3) -&gt; unit<br />
+          <div class="tip" id="47">
+            <strong>Signature:</strong> (object:obj * method:nativeint) -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -70,11 +70,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '88', 88)" onmouseover="showTip(event, '88', 88)">
-            Equals(obj)
+          <code onmouseout="hideTip(event, '48', 48)" onmouseover="showTip(event, '48', 48)">
+            BeginInvoke(callback, object)
           </code>
-          <div class="tip" id="88">
-            <strong>Signature:</strong> obj:obj -&gt; bool<br />
+          <div class="tip" id="48">
+            <strong>Signature:</strong> (callback:AsyncCallback * object:obj) -&gt; IAsyncResult<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -85,11 +85,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '89', 89)" onmouseover="showTip(event, '89', 89)">
-            GetHashCode()
+          <code onmouseout="hideTip(event, '49', 49)" onmouseover="showTip(event, '49', 49)">
+            EndInvoke(result)
           </code>
-          <div class="tip" id="89">
-            <strong>Signature:</strong> unit -&gt; int<br />
+          <div class="tip" id="49">
+            <strong>Signature:</strong> result:IAsyncResult -&gt; MaybeResult&lt;&#39;T&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -97,36 +97,15 @@
           
         </td>
       </tr>
-    </tbody>
-  </table>
-  <h3>Static members</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Static member</td><td>Description</td></tr>
-    </thead>
-    <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '90', 90)" onmouseover="showTip(event, '90', 90)">
-            op_Equality(x, y)
+          <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
+            Invoke()
           </code>
-          <div class="tip" id="90">
-            <strong>Signature:</strong> (x:Tuple&lt;&#39;T1,&#39;T2,&#39;T3&gt; * y:Tuple&lt;&#39;T1,&#39;T2,&#39;T3&gt;) -&gt; bool<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '91', 91)" onmouseover="showTip(event, '91', 91)">
-            op_Inequality(x, y)
-          </code>
-          <div class="tip" id="91">
-            <strong>Signature:</strong> (x:Tuple&lt;&#39;T1,&#39;T2,&#39;T3&gt; * y:Tuple&lt;&#39;T1,&#39;T2,&#39;T3&gt;) -&gt; bool<br />
+          <div class="tip" id="50">
+            <strong>Signature:</strong> unit -&gt; MaybeResult&lt;&#39;T&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">

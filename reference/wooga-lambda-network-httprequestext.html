@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Tuple<'T1, 'T2, 'T3> - Wooga.Lambda</title>
+    <title>HttpRequestExt - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -35,70 +35,9 @@
 
 
 
-<h1>Tuple<'T1, 'T2, 'T3></h1>
+<h1>HttpRequestExt</h1>
 <div class="xmldoc">
-<p>Represent a value triplet.</p>
 </div>
-  <h3>Constructors</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Constructor</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '87', 87)" onmouseover="showTip(event, '87', 87)">
-            new(item1, item2, item3)
-          </code>
-          <div class="tip" id="87">
-            <strong>Signature:</strong> (item1:&#39;T1 * item2:&#39;T2 * item3:&#39;T3) -&gt; unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <h3>Instance members</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Instance member</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '88', 88)" onmouseover="showTip(event, '88', 88)">
-            Equals(obj)
-          </code>
-          <div class="tip" id="88">
-            <strong>Signature:</strong> obj:obj -&gt; bool<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '89', 89)" onmouseover="showTip(event, '89', 89)">
-            GetHashCode()
-          </code>
-          <div class="tip" id="89">
-            <strong>Signature:</strong> unit -&gt; int<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-    </tbody>
-  </table>
   <h3>Static members</h3>
   <table class="table table-bordered member-list">
     <thead>
@@ -108,11 +47,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '90', 90)" onmouseover="showTip(event, '90', 90)">
-            op_Equality(x, y)
+          <code onmouseout="hideTip(event, '140', 140)" onmouseover="showTip(event, '140', 140)">
+            AsWebRequest(httpRequest)
           </code>
-          <div class="tip" id="90">
-            <strong>Signature:</strong> (x:Tuple&lt;&#39;T1,&#39;T2,&#39;T3&gt; * y:Tuple&lt;&#39;T1,&#39;T2,&#39;T3&gt;) -&gt; bool<br />
+          <div class="tip" id="140">
+            <strong>Signature:</strong> httpRequest:HttpRequest -&gt; HttpWebRequest<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -122,11 +61,53 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '91', 91)" onmouseover="showTip(event, '91', 91)">
-            op_Inequality(x, y)
+          <code onmouseout="hideTip(event, '141', 141)" onmouseover="showTip(event, '141', 141)">
+            BareRequest(uri, httpMethod)
           </code>
-          <div class="tip" id="91">
-            <strong>Signature:</strong> (x:Tuple&lt;&#39;T1,&#39;T2,&#39;T3&gt; * y:Tuple&lt;&#39;T1,&#39;T2,&#39;T3&gt;) -&gt; bool<br />
+          <div class="tip" id="141">
+            <strong>Signature:</strong> (uri:Uri * httpMethod:HttpMethod) -&gt; HttpRequest<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '142', 142)" onmouseover="showTip(event, '142', 142)">
+            RequestHttpResponse(httpRequest)
+          </code>
+          <div class="tip" id="142">
+            <strong>Signature:</strong> httpRequest:HttpRequest -&gt; IO&lt;HttpResponse&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '143', 143)" onmouseover="showTip(event, '143', 143)">
+            WithBody(httpRequest, body)
+          </code>
+          <div class="tip" id="143">
+            <strong>Signature:</strong> (httpRequest:HttpRequest * body:byte []) -&gt; HttpRequest<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '144', 144)" onmouseover="showTip(event, '144', 144)">
+            WithHeaders(httpRequest, httpHeaders)
+          </code>
+          <div class="tip" id="144">
+            <strong>Signature:</strong> (httpRequest:HttpRequest * httpHeaders:HttpHeaders) -&gt; HttpRequest<br />
                       </div>
         </td>
         <td class="xmldoc">
