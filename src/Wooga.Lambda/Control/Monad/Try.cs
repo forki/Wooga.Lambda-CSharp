@@ -1,5 +1,4 @@
 ﻿using System;
-using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Monad
 {

@@ -15,12 +15,12 @@ namespace Wooga.Lambda.Control.Monad
     {
         public static Either<TLeft, TRight> Left<TLeft, TRight>(TLeft m)
         {
-            return () => new EitherResult<TLeft, TRight>.Left<TLeft, TRight>(m);
+            return () => new EitherResult<TLeft, TRight>.Left(m);
         }
 
         public static Either<TLeft, TRight> Right<TLeft, TRight>(TRight m)
         {
-            return () => new EitherResult<TLeft, TRight>.Right<TLeft, TRight>(m);
+            return () => new EitherResult<TLeft, TRight>.Right(m);
         }
 
         public static Boolean IsRight<TLeft, TRight>(this Either<TLeft, TRight> m)

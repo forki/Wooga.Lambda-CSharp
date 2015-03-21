@@ -14,12 +14,12 @@ namespace Wooga.Lambda.Control.Monad
     {
         public static Maybe<T> Just<T>(T v)
         {
-            return () => new MaybeResult<T>.Just<T>(v);
+            return () => new MaybeResult<T>.Just(v);
         }
 
         public static Maybe<T> Nothing<T>()
         {
-            return () => new MaybeResult<T>.Nothing<T>();
+            return () => new MaybeResult<T>.Nothing();
         }
 
         public static T FromJust<T>(this Maybe<T> m)

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Wooga.Lambda.System
+namespace Wooga.Lambda.Control.Monad
 {
     /// <summary>
     /// A delegate to label lambdas as IO

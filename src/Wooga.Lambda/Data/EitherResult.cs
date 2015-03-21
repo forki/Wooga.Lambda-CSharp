@@ -12,7 +12,7 @@ namespace Wooga.Lambda.Data
 
         public abstract TRight RightValue();
 
-        internal sealed class Left<TLeft, TRight> : EitherResult<TLeft, TRight>
+        internal sealed class Left : EitherResult<TLeft, TRight>
         {
             private readonly TLeft _v;
 
@@ -42,7 +42,7 @@ namespace Wooga.Lambda.Data
             }
         }
 
-        internal sealed class Right<TLeft, TRight> : EitherResult<TLeft, TRight>
+        internal sealed class Right : EitherResult<TLeft, TRight>
         {
             private readonly TRight _v;
 

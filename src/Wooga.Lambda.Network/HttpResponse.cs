@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using Wooga.Lambda.System;
+using Wooga.Lambda.Control.Monad;
 
 namespace Wooga.Lambda.Network
 {

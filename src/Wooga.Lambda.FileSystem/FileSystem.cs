@@ -2,7 +2,6 @@
 using System.IO;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
-using Wooga.Lambda.System;
 
 namespace Wooga.Lambda.FileSystem
 {

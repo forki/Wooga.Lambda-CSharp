@@ -21,4 +21,3 @@ description
 files
 	../Wooga.Lambda/Control/**/*.cs ==> content/Wooga.Lambda/Control
 	../Wooga.Lambda/Data/**/*.cs ==> content/Wooga.Lambda/Data
-	../Wooga.Lambda/System/**/*.cs ==> content/Wooga.Lambda/System

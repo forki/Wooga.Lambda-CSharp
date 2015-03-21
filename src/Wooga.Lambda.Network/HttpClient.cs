@@ -1,6 +1,6 @@
 ﻿using System;
 using Wooga.Lambda.Control.Concurrent;
-using Wooga.Lambda.System;
+using Wooga.Lambda.Control.Monad;
 
 namespace Wooga.Lambda.Network
 {
