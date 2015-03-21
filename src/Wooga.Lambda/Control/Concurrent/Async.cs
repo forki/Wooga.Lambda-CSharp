@@ -12,6 +12,10 @@ namespace Wooga.Lambda.Control.Concurrent
     /// <returns>Result</returns>
     public delegate T Async<T>();
 
+    /// <summary>
+    /// A wrapper to encapsulate a ManualResetEvent.
+    /// </summary>
+    /// <typeparam name="TReply">The type of the reply.</typeparam>
     internal sealed class AsyncEventHandle<T>
     {
         public readonly ManualResetEvent DoneEvent = new ManualResetEvent(false);
@@ -31,6 +35,10 @@ namespace Wooga.Lambda.Control.Concurrent
         }
     }
 
+    /// <summary>
+    /// A handle to a capability to reply to a message.
+    /// </summary>
+    /// <typeparam name="TReply">The type of the reply.</typeparam>
     public sealed class AsyncReplyChannel<TReply>
     {
         private readonly Func<TReply, Unit> replyf;
@@ -64,6 +72,12 @@ namespace Wooga.Lambda.Control.Concurrent
             return f(m(), h(), i(), k());
         }
 
+        /// <summary>
+        /// Creates an asynchronous computation that runs the given computation and ignores its result.
+        /// </summary>
+        /// <typeparam name="T">Type of computation result</typeparam>
+        /// <param name="m">The computation.</param>
+        /// <returns>Unit</returns>
         public static Async<Unit> Ignore<T>(this Async<T> m)
         {
             return () =>
@@ -73,6 +87,12 @@ namespace Wooga.Lambda.Control.Concurrent
             };
         }
 
+        /// <summary>
+        /// Creates an asynchronous computation that executes all the given asynchronous computations, initially queueing each as work items and using a fork/join pattern.
+        /// </summary>
+        /// <typeparam name="T">Type of computation result</typeparam>
+        /// <param name="ms">The computations.</param>
+        /// <returns>Computation results</returns>
         public static Async<T[]> Parallel<T>(this Async<T>[] ms)
         {
             return () =>
@@ -100,11 +120,22 @@ namespace Wooga.Lambda.Control.Concurrent
             };
         }
 
+        /// <summary>
+        /// Runs the provided asynchronous computation and awaits its result.
+        /// </summary>
+        /// <typeparam name="T">Type of computation result</typeparam>
+        /// <param name="m">The computation</param>
+        /// <returns>Computation result</returns>
         public static T RunSynchronously<T>(this Async<T> m)
         {
             return m.Invoke();
         }
 
+        /// <summary>
+        /// Creates an asynchronous computation that will sleep for the given time.
+        /// </summary>
+        /// <param name="ms">The sleep duration in miliseconds</param>
+        /// <returns>Async computation</returns>
         public static Async<Unit> Sleep(int ms)
         {
             return () =>
@@ -115,12 +146,25 @@ namespace Wooga.Lambda.Control.Concurrent
             };
         }
 
+        /// <summary>
+        /// Starts the asynchronous computation in the thread pool. Do not await its result.
+        /// </summary>
+        /// <typeparam name="T">Type of computation result</typeparam>
+        /// <param name="m">The computation.</param>
+        /// <returns>Unit value</returns>
         public static Unit Start<T>(this Async<T> m)
         {
             ThreadPool.QueueUserWorkItem(_ => m.RunSynchronously());
             return Unit.Default;
         }
 
+        /// <summary>
+        /// Starts the asynchronous computation in the thread pool. Await result on AsyncReplyChannel.
+        /// </summary>
+        /// <typeparam name="T">Type of computation result</typeparam>
+        /// <param name="m">The computation.</param>
+        /// <param name="f">The lambda providing the AsyncReplyChannel</param>
+        /// <returns>Unit value</returns>
         public static Unit StartAndReply<T>(this Async<T> m, Func<AsyncReplyChannel<T>, AsyncReplyChannel<T>> f)
         {
             var ch = f(new AsyncReplyChannel<T>(_ => Unit.Default));
@@ -132,6 +176,12 @@ namespace Wooga.Lambda.Control.Concurrent
             return Unit.Default;
         }
 
+        /// <summary>
+        /// Starts a child computation. This allows multiple asynchronous computations to be executed simultaneously.
+        /// </summary>
+        /// <typeparam name="T">Type of computation result</typeparam>
+        /// <param name="m">The computation.</param>
+        /// <returns>A new computation that waits for the input computation to finish.</returns>
         public static Async<Async<T>> StartChild<T>(this Async<T> m)
         {
             return () =>
