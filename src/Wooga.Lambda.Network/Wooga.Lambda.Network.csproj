@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{03231AC8-DCA3-49E4-89CD-E68BE439C2A4}</ProjectGuid>
+    <ProjectGuid>{2247283E-0466-40AC-9D05-B8972C8451BF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Wooga.Lambda</RootNamespace>
-    <AssemblyName>Wooga.Lambda</AssemblyName>
+    <RootNamespace>Wooga.Lambda.Network</RootNamespace>
+    <AssemblyName>Wooga.Lambda.Network</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Wooga.Lambda.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Wooga.Lambda.Network.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -41,20 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Control\Concurrent\Agent.cs" />
-    <Compile Include="Control\Concurrent\Async.cs" />
-    <Compile Include="Control\Monad\Try.cs" />
-    <Compile Include="Data\ArrayExt.cs" />
-    <Compile Include="Data\DictionaryExt.cs" />
-    <Compile Include="Data\Either.cs" />
-    <Compile Include="Data\Maybe.cs" />
-    <Compile Include="Data\Tuple.cs" />
-    <Compile Include="Data\Unit.cs" />
+    <Compile Include="HttpClient.cs" />
+    <Compile Include="HttpHeader.cs" />
+    <Compile Include="HttpHeaders.cs" />
+    <Compile Include="HttpMethod.cs" />
+    <Compile Include="HttpRequest.cs" />
+    <Compile Include="HttpResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="System\IO.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="paket.references" />
+    <ProjectReference Include="..\Wooga.Lambda\Wooga.Lambda.csproj">
+      <Project>{03231ac8-dca3-49e4-89cd-e68be439c2a4}</Project>
+      <Name>Wooga.Lambda</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="paket.template" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
