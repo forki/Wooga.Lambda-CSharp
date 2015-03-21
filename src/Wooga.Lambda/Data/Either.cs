@@ -8,18 +8,18 @@ namespace Wooga.Lambda.Data
     /// <typeparam name="TLeft">The type of the left/failure value.</typeparam>
     /// <typeparam name="TRight">The type of the right/success value.</typeparam>
     /// <returns>EitherData containing either a success or failure value.</returns>
-    public delegate Either.EitherData<TLeft, TRight> Either<TLeft, TRight>();
+    public delegate Either.EitherResult<TLeft, TRight> Either<TLeft, TRight>();
 
     public static class Either
     {
         public static Either<TLeft, TRight> Left<TLeft, TRight>(TLeft m)
         {
-            return () => new EitherDataLeft<TLeft, TRight>(m);
+            return () => new EitherResultLeft<TLeft, TRight>(m);
         }
 
         public static Either<TLeft, TRight> Right<TLeft, TRight>(TRight m)
         {
-            return () => new EitherDataRight<TLeft, TRight>(m);
+            return () => new EitherResultRight<TLeft, TRight>(m);
         }
 
         public static Boolean IsRight<TLeft, TRight>(this Either<TLeft, TRight> m)
@@ -65,7 +65,7 @@ namespace Wooga.Lambda.Data
             return Right<TLeft, TRight>(v);
         }
 
-        public abstract class EitherData<TLeft, TRight>
+        public abstract class EitherResult<TLeft, TRight>
         {
             public abstract Boolean IsLeft();
 
@@ -76,11 +76,11 @@ namespace Wooga.Lambda.Data
             public abstract TRight RightValue();
         }
 
-        private sealed class EitherDataLeft<TLeft, TRight> : EitherData<TLeft, TRight>
+        private sealed class EitherResultLeft<TLeft, TRight> : EitherResult<TLeft, TRight>
         {
             private readonly TLeft _v;
 
-            public EitherDataLeft(TLeft v)
+            public EitherResultLeft(TLeft v)
             {
                 _v = v;
             }
@@ -106,11 +106,11 @@ namespace Wooga.Lambda.Data
             }
         }
 
-        private sealed class EitherDataRight<TLeft, TRight> : EitherData<TLeft, TRight>
+        private sealed class EitherResultRight<TLeft, TRight> : EitherResult<TLeft, TRight>
         {
             private readonly TRight _v;
 
-            public EitherDataRight(TRight v)
+            public EitherResultRight(TRight v)
             {
                 _v = v;
             }

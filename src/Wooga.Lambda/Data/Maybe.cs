@@ -7,18 +7,18 @@ namespace Wooga.Lambda.Data
     /// </summary>
     /// <typeparam name="T">Result type</typeparam>
     /// <returns>MaybeData representing a value or Nothing.</returns>
-    public delegate Maybe.MaybeData<T> Maybe<T>();
+    public delegate Maybe.MaybeResult<T> Maybe<T>();
 
     public static class Maybe
     {
         public static Maybe<T> Just<T>(T v)
         {
-            return () => new JustData<T>(v);
+            return () => new JustResult<T>(v);
         }
 
         public static Maybe<T> Nothing<T>()
         {
-            return () => new NothingData<T>();
+            return () => new NothingResult<T>();
         }
 
         public static T FromJust<T>(this Maybe<T> m)
@@ -69,18 +69,18 @@ namespace Wooga.Lambda.Data
             return Just(v);
         }
 
-        public abstract class MaybeData<T>
+        public abstract class MaybeResult<T>
         {
             public abstract T Value();
 
             public abstract Boolean HasValue();
         }
 
-        private sealed class JustData<T> : MaybeData<T>
+        private sealed class JustResult<T> : MaybeResult<T>
         {
             private readonly T _v;
 
-            public JustData(T v)
+            public JustResult(T v)
             {
                 _v = v;
             }
@@ -96,7 +96,7 @@ namespace Wooga.Lambda.Data
             }
         }
 
-        private sealed class NothingData<T> : MaybeData<T>
+        private sealed class NothingResult<T> : MaybeResult<T>
         {
             public override T Value()
             {
