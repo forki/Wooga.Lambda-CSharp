@@ -46,8 +46,10 @@
     <Compile Include="Control\Monad\Try.cs" />
     <Compile Include="Data\ArrayExt.cs" />
     <Compile Include="Data\DictionaryExt.cs" />
-    <Compile Include="Data\Either.cs" />
-    <Compile Include="Data\Maybe.cs" />
+    <Compile Include="Control\Monad\Either.cs" />
+    <Compile Include="Data\EitherResult.cs" />
+    <Compile Include="Control\Monad\Maybe.cs" />
+    <Compile Include="Data\MaybeResult.cs" />
     <Compile Include="Data\Tuple.cs" />
     <Compile Include="Data\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

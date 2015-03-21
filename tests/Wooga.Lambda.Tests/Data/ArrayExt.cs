@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Tests.Data

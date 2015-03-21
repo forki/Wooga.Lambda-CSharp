@@ -1,24 +1,25 @@
 ﻿using System;
+using Wooga.Lambda.Data;
 
-namespace Wooga.Lambda.Data
+namespace Wooga.Lambda.Control.Monad
 {
     /// <summary>
     /// A delegate to label lambdas as Maybe
     /// </summary>
     /// <typeparam name="T">Result type</typeparam>
     /// <returns>MaybeData representing a value or Nothing.</returns>
-    public delegate Maybe.MaybeResult<T> Maybe<T>();
+    public delegate MaybeResult<T> Maybe<T>();
 
     public static class Maybe
     {
         public static Maybe<T> Just<T>(T v)
         {
-            return () => new JustResult<T>(v);
+            return () => new MaybeResult<T>.Just<T>(v);
         }
 
         public static Maybe<T> Nothing<T>()
         {
-            return () => new NothingResult<T>();
+            return () => new MaybeResult<T>.Nothing<T>();
         }
 
         public static T FromJust<T>(this Maybe<T> m)
@@ -67,46 +68,6 @@ namespace Wooga.Lambda.Data
         public static Maybe<T> Return<T>(T v)
         {
             return Just(v);
-        }
-
-        public abstract class MaybeResult<T>
-        {
-            public abstract T Value();
-
-            public abstract Boolean HasValue();
-        }
-
-        private sealed class JustResult<T> : MaybeResult<T>
-        {
-            private readonly T _v;
-
-            public JustResult(T v)
-            {
-                _v = v;
-            }
-
-            public override T Value()
-            {
-                return _v;
-            }
-
-            public override bool HasValue()
-            {
-                return true;
-            }
-        }
-
-        private sealed class NothingResult<T> : MaybeResult<T>
-        {
-            public override T Value()
-            {
-                throw new InvalidOperationException("Maybe.FromJust: Nothing");
-            }
-
-            public override bool HasValue()
-            {
-                return false;
-            }
         }
     }
 
