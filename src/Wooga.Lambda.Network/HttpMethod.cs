@@ -10,13 +10,14 @@ namespace Wooga.Lambda.Network
         public static readonly HttpMethod MkCol = new HttpMethod("MKCOL");
         public static readonly HttpMethod Post = new HttpMethod("POST");
         public static readonly HttpMethod Put = new HttpMethod("PUT");
+        public static readonly HttpMethod Delete = new HttpMethod("DELETE");
 
-        private HttpMethod(String method)
+        public readonly String Name;
+
+        private HttpMethod(String name)
         {
-            Name = method;
+            Name = name;
         }
-
-        public String Name { private set; get; }
 
         public override String ToString()
         {

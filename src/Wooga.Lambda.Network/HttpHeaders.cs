@@ -1,18 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Net;
 using Wooga.Lambda.Control.Monad;
-using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Network
 {
-    public struct HttpHeaders
+    public sealed class HttpHeaders : IEnumerable<HttpHeader>
     {
-        internal Dictionary<String, HttpHeader> _headers;
+        internal readonly Dictionary<String, HttpHeader> Headers;
 
-        internal HttpHeaders(Dictionary<string, HttpHeader> h)
+        private HttpHeaders(Dictionary<string, HttpHeader> h)
         {
-            _headers = h;
+            Headers = h;
         }
 
         public static HttpHeaders Create()
@@ -24,6 +23,16 @@ namespace Wooga.Lambda.Network
         {
             return new HttpHeaders(h);
         }
+
+        public IEnumerator<HttpHeader> GetEnumerator()
+        {
+            return Headers.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
     public static class HttpHeadersExt
@@ -31,21 +40,21 @@ namespace Wooga.Lambda.Network
         public static HttpHeaders Concat(this HttpHeaders self, HttpHeaders other)
         {
             var r = new Dictionary<string, HttpHeader>();
-            foreach (var h in self._headers.Values)
+            foreach (var h in self.Headers.Values)
             {
                 r.Add(h.Key, h);
             }
-            foreach (var h in other._headers.Values)
+            foreach (var h in other.Headers.Values)
             {
                 r.Add(h.Key, h);
             }
-            return new HttpHeaders(r);
+            return HttpHeaders.Create(r);
         }
 
         public static Maybe<HttpHeader> TryFindValueWithKey(this HttpHeaders self, String key)
         {
             HttpHeader h;
-            if (self._headers.TryGetValue(key, out h))
+            if (self.Headers.TryGetValue(key, out h))
             {
                 return Maybe.Return(() => h);
             }
@@ -54,32 +63,7 @@ namespace Wooga.Lambda.Network
 
         public static HttpHeaders Append(this HttpHeaders self, String key, String value)
         {
-            return self.Concat(new HttpHeaders(new Dictionary<String, HttpHeader> {{key, new HttpHeader(key, value)}}));
-        }
-
-        public static WebHeaderCollection ToWebHeaders(this HttpHeaders self)
-        {
-            return self._headers.Fold((headers, _, header) =>
-            {
-                headers.Add(header.Key, header.Value);
-                return headers;
-            },
-                new WebHeaderCollection());
-        }
-
-        public static HttpWebRequest AppendToRequest(this HttpHeaders self, HttpWebRequest request)
-        {
-            foreach (var h in self._headers.Values)
-            {
-                request.Headers.Add(h.Key, h.Value);
-            }
-            return request;
-        }
-
-        public static HttpHeaders OfWebHeaders(WebHeaderCollection webHeaders)
-        {
-            return webHeaders.AllKeys.Fold((headers, key) => headers.Append(key, webHeaders.Get(key)),
-                HttpHeaders.Create());
+            return self.Concat(HttpHeaders.Create(new Dictionary<String, HttpHeader> {{key, new HttpHeader(key, value)}}));
         }
     }
 }

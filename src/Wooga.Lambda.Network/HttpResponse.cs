@@ -1,20 +1,22 @@
 ﻿using System;
-using System.IO;
 using System.Net;
-using Wooga.Lambda.Control.Monad;
 
 namespace Wooga.Lambda.Network
 {
     public struct HttpResponse
     {
-        public readonly String Body;
-        public readonly String ContentType;
-        public readonly HttpHeaders HttpHeaders;
-        public readonly HttpRequest HttpRequest;
-        public readonly HttpStatusCode StatusCode;
+        public String Body { get; private set; }
+        public String ContentType { get; private set; }
+        public HttpHeaders HttpHeaders { get; private set; }
+        public HttpRequest HttpRequest { get; private set; }
+        public HttpStatusCode StatusCode { get; private set; }
 
-        public HttpResponse(HttpRequest httpRequest, HttpHeaders httpHeaders, HttpStatusCode statusCode, String body,
-            String contentType)
+        public HttpResponse(HttpRequest httpRequest)
+            : this(httpRequest, HttpHeaders.Create(), 0, "", "")
+        {
+        }
+
+        public HttpResponse(HttpRequest httpRequest, HttpHeaders httpHeaders, HttpStatusCode statusCode, String body,String contentType) : this()
         {
             HttpRequest = httpRequest;
             HttpHeaders = httpHeaders;
@@ -22,21 +24,15 @@ namespace Wooga.Lambda.Network
             Body = body;
             ContentType = contentType;
         }
-    }
 
-    public static class HttpResponseExt
-    {
-        public static IO<HttpResponse> AsHttpResponse(this HttpWebResponse response, HttpRequest httpRequest)
+        public HttpResponse With(HttpHeaders httpHeaders)
         {
-            var headers = HttpHeadersExt.OfWebHeaders(response.Headers);
-            var body = ReadEntireStream(response.GetResponseStream());
-            return
-                () => new HttpResponse(httpRequest, headers, response.StatusCode, body.Invoke(), response.ContentType);
+            return new HttpResponse(HttpRequest, HttpHeaders.Concat(httpHeaders), StatusCode, Body, ContentType);        
         }
 
-        private static IO<String> ReadEntireStream(Stream stream)
+        public HttpResponse With(HttpStatusCode statusCode)
         {
-            return () => new StreamReader(stream).ReadToEnd();
+            return new HttpResponse(HttpRequest, HttpHeaders, statusCode, Body, ContentType);
         }
     }
 }

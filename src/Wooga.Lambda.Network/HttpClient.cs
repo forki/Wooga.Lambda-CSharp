@@ -1,43 +1,65 @@
 ﻿using System;
 using Wooga.Lambda.Control.Concurrent;
-using Wooga.Lambda.Control.Monad;
 
 namespace Wooga.Lambda.Network
 {
-    /// <summary>
-    /// HttpClient interface for a monadic HttpClient using IO & Async
-    /// </summary>
-    public interface IOHttpClient
+    public sealed class HttpClient
     {
-        IO<HttpResponse> Post(String endpoint, byte[] body);
-        Async<HttpResponse> PostAsync(String endpoint, byte[] body);
-        IO<HttpResponse> Get(String endpoint);
-        Async<HttpResponse> GetAsync(String endpoint);
-    }
+        public readonly Func<HttpRequest,Async<HttpResponse>> TransportAsync;
 
-    public class HttpClient : IOHttpClient
-    {
-        public IO<HttpResponse> Post(String url, byte[] body)
+        public HttpClient(Func<HttpClient,HttpRequest,HttpResponse> transport)
         {
-            return HttpRequest.Basic(url, HttpMethod.Post)
-                .WithBody(body)
-                .RequestHttpResponse();
+            TransportAsync = r => () => transport(this, r);
+        }
+
+        public HttpResponse Post(String endpoint, byte[] body)
+        {
+            return PostAsync(endpoint, body).RunSynchronously();   
         }
 
         public Async<HttpResponse> PostAsync(string endpoint, byte[] body)
         {
-            return () => Post(endpoint, body).Invoke();
+            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Post).WithBody(body));
         }
 
-        public IO<HttpResponse> Get(String endpoint)
+        public HttpResponse Get(String endpoint)
         {
-            return HttpRequest.Basic(endpoint, HttpMethod.Get)
-                .RequestHttpResponse();
+            return GetAsync(endpoint).RunSynchronously();
         }
 
         public Async<HttpResponse> GetAsync(string endpoint)
         {
-            return () => Get(endpoint).Invoke();
+            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Get));
+        }
+
+        public HttpResponse Head(string endpoint)
+        {
+            return HeadAsync(endpoint).RunSynchronously();
+        }
+
+        public Async<HttpResponse> HeadAsync(string endpoint)
+        {
+            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Head));
+        }
+
+        public HttpResponse Put(string endpoint, byte[] body)
+        {
+            return PutAsync(endpoint, body).RunSynchronously();
+        }
+
+        public Async<HttpResponse> PutAsync(string endpoint, byte[] body)
+        {
+            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Put).WithBody(body));
+        }
+
+        public HttpResponse Delete(string endpoint)
+        {
+            return DeleteAsync(endpoint).RunSynchronously();
+        }
+
+        public Async<HttpResponse> DeleteAsync(string endpoint)
+        {
+            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Delete));
         }
     }
 }
