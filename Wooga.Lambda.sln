@@ -63,6 +63,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wooga.Lambda.Network.Unity3
 		src\Wooga.Lambda.Network.Unity3D.Source\paket.template = src\Wooga.Lambda.Network.Unity3D.Source\paket.template
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Parser", "src\Wooga.Lambda.Parser\Wooga.Lambda.Parser.csproj", "{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Parser.Tests", "tests\Wooga.Lambda.Parser.Tests\Wooga.Lambda.Parser.Tests.csproj", "{D651D213-21E5-4225-8E47-B44DF5D502A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +93,14 @@ Global
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D651D213-21E5-4225-8E47-B44DF5D502A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D651D213-21E5-4225-8E47-B44DF5D502A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D651D213-21E5-4225-8E47-B44DF5D502A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D651D213-21E5-4225-8E47-B44DF5D502A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,5 +113,6 @@ Global
 		{75137CDF-FBDA-45E6-835C-4F4F38AE395A} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
 		{DD381F18-597A-486B-9D44-CCA1E9FBE6C1} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
 		{40C3D7A7-A94A-4925-BA28-6739F0E6F339} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
+		{D651D213-21E5-4225-8E47-B44DF5D502A6} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
 	EndGlobalSection
 EndGlobal

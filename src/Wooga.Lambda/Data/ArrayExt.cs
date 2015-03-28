@@ -13,6 +13,11 @@ namespace Wooga.Lambda.Data
             return xs.Length == 0 ? Maybe.Nothing<T>() : Maybe.Just(xs[0]);
         }
 
+        public static T Head<T>(this T[] xs)
+        {
+            return xs.TryHead().FromJust();
+        }
+
         public static Maybe<T2> TryFind<T, T2>(this T[] xs, Func<T, Maybe<T2>> f)
         {
             foreach (var x in xs)
@@ -27,6 +32,11 @@ namespace Wooga.Lambda.Data
         public static Maybe<T[]> TryTail<T>(this T[] xs)
         {
             return xs.Length <= 1 ? Maybe.Nothing<T[]>() : Maybe.Just(xs.RangeSubset(1, xs.Length - 1));
+        }
+
+        public static T[] Tail<T>(this T[] xs)
+        {
+            return xs.TryTail().FromJust();
         }
 
         public static T[] Append<T>(this T[] xs, T y)
