@@ -3,7 +3,7 @@
 namespace Wooga.Lambda.Control.Monad
 {
     /// <summary>
-    /// A delegate to label lambdas as Try
+    ///     A delegate to label lambdas as Try
     /// </summary>
     /// <typeparam name="T">Result type</typeparam>
     /// <returns>Either lambda wrapping the computation with System.Exception as default failure type</returns>

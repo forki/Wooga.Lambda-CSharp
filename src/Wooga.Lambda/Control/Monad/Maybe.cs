@@ -4,7 +4,7 @@ using Wooga.Lambda.Data;
 namespace Wooga.Lambda.Control.Monad
 {
     /// <summary>
-    /// A delegate to label lambdas as Maybe
+    ///     A delegate to label lambdas as Maybe
     /// </summary>
     /// <typeparam name="T">Result type</typeparam>
     /// <returns>MaybeData representing a value or Nothing.</returns>

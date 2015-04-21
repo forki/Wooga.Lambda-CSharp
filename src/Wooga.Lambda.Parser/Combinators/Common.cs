@@ -60,7 +60,7 @@ namespace Wooga.Lambda.Parser.Combinators
         {
             return _Many(p, new R[0]);
         }
-        
+
         public static Parser<R[]> Many1<R>(this Parser<R> p)
         {
             return _Many(p, new R[0], 1, 1);

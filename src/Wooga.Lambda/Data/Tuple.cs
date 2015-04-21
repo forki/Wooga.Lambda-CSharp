@@ -3,14 +3,13 @@
 namespace Wooga.Lambda.Data
 {
     /// <summary>
-    /// Represent a value pair.
+    ///     Represent a value pair.
     /// </summary>
     /// <typeparam name="T1">The type of the first value.</typeparam>
     /// <typeparam name="T2">The type of the second value.</typeparam>
     public struct Tuple<T1, T2>
     {
         public readonly T1 Item1;
-
         public readonly T2 Item2;
 
         public Tuple(T1 item1, T2 item2)
@@ -41,7 +40,7 @@ namespace Wooga.Lambda.Data
     }
 
     /// <summary>
-    /// Represent a value triplet.
+    ///     Represent a value triplet.
     /// </summary>
     /// <typeparam name="T1">The type of the first value.</typeparam>
     /// <typeparam name="T2">The type of the second value.</typeparam>
@@ -49,9 +48,7 @@ namespace Wooga.Lambda.Data
     public struct Tuple<T1, T2, T3>
     {
         public readonly T1 Item1;
-
         public readonly T2 Item2;
-
         public readonly T3 Item3;
 
         public Tuple(T1 item1, T2 item2, T3 item3)

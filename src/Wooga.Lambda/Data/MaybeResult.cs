@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Wooga.Lambda.Data
 {
     public abstract class MaybeResult<T>
     {
         public abstract T Value();
-
         public abstract Boolean HasValue();
 
         internal sealed class Just : MaybeResult<T>
@@ -44,6 +40,4 @@ namespace Wooga.Lambda.Data
             }
         }
     }
-
-    
 }

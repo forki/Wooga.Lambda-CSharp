@@ -4,7 +4,7 @@ using Wooga.Lambda.Control.Monad;
 namespace Wooga.Lambda.Data
 {
     /// <summary>
-    /// System.Array extension methods
+    ///     System.Array extension methods
     /// </summary>
     public static class ArrayExt
     {
