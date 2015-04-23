@@ -47,11 +47,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
-            new()
+          <code onmouseout="hideTip(event, '131', 131)" onmouseover="showTip(event, '131', 131)">
+            new(transport)
           </code>
-          <div class="tip" id="121">
-            <strong>Signature:</strong> unit -&gt; unit<br />
+          <div class="tip" id="131">
+            <strong>Signature:</strong> transport:Func&lt;HttpClient,HttpRequest,HttpResponse&gt; -&gt; unit<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -69,12 +69,39 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
+          <code onmouseout="hideTip(event, '132', 132)" onmouseover="showTip(event, '132', 132)">
+            Delete(endpoint)
+          </code>
+          <div class="tip" id="132">
+            <strong>Signature:</strong> endpoint:string -&gt; HttpResponse<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '133', 133)" onmouseover="showTip(event, '133', 133)">
+            DeleteAsync(endpoint)
+          </code>
+          <div class="tip" id="133">
+            <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '134', 134)" onmouseover="showTip(event, '134', 134)">
             Get(endpoint)
           </code>
-          <div class="tip" id="122">
-            <strong>Signature:</strong> endpoint:string -&gt; IO&lt;HttpResponse&gt;<br />
-              <strong>Modifiers:</strong> abstract<br />
+          <div class="tip" id="134">
+            <strong>Signature:</strong> endpoint:string -&gt; HttpResponse<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -84,12 +111,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '123', 123)" onmouseover="showTip(event, '123', 123)">
+          <code onmouseout="hideTip(event, '135', 135)" onmouseover="showTip(event, '135', 135)">
             GetAsync(endpoint)
           </code>
-          <div class="tip" id="123">
+          <div class="tip" id="135">
             <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
-              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -99,12 +125,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '124', 124)" onmouseover="showTip(event, '124', 124)">
-            Post(url, body)
+          <code onmouseout="hideTip(event, '136', 136)" onmouseover="showTip(event, '136', 136)">
+            Head(endpoint)
           </code>
-          <div class="tip" id="124">
-            <strong>Signature:</strong> (url:string * body:byte []) -&gt; IO&lt;HttpResponse&gt;<br />
-              <strong>Modifiers:</strong> abstract<br />
+          <div class="tip" id="136">
+            <strong>Signature:</strong> endpoint:string -&gt; HttpResponse<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -114,12 +139,67 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '125', 125)" onmouseover="showTip(event, '125', 125)">
+          <code onmouseout="hideTip(event, '137', 137)" onmouseover="showTip(event, '137', 137)">
+            HeadAsync(endpoint)
+          </code>
+          <div class="tip" id="137">
+            <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '138', 138)" onmouseover="showTip(event, '138', 138)">
+            Post(endpoint, body)
+          </code>
+          <div class="tip" id="138">
+            <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; HttpResponse<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '139', 139)" onmouseover="showTip(event, '139', 139)">
             PostAsync(endpoint, body)
           </code>
-          <div class="tip" id="125">
+          <div class="tip" id="139">
             <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; Async&lt;HttpResponse&gt;<br />
-              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '140', 140)" onmouseover="showTip(event, '140', 140)">
+            Put(endpoint, body)
+          </code>
+          <div class="tip" id="140">
+            <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; HttpResponse<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '141', 141)" onmouseover="showTip(event, '141', 141)">
+            PutAsync(endpoint, body)
+          </code>
+          <div class="tip" id="141">
+            <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; Async&lt;HttpResponse&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">

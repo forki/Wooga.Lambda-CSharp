@@ -1,0 +1,436 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Burritos in C#</title>
+    <meta name="description" content="About Wooga.Lambda">
+    <meta name="author" content="devboy">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="//code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="fsharp.formatting/styles/style.css" />
+    <link type="text/css" rel="stylesheet" href="fsharp.formatting/styles/deedle.css" />
+    <link type="text/css" rel="stylesheet" href="css/custom.css" />
+    <script src="fsharp.formatting/styles/tips.js" type="text/javascript"></script>
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+    </script>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="reveal">
+        
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section data-background="images/burrito.jpg">
+
+<h1>Burritos in C#</h1>
+
+</section>
+
+<section data-background="images/lambda.jpg">
+
+<section data-background="images/lambda.jpg">
+
+<h1>Wooga.Lambda</h1>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<h2>Functional utilities for C#</h2>
+
+<blockquote>
+  <p>inspired by csharp-monads, Haskell &amp; F#</p>
+
+  <p>compatible with Unity3D</p>
+</blockquote>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<h2>Why functional?</h2>
+
+<blockquote>
+  <p>simplicity</p>
+
+  <p>predictability</p>
+
+  <p>composability</p>
+
+  <p>safety</p>
+
+  <p>concurrency</p>
+</blockquote>
+
+</section>
+
+</section>
+
+<section data-background="#34495e">
+
+<section data-background="#34495e">
+
+<h1>Problems</h1>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<p><img src="images/problems.jpg" alt="" /></p>
+
+</section>
+
+</section>
+
+<section data-background="#16a085">
+
+<section data-background="#16a085">
+
+<h3>problem: null</h3>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">string</span> FirstOf(<span class="k">string</span>[] xs)
+{
+  <span class="k">return</span> xs.Length <span class="o">&gt;</span> 0 <span class="o">?</span> xs[0] <span class="o">:</span> <span class="k">null</span>;
+}
+
+<span class="k">var</span> name <span class="o">=</span> FirstOf(names);
+<span class="k">var</span> letters <span class="o">=</span> name.Length; <span class="c">// Causes NullReferenceException</span>
+</pre></td></tr></table>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<h3>solution: maybe</h3>
+
+<blockquote>
+  <p>"The Maybe type encapsulates an optional value. A value of type Maybe[T] either contains a value of type T (Just[T]), or it is empty (Nothing[T])."</p>
+</blockquote>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<h3>example: maybe</h3>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">string</span> FirstOf(<span class="k">string</span>[] xs)
+{
+  <span class="k">return</span> xs.Length <span class="o">&gt;</span> 0 <span class="o">?</span> xs[0] <span class="o">:</span> <span class="k">null</span>;
+}
+
+<span class="k">var</span> name <span class="o">=</span> FirstOf(names);
+<span class="k">var</span> letters <span class="o">=</span> name.Length; <span class="c">// Causes NullReferenceException</span>
+
+<span class="c">// vs.</span>
+
+Maybe&lt;<span class="k">string</span>&gt; FirstOf(<span class="k">string</span>[] xs)
+{
+  <span class="k">return</span> xs.Length <span class="o">&gt;</span> 0 <span class="o">?</span> Maybe.Just(xs[0]) <span class="o">:</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;();
+}
+
+<span class="k">var</span> name <span class="o">=</span> FirstOf(names);
+<span class="k">var</span> letters <span class="o">=</span> name.FromJustOrDefault(0,s <span class="o">=</span><span class="o">&gt;</span> s.Length);
+</pre></td></tr></table>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<h3>composing: maybe</h3>
+
+<table class="pre"><tr><td><pre lang="cs">Maybe&lt;<span class="k">string</span>&gt; FirstOf(<span class="k">string</span>[] xs)
+{
+    <span class="k">return</span> xs.Length <span class="o">&gt;</span> 0 <span class="o">?</span> Maybe.Just(xs[0]) <span class="o">:</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;();
+}
+
+Maybe&lt;<span class="k">string</span>&gt; StartsWithA(<span class="k">string</span> s)
+{
+    <span class="k">return</span> s.StartsWith(<span class="s">"A"</span>) <span class="o">?</span> Maybe.Just(s) <span class="o">:</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;();
+}
+
+Maybe&lt;<span class="k">string</span>&gt; AtLeast5Chars(<span class="k">string</span> s)
+{
+    <span class="k">return</span> s.Length <span class="o">&gt;</span><span class="o">=</span> 5 <span class="o">?</span> Maybe.Just(s) <span class="o">:</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;();
+}
+
+<span class="k">var</span> letters <span class="o">=</span> FirstOf(names)
+              .Bind(StartsWithA)
+              .Bind(AtLeast5Chars)
+              .FromJustOrDefault(0,s <span class="o">=</span><span class="o">&gt;</span> s.Length);
+</pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section data-background="#27ae60">
+
+<section data-background="#27ae60">
+
+<h3>problem: exceptions</h3>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">bool</span> ValidPassword(<span class="k">string</span> x)
+{
+    <span class="k">if</span>(x.Length <span class="o">&lt;</span> 8)
+        <span class="k">throw</span> <span class="k">new</span> System.Exception(<span class="s">"Password needs at least 8 chars"</span>);
+    <span class="k">if</span>(x.Contains(<span class="s">"-"</span>))
+        <span class="k">throw</span> <span class="k">new</span> System.Exception(<span class="s">"Password needs to contain a dash"</span>);
+    <span class="k">return</span> <span class="k">true</span>;
+}
+
+<span class="k">var</span> valid <span class="o">=</span> <span class="k">false</span>;
+<span class="k">try</span>
+{
+    valid <span class="o">=</span> ValidPassword(pw);
+}
+<span class="k">catch</span> (Exception e)
+{
+    Console.WriteLine(<span class="s">"Validation error:"</span>+e);
+}
+<span class="k">if</span>(valid) Console.WriteLine(<span class="s">"Validation succeeded"</span>);
+</pre></td></tr></table>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<h3>solution: either</h3>
+
+<blockquote>
+  <p>"The Either type represents values with two possibilities: a value of type Either[T1,T2] is either Left[T1] or Right[T2]."</p>
+
+  <p>"The Either type is sometimes used to represent a value which is either correct or an error; by convention, Left is used to hold an error value and Right holds a correct value"</p>
+</blockquote>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<h3>example: either</h3>
+
+<table class="pre"><tr><td><pre lang="cs">Either&lt;Exception,<span class="k">string</span>&gt; ValidPassword(<span class="k">string</span> x)
+{
+    <span class="k">if</span>(x.Length <span class="o">&lt;</span> 8)
+        <span class="k">return</span> Either.Left&lt;Exception,<span class="k">string</span>&gt;(<span class="k">new</span> Exception(<span class="s">"Password needs at least 8 chars"</span>));
+    <span class="k">if</span> (x.Contains(<span class="s">"-"</span>))
+        <span class="k">return</span> Either.Left&lt;Exception, <span class="k">string</span>&gt;(<span class="k">new</span> Exception(<span class="s">"Password needs to contain a dash"</span>));
+    <span class="k">return</span> Either.Right&lt;Exception,<span class="k">string</span>&gt;(x);
+}
+
+<span class="k">var</span> valid <span class="o">=</span> ValidPassword(pw);
+valid.IsLeft()
+    <span class="o">?</span> Console.WriteLine(<span class="s">"Validation error:"</span> <span class="o">+</span> valid.FromLeft())
+    <span class="o">:</span> Console.WriteLine(<span class="s">"Validation succeeded"</span>);
+</pre></td></tr></table>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<h3>composing: either</h3>
+
+<table class="pre"><tr><td><pre lang="cs">Either&lt;Exception, <span class="k">string</span>&gt; AtLeast8Chars(<span class="k">string</span> x)
+{
+    <span class="k">return</span> x.Length <span class="o">&lt;</span> 8
+        <span class="o">?</span> Either.Left&lt;Exception, <span class="k">string</span>&gt;(<span class="k">new</span> Exception(<span class="s">"Password needs at least 8 chars"</span>))
+        <span class="o">:</span> Either.Right&lt;Exception, <span class="k">string</span>&gt;(x);
+}
+
+Either&lt;Exception, <span class="k">string</span>&gt; ContainsDash(<span class="k">string</span> x)
+{
+    <span class="k">return</span> x.Contains(<span class="s">"-"</span>)
+        <span class="o">?</span> Either.Left&lt;Exception, <span class="k">string</span>&gt;(<span class="k">new</span> Exception(<span class="s">"Password needs to contain a dash"</span>))
+        <span class="o">:</span> Either.Right&lt;Exception, <span class="k">string</span>&gt;(x);
+}
+
+Either&lt;Exception,<span class="k">string</span>&gt; ValidPassword(<span class="k">string</span> x)
+{
+    <span class="k">return</span> AtLeast8Chars(x)
+          .Bind(ContainsDash);
+}
+
+<span class="k">var</span> valid <span class="o">=</span> ValidPassword(pw);
+valid.IsLeft()
+    <span class="o">?</span> Console.WriteLine(<span class="s">"Validation error:"</span> <span class="o">+</span> valid.FromLeft())
+    <span class="o">:</span> Console.WriteLine(<span class="s">"Validation succeeded"</span>);
+</pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section data-background="#27ae60">
+
+<section data-background="#27ae60">
+
+<h3>problem: concurrency</h3>
+
+<table class="pre"><tr><td><pre lang="cs">HttpWebRequest webRequest;
+
+<span class="k">void</span> StartWebRequest()
+{
+    webRequest.BeginGetResponse(FinishWebRequest, <span class="k">null</span>);
+}
+
+<span class="k">void</span> FinishWebRequest(IAsyncResult result)
+{
+    <span class="k">var</span> response <span class="o">=</span> webRequest.EndGetResponse(result);
+    Console.WriteLine(response.ContentLength);
+}
+
+StartWebRequest(); <span class="c">// How do I get the response out?!?</span>
+</pre></td></tr></table>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<h3>solution: async</h3>
+
+<blockquote>
+  <p>"A compositional asynchronous computation, which, when run, will eventually produce a value of type T, or else raises an exception." - F# docs</p>
+</blockquote>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<h3>example: async</h3>
+
+<table class="pre"><tr><td><pre lang="cs">Async&lt;<span class="k">string</span>&gt; LoadHugeJsonAsync(Uri uri)
+{
+    <span class="k">return</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"....json..."</span>; <span class="c">//This could be a synchronous webrequest</span>
+}
+
+<span class="k">var</span> req <span class="o">=</span> LoadHugeJsonAsync(<span class="k">new</span> Uri(<span class="s">"huge-json.com"</span>));
+
+<span class="c">// Run it synchronously/blocking</span>
+<span class="k">var</span> result <span class="o">=</span> req.RunSynchronously();
+Console.WriteLine(result);
+
+<span class="c">// Run it async with callback</span>
+<span class="k">var</span> callback <span class="o">=</span> <span class="k">new</span> AsyncReplyChannel&lt;<span class="k">string</span>&gt;(s <span class="o">=</span><span class="o">&gt;</span>
+{
+    Console.WriteLine(s);
+    <span class="k">return</span> Unit.Default;
+});
+req.StartAndReply(ch <span class="o">=</span><span class="o">&gt;</span> callback);
+</pre></td></tr></table>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<h3>composing: async</h3>
+
+<table class="pre"><tr><td><pre lang="cs">Async&lt;<span class="k">string</span>&gt; LoadHugeJsonAsync(Uri uri)
+{
+    <span class="k">return</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"....json..."</span>; <span class="c">//This could be a synchronous webrequest</span>
+}
+
+Async&lt;Dictionary&lt;<span class="k">string</span>, <span class="k">string</span>&gt;<span class="o">&gt;</span> ParseHugeJsonAsync(<span class="k">string</span> json)
+{
+    <span class="k">return</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="k">new</span> Dictionary&lt;<span class="k">string</span>, <span class="k">string</span>&gt;(); <span class="c">// There should be some parsing here</span>
+}
+
+<span class="k">var</span> req <span class="o">=</span> LoadHugeJsonAsync(<span class="k">new</span> Uri(<span class="s">"huge-json.com"</span>))
+          .Bind(ParseHugeJsonAsync);
+
+<span class="c">// Get the dictionary synchronously</span>
+<span class="k">var</span> dict <span class="o">=</span> req.RunSynchronously();
+</pre></td></tr></table>
+
+</section>
+
+<section author="devboy" description="About Wooga.Lambda" theme="black" title="Burritos in C#" transition="slide">
+
+<h3>composing: async (parallel)</h3>
+
+<table class="pre"><tr><td><pre lang="cs">Async&lt;<span class="k">string</span>&gt; LoadHugeJsonAsync(Uri uri)
+{
+    <span class="k">return</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"....json..."</span>; <span class="c">//This could be a synchronous webrequest</span>
+}
+
+<span class="k">var</span> reqs <span class="o">=</span> <span class="k">new</span> []
+{
+    LoadHugeJson(<span class="k">new</span> Uri(<span class="s">"huge-json.com/1"</span>)),
+    LoadHugeJson(<span class="k">new</span> Uri(<span class="s">"huge-json.com/2"</span>)),
+    LoadHugeJson(<span class="k">new</span> Uri(<span class="s">"huge-json.com/3"</span>))
+};
+
+<span class="k">var</span> results <span class="o">=</span> reqs.Parallel().RunSynchronously();
+<span class="k">foreach</span> (<span class="k">var</span> result <span class="k">in</span> results)
+{
+    Console.WriteLine(result);
+}
+</pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section >
+
+<h3>Thanks</h3>
+
+<p>github.com/wooga/Wooga.Lambda-CSharp</p>
+
+</section>
+
+
+
+        </div>
+    </div>
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+    <script>
+
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'slide', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: 'lib/js/classList.js', condition: function () { return !document.body.classList; } },
+                { src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+                { src: 'plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+                { src: 'plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+</body>
+</html>
+
