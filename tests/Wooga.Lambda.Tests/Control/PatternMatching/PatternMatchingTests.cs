@@ -10,33 +10,33 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         public static void ChooseDefaultWhenNoMatch()
         {
             var t = Pattern
-                    .Match<string, string>("hello")
-                    .Case(s => s == "cat", s => s)
-                    .Default(()=> "dog")
+                    .Match<string, int>("hello")
+                    .Case(s => s == "cat", s => 0)
+                    .Default(()=> 1)
                     .Evaluate();
-            Assert.AreEqual("dog", t);
+            Assert.AreEqual(1, t);
         }
 
         [Test]
         public static void ChooseFirstOfMultipleCorrectMatch()
         {
             var t = Pattern
-                    .Match<string, string>("cat")
-                    .Case(s => s == "cat", s => s)
-                    .Case(s => s == "cat", _ => "dog")
+                    .Match<string, int>("cat")
+                    .Case(s => s == "cat", s => 0)
+                    .Case(s => s == "cat", _ => 1)
                     .Evaluate();
-            Assert.AreEqual("cat", t);
+            Assert.AreEqual(0, t);
         }
 
         [Test]
         public static void ChooseFirstCorrectMatch()
         {
             var t = Pattern
-                    .Match<string, string>("cat")
-                    .Case(s => s == "fish", s => s)
-                    .Case(s => s == "cat", _ => "dog")
+                    .Match<string, int>("cat")
+                    .Case(s => s == "fish", s => 0)
+                    .Case(s => s == "cat", _ => 2)
                     .Evaluate();
-            Assert.AreEqual("dog", t);
+            Assert.AreEqual(2, t);
         }
 
         [Test]
