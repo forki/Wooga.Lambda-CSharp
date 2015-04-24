@@ -37,6 +37,7 @@
     <Compile Include="Control\Concurrent\AgentTests.cs" />
     <Compile Include="Control\Concurrent\AsyncTests.cs" />
     <Compile Include="Control\Monad\TryTests.cs" />
+    <Compile Include="Control\PatternMatching\PatternMatchingTests.cs" />
     <Compile Include="Data\ArrayExt.cs" />
     <Compile Include="Data\EitherTests.cs" />
     <Compile Include="Data\MaybeTests.cs" />
@@ -68,4 +69,5 @@
       <Paket>True</Paket>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
 </Project>
