@@ -51,5 +51,17 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
             Assert.AreEqual("dog", t);
         }
 
+        [Test]
+        public static void ChooseFirstCorrectMatchDefaultWhenDefaultIsFist()
+        {
+            var t = Pattern
+                    .Match<string, string>("cat")
+                    .Default(() => "default")
+                    .Case(s => s == "fish", s => s)
+                    .Case(s => s == "cat", _ => "dog")
+                    .Evaluate();
+            Assert.AreEqual("default", t);
+        }
+
     }
 }
