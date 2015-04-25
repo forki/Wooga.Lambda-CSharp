@@ -1,4 +1,4 @@
-using System;
+//using System;
 using System.Text;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
@@ -12,7 +12,7 @@ namespace AsyncDownloader
     {
         private static readonly Encoding Enc = Encoding.UTF8;
 
-        public static Async<Wooga.Lambda.Data.Tuple<string, string>> GetHtmlAsync(this HttpClient http, string uri)
+        public static Async<Tuple<System.Uri, string>> GetHtmlAsync(this HttpClient http, string uri)
         {
             return () =>
             {
@@ -21,7 +21,7 @@ namespace AsyncDownloader
                     .RunSynchronously()
                     .Body
                     .FromJustOrDefault("", Enc.GetString);
-                return new Wooga.Lambda.Data.Tuple<string,string>(uri,body);
+                return new Tuple<System.Uri, string>(new System.Uri(uri), body);
             };
         }
 
@@ -47,15 +47,11 @@ namespace AsyncDownloader
                        .Parallel()
                        .RunSynchronously();
 
-            var bytesTotal = resp.Fold((a, s) => a + Enc.GetByteCount(s.Item2), 0);
+            var bytesTotal = resp.Fold((a,s) => a + Enc.GetByteCount(s.Item2), 0);
 
             System.Diagnostics.Debug.WriteLine( bytesTotal + " bytesLoaded");
 
-            // 133025 bytes of http://giphy.com/,
-            // 52014 bytes of http://google.com,
-            // 30253 bytes of http://wooga.com,
-            // 9062 bytes of http://apple.com,
-            // 70632 bytes of http://tumblr.com,
+            // 12932393 bytes = ~12MB total 
         }
     }
 }

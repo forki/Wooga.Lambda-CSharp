@@ -77,11 +77,11 @@ namespace Wooga.Lambda.Control.Monad
         {
             try
             {
-                return Either.Right<TLeft, TRight>(fr());
+                return Right<TLeft, TRight>(fr());
             }
             catch (Exception e)
             {
-                return Either.Left<TLeft, TRight>(fl(e));
+                return Left<TLeft, TRight>(fl(e));
             }     
         }
 
