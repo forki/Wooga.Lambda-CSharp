@@ -47,8 +47,36 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '171', 171)" onmouseover="showTip(event, '171', 171)">
+          <code onmouseout="hideTip(event, '169', 169)" onmouseover="showTip(event, '169', 169)">
             Any()
+          </code>
+          <div class="tip" id="169">
+            <strong>Signature:</strong> unit -&gt; Parser&lt;char&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '170', 170)" onmouseover="showTip(event, '170', 170)">
+            AnyOf(cs)
+          </code>
+          <div class="tip" id="170">
+            <strong>Signature:</strong> (cs:char []) -&gt; Parser&lt;char&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '171', 171)" onmouseover="showTip(event, '171', 171)">
+            Digit()
           </code>
           <div class="tip" id="171">
             <strong>Signature:</strong> unit -&gt; Parser&lt;char&gt;<br />
@@ -62,10 +90,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '172', 172)" onmouseover="showTip(event, '172', 172)">
-            AnyOf(cs)
+            Eq(c)
           </code>
           <div class="tip" id="172">
-            <strong>Signature:</strong> (cs:char []) -&gt; Parser&lt;char&gt;<br />
+            <strong>Signature:</strong> c:char -&gt; Parser&lt;char&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -76,7 +104,7 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '173', 173)" onmouseover="showTip(event, '173', 173)">
-            Digit()
+            Letter()
           </code>
           <div class="tip" id="173">
             <strong>Signature:</strong> unit -&gt; Parser&lt;char&gt;<br />
@@ -90,10 +118,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '174', 174)" onmouseover="showTip(event, '174', 174)">
-            Eq(c)
+            Newline()
           </code>
           <div class="tip" id="174">
-            <strong>Signature:</strong> c:char -&gt; Parser&lt;char&gt;<br />
+            <strong>Signature:</strong> unit -&gt; Parser&lt;char&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -104,37 +132,9 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '175', 175)" onmouseover="showTip(event, '175', 175)">
-            Letter()
-          </code>
-          <div class="tip" id="175">
-            <strong>Signature:</strong> unit -&gt; Parser&lt;char&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '176', 176)" onmouseover="showTip(event, '176', 176)">
-            Newline()
-          </code>
-          <div class="tip" id="176">
-            <strong>Signature:</strong> unit -&gt; Parser&lt;char&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '177', 177)" onmouseover="showTip(event, '177', 177)">
             NoneOf(cs)
           </code>
-          <div class="tip" id="177">
+          <div class="tip" id="175">
             <strong>Signature:</strong> (cs:char []) -&gt; Parser&lt;char&gt;<br />
                       </div>
         </td>
@@ -145,10 +145,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '178', 178)" onmouseover="showTip(event, '178', 178)">
+          <code onmouseout="hideTip(event, '176', 176)" onmouseover="showTip(event, '176', 176)">
             Satisfy(f)
           </code>
-          <div class="tip" id="178">
+          <div class="tip" id="176">
             <strong>Signature:</strong> f:Func&lt;char,bool&gt; -&gt; Parser&lt;char&gt;<br />
                       </div>
         </td>
@@ -159,10 +159,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '179', 179)" onmouseover="showTip(event, '179', 179)">
+          <code onmouseout="hideTip(event, '177', 177)" onmouseover="showTip(event, '177', 177)">
             SeqOf(cs)
           </code>
-          <div class="tip" id="179">
+          <div class="tip" id="177">
             <strong>Signature:</strong> (cs:char []) -&gt; Parser&lt;char []&gt;<br />
                       </div>
         </td>
@@ -173,10 +173,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '180', 180)" onmouseover="showTip(event, '180', 180)">
+          <code onmouseout="hideTip(event, '178', 178)" onmouseover="showTip(event, '178', 178)">
             WhiteSpace()
           </code>
-          <div class="tip" id="180">
+          <div class="tip" id="178">
             <strong>Signature:</strong> unit -&gt; Parser&lt;char&gt;<br />
                       </div>
         </td>

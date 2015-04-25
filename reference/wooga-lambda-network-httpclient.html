@@ -47,10 +47,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
+          <code onmouseout="hideTip(event, '118', 118)" onmouseover="showTip(event, '118', 118)">
             new(transport)
           </code>
-          <div class="tip" id="120">
+          <div class="tip" id="118">
             <strong>Signature:</strong> transport:Func&lt;HttpClient,HttpRequest,HttpResponse&gt; -&gt; unit<br />
                       </div>
         </td>
@@ -69,8 +69,36 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
+          <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
             Delete(endpoint)
+          </code>
+          <div class="tip" id="119">
+            <strong>Signature:</strong> endpoint:string -&gt; HttpResponse<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
+            DeleteAsync(endpoint)
+          </code>
+          <div class="tip" id="120">
+            <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
+            Get(endpoint)
           </code>
           <div class="tip" id="121">
             <strong>Signature:</strong> endpoint:string -&gt; HttpResponse<br />
@@ -84,7 +112,7 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
-            DeleteAsync(endpoint)
+            GetAsync(endpoint)
           </code>
           <div class="tip" id="122">
             <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
@@ -98,7 +126,7 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '123', 123)" onmouseover="showTip(event, '123', 123)">
-            Get(endpoint)
+            Head(endpoint)
           </code>
           <div class="tip" id="123">
             <strong>Signature:</strong> endpoint:string -&gt; HttpResponse<br />
@@ -112,7 +140,7 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '124', 124)" onmouseover="showTip(event, '124', 124)">
-            GetAsync(endpoint)
+            HeadAsync(endpoint)
           </code>
           <div class="tip" id="124">
             <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
@@ -126,10 +154,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '125', 125)" onmouseover="showTip(event, '125', 125)">
-            Head(endpoint)
+            Post(endpoint, body)
           </code>
           <div class="tip" id="125">
-            <strong>Signature:</strong> endpoint:string -&gt; HttpResponse<br />
+            <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; HttpResponse<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -140,10 +168,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '126', 126)" onmouseover="showTip(event, '126', 126)">
-            HeadAsync(endpoint)
+            PostAsync(endpoint, body)
           </code>
           <div class="tip" id="126">
-            <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
+            <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; Async&lt;HttpResponse&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -154,7 +182,7 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '127', 127)" onmouseover="showTip(event, '127', 127)">
-            Post(endpoint, body)
+            Put(endpoint, body)
           </code>
           <div class="tip" id="127">
             <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; HttpResponse<br />
@@ -168,37 +196,9 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '128', 128)" onmouseover="showTip(event, '128', 128)">
-            PostAsync(endpoint, body)
-          </code>
-          <div class="tip" id="128">
-            <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; Async&lt;HttpResponse&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '129', 129)" onmouseover="showTip(event, '129', 129)">
-            Put(endpoint, body)
-          </code>
-          <div class="tip" id="129">
-            <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; HttpResponse<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '130', 130)" onmouseover="showTip(event, '130', 130)">
             PutAsync(endpoint, body)
           </code>
-          <div class="tip" id="130">
+          <div class="tip" id="128">
             <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; Async&lt;HttpResponse&gt;<br />
                       </div>
         </td>

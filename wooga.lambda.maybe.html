@@ -35,9 +35,9 @@
           
 <h1><a name="Monad-Maybe" class="anchor" href="#Monad-Maybe">Monad.Maybe</a></h1>
 
-<h4><a name="API" class="anchor" href="#API"><a href="reference/wooga-lambda-control-monad-maybe.html">(API)</a></a></h4>
+<p><a href="reference/wooga-lambda-control-monad-maybe.html">(API Reference)</a></p>
 
-<h3><a name="The-problem-null" class="anchor" href="#The-problem-null">The problem: null</a></h3>
+<h2><a name="The-problem-null" class="anchor" href="#The-problem-null">The problem: null</a></h2>
 
 <table class="pre"><tr><td><pre lang="cs"><span class="k">string</span> FirstOf(<span class="k">string</span>[] xs)
 {
@@ -48,13 +48,13 @@
 <span class="k">var</span> letters <span class="o">=</span> name.Length; <span class="c">// Causes NullReferenceException</span>
 </pre></td></tr></table>
 
-<h3><a name="The-solution-Maybe" class="anchor" href="#The-solution-Maybe">The solution: Maybe[T]</a></h3>
+<h2><a name="The-solution-Maybe" class="anchor" href="#The-solution-Maybe">The solution: Maybe[T]</a></h2>
 
 <blockquote>
   <p>"The Maybe type encapsulates an optional value. A value of type Maybe[T] either contains a value of type T (Just[T]), or it is empty (Nothing[T])."</p>
 </blockquote>
 
-<h3><a name="An-example-Maybe" class="anchor" href="#An-example-Maybe">An example: Maybe[T]</a></h3>
+<h2><a name="An-example-Maybe" class="anchor" href="#An-example-Maybe">An example: Maybe[T]</a></h2>
 
 <table class="pre"><tr><td><pre lang="cs">Maybe&lt;<span class="k">string</span>&gt; FirstOf(<span class="k">string</span>[] xs)
 {
@@ -65,7 +65,7 @@
 <span class="k">var</span> letters <span class="o">=</span> name.FromJustOrDefault(0,s <span class="o">=</span><span class="o">&gt;</span> s.Length);
 </pre></td></tr></table>
 
-<h3><a name="Composing-Maybe" class="anchor" href="#Composing-Maybe">Composing: Maybe[T]</a></h3>
+<h2><a name="Composing-Maybe" class="anchor" href="#Composing-Maybe">Composing: Maybe[T]</a></h2>
 
 <table class="pre"><tr><td><pre lang="cs">Maybe&lt;<span class="k">string</span>&gt; FirstOf(<span class="k">string</span>[] xs)
 {

@@ -35,9 +35,41 @@
           
 <h1><a name="Concurrent-Async" class="anchor" href="#Concurrent-Async">Concurrent.Async</a></h1>
 
-<p><a href="http://wooga.github.io/Wooga.Lambda-CSharp/reference/wooga-lambda-control-concurrent-async.html">Documentation</a></p>
+<p><a href="http://wooga.github.io/Wooga.Lambda-CSharp/reference/wooga-lambda-control-concurrent-async.html">(API Reference)</a></p>
 
-<p>No documentation yet</p>
+<h2><a name="The-parallel-method-Async" class="anchor" href="#The-parallel-method-Async">The parallel method: Async[T]</a></h2>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">using</span> System.Text;
+<span class="k">using</span> Wooga.Lambda.Control.Concurrent;
+<span class="k">using</span> Wooga.Lambda.Control.Monad;
+<span class="k">using</span> Wooga.Lambda.Data;
+<span class="k">using</span> Wooga.Lambda.Network;
+<span class="k">using</span> Wooga.Lambda.Network.Transport;
+
+<span class="k">namespace</span> AsyncDownloader
+{
+    <span class="k">static</span> <span class="k">class</span> AsyncParallelSimple
+    {
+        <span class="k">public</span> <span class="k">static</span> Async&lt;<span class="k">string</span>&gt; GetHtmlAsync(<span class="k">this</span> HttpClient http, <span class="k">string</span> uri)
+        {
+            <span class="k">return</span> () <span class="o">=</span><span class="o">&gt;</span> http
+                         .GetAsync(uri)
+                         .RunSynchronously()
+                         .Body
+                         .FromJustOrDefault(<span class="s">""</span>, Encoding.UTF8.GetString);
+        }
+
+        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> Run(<span class="k">string</span>[] uris)
+        {
+            <span class="k">var</span> http <span class="o">=</span> WebRequestTransport.CreateHttpClient();
+            <span class="k">var</span> reqs <span class="o">=</span> uris
+                       .Map(http.GetHtmlAsync);
+            <span class="k">var</span> resp <span class="o">=</span> reqs
+                       .Parallel()
+                       .RunSynchronously();
+        }
+    }
+}</pre></td></tr></table>
 
 
         </div>
