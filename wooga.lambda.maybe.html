@@ -35,11 +35,7 @@
           
 <h1><a name="Monad-Maybe" class="anchor" href="#Monad-Maybe">Monad.Maybe</a></h1>
 
-<blockquote>
-  <p>The Maybe type encapsulates an optional value. A value of type Maybe[T] either contains a value of type T (Just[T]), or it is empty (Nothing[T]).</p>
-</blockquote>
-
-<h3><a name="problem-null" class="anchor" href="#problem-null">problem: null</a></h3>
+<h3><a name="The-problem-null" class="anchor" href="#The-problem-null">The problem: null</a></h3>
 
 <table class="pre"><tr><td><pre lang="cs"><span class="k">string</span> FirstOf(<span class="k">string</span>[] xs)
 {
@@ -50,29 +46,15 @@
 <span class="k">var</span> letters <span class="o">=</span> name.Length; <span class="c">// Causes NullReferenceException</span>
 </pre></td></tr></table>
 
-<hr />
-
-<h3><a name="solution-maybe" class="anchor" href="#solution-maybe">solution: maybe</a></h3>
+<h3><a name="The-solution-Maybe" class="anchor" href="#The-solution-Maybe">The solution: Maybe[T]</a></h3>
 
 <blockquote>
   <p>"The Maybe type encapsulates an optional value. A value of type Maybe[T] either contains a value of type T (Just[T]), or it is empty (Nothing[T])."</p>
 </blockquote>
 
-<hr />
+<h3><a name="An-example-Maybe" class="anchor" href="#An-example-Maybe">An example: Maybe[T]</a></h3>
 
-<h3><a name="example-maybe" class="anchor" href="#example-maybe">example: maybe</a></h3>
-
-<table class="pre"><tr><td><pre lang="cs"><span class="k">string</span> FirstOf(<span class="k">string</span>[] xs)
-{
-  <span class="k">return</span> xs.Length <span class="o">&gt;</span> 0 <span class="o">?</span> xs[0] <span class="o">:</span> <span class="k">null</span>;
-}
-
-<span class="k">var</span> name <span class="o">=</span> FirstOf(names);
-<span class="k">var</span> letters <span class="o">=</span> name.Length; <span class="c">// Causes NullReferenceException</span>
-
-<span class="c">// vs.</span>
-
-Maybe&lt;<span class="k">string</span>&gt; FirstOf(<span class="k">string</span>[] xs)
+<table class="pre"><tr><td><pre lang="cs">Maybe&lt;<span class="k">string</span>&gt; FirstOf(<span class="k">string</span>[] xs)
 {
   <span class="k">return</span> xs.Length <span class="o">&gt;</span> 0 <span class="o">?</span> Maybe.Just(xs[0]) <span class="o">:</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;();
 }
@@ -81,9 +63,7 @@ Maybe&lt;<span class="k">string</span>&gt; FirstOf(<span class="k">string</span>
 <span class="k">var</span> letters <span class="o">=</span> name.FromJustOrDefault(0,s <span class="o">=</span><span class="o">&gt;</span> s.Length);
 </pre></td></tr></table>
 
-<hr />
-
-<h3><a name="composing-maybe" class="anchor" href="#composing-maybe">composing: maybe</a></h3>
+<h3><a name="Composing-Maybe" class="anchor" href="#Composing-Maybe">Composing: Maybe[T]</a></h3>
 
 <table class="pre"><tr><td><pre lang="cs">Maybe&lt;<span class="k">string</span>&gt; FirstOf(<span class="k">string</span>[] xs)
 {
