@@ -13,8 +13,8 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="./content/style.css" />
-    <script type="text/javascript" src="./content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="/Wooga.Lambda-CSharp/content/style.css" />
+    <script type="text/javascript" src="/Wooga.Lambda-CSharp/content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -27,7 +27,7 @@
           <li><a href="http://wooga.com">wooga.com</a></li>
           <li><a href="http://github.com/wooga/Wooga.Lambda-CSharp">github page</a></li>
         </ul>
-        <h3 class="muted"><a href="./index.html">Wooga.Lambda</a></h3>
+        <h3 class="muted"><a href="/Wooga.Lambda-CSharp/index.html">Wooga.Lambda</a></h3>
       </div>
       <hr />
       <div class="row">
@@ -118,91 +118,61 @@ Async&lt;<span class="k">string</span>&gt; comp <span class="o">=</span> () <spa
 <span class="k">var</span> r <span class="o">=</span> comp.RunSynchronously(); <span class="c">// "first second third"</span>
 </pre></td></tr></table>
 
-<p><a href="http://wooga.github.io/Wooga.Lambda-CSharp/reference/wooga-lambda-control-concurrent-async.html">(API Reference)</a></p>
+<h2><a name="Composing-Async-parallel" class="anchor" href="#Composing-Async-parallel">Composing <em>Async</em> parallel</a></h2>
 
-<h2><a name="The-parallel-method-Async" class="anchor" href="#The-parallel-method-Async">The parallel method: Async[T]</a></h2>
+<p>Multiple <strong>Async<'T></strong> can be executed in parallel with <strong>Async.Parallel(Async<'T>[])</strong>.
+Returns an array of values from the array of input computations.</p>
 
-<table class="pre"><tr><td><pre lang="cs"><span class="k">using</span> System;
-<span class="k">using</span> System.Text;
-<span class="k">using</span> Wooga.Lambda.Control.Concurrent;
-<span class="k">using</span> Wooga.Lambda.Control.Monad;
-<span class="k">using</span> Wooga.Lambda.Data;
-<span class="k">using</span> Wooga.Lambda.Network;
-<span class="k">using</span> Wooga.Lambda.Network.Transport;
+<table class="pre"><tr><td><pre lang="cs">Async&lt;<span class="k">int</span>&gt; threadId <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> Thread.CurrentThread.ManagedThreadId;
+<span class="k">var</span> blocker <span class="o">=</span> Async.Sleep(300).Bind(_ <span class="o">=</span><span class="o">&gt;</span> threadId);
+<span class="k">var</span> sleeps <span class="o">=</span> <span class="k">new</span>[]{blocker,<span class="o">.</span><span class="o">.</span><span class="o">.</span>,blocker};
 
-<span class="k">namespace</span> AsyncDownloader
-{
-    <span class="k">static</span> <span class="k">class</span> AsyncParallelSimple
-    {
-        <span class="k">private</span> <span class="k">static</span> <span class="k">readonly</span> Encoding Enc <span class="o">=</span> Encoding.UTF8;
+<span class="k">var</span> stopwatch <span class="o">=</span> <span class="k">new</span> Stopwatch();
+stopwatch.Start();
 
-        <span class="k">public</span> <span class="k">static</span> Async&lt;Tuple&lt;<span class="k">string</span>, <span class="k">string</span>&gt;<span class="o">&gt;</span> GetHtmlAsync(<span class="k">this</span> HttpClient http, <span class="k">string</span> uri)
-        {
-            <span class="k">return</span> () <span class="o">=</span><span class="o">&gt;</span>
-            {
-                <span class="k">var</span> body <span class="o">=</span> http
-                    .GetAsync(uri)
-                    .RunSynchronously()
-                    .Body
-                    .FromJustOrDefault(<span class="s">""</span>, Enc.GetString);
-                <span class="k">return</span> <span class="k">new</span> Tuple&lt;<span class="k">string</span>,<span class="k">string</span>&gt;(uri,body);
-            };
-        }
+<span class="k">var</span> threadCount <span class="o">=</span> sleeps
+                  .Parallel().RunSynchronously()
+                  .Distinct().Count();
 
-        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> Run(<span class="k">string</span>[] uris)
-        {
-            <span class="k">var</span> http <span class="o">=</span> WebRequestTransport.CreateHttpClient();
+stopwatch.Stop();
+<span class="k">var</span> t <span class="o">=</span> stopwatch.Elapsed.Milliseconds;
 
-            <span class="k">var</span> reqs <span class="o">=</span> uris.Map(http.GetHtmlAsync);
+Debug.WriteLine(<span class="s">"total ms: {0} for threads: {1}"</span>,t,threadCount);
+<span class="c">// total ms: 953 for threads: 4</span>
+</pre></td></tr></table>
 
-            <span class="k">var</span> resp <span class="o">=</span> reqs
-                       .Parallel()
-                       .RunSynchronously();
-
-            System.Diagnostics.Debug.WriteLine(
-                resp.Map(t <span class="o">=</span><span class="o">&gt;</span> Enc.GetByteCount(t.Item2) <span class="o">+</span> <span class="s">" bytes of "</span> <span class="o">+</span> t.Item1 <span class="o">+</span> <span class="s">",\n"</span>)
-                    .Fold((a,s)<span class="o">=</span>&gt;a+s,<span class="s">""</span>)
-                );
-
-            <span class="c">// 133025 bytes of http://giphy.com/,</span>
-            <span class="c">// 52014 bytes of http://google.com,</span>
-            <span class="c">// 30253 bytes of http://wooga.com,</span>
-            <span class="c">// 9062 bytes of http://apple.com,</span>
-            <span class="c">// 70632 bytes of http://tumblr.com,</span>
-        }
-    }
-}</pre></td></tr></table>
+<p>Check out the <a href="http://wooga.github.io/Wooga.Lambda-CSharp/reference/wooga-lambda-control-concurrent-async.html">API Reference</a> for more information.</p>
 
 
         </div>
         <div class="span3">
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-            <li><img src="./img/logo.png" alt="F# Project" style="width:150px;margin:10px" /></li>
+            <li><img src="/Wooga.Lambda-CSharp/img/logo.png" alt="F# Project" style="width:150px;margin:10px" /></li>
             <!-- <li><img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/issue" alt="F# Project" style="width:180px;margin:5px"/></li>
             <li>
               <img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/pr" alt="F# Project" style="width:180px;margin:5px"/>
             </li> -->
             <li class="nav-header">Wooga.Lambda</li>
-            <li><a href="./index.html">Home page</a></li>
+            <li><a href="/Wooga.Lambda-CSharp/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/Wooga.Lambda">Get Library via NuGet</a></li>
             <li><a href="http://github.com/wooga/Wooga.Lambda-CSharp">Source Code on GitHub</a></li>
-            <li><a href="./license.html">License</a></li>
-            <li><a href="./release-notes.html">Release Notes</a></li>
+            <li><a href="/Wooga.Lambda-CSharp/license.html">License</a></li>
+            <li><a href="/Wooga.Lambda-CSharp/release-notes.html">Release Notes</a></li>
 
             <li class="nav-header">Get Started</li>
-            <li><a href="./wooga.lambda.maybe.html">Monad.Maybe</a></li>
-            <li><a href="./wooga.lambda.either.html">Monad.Either</a></li>
-            <li><a href="./wooga.lambda.async.html">Concurrent.Async</a></li>
-            <!-- <li><a href="./wooga.lambda.agent.html">Concurrent.Agent</a></li> -->
-            <li><a href="./wooga.lambda.patternmatch.html">Pattern.Match</a></li>
-            <!-- <li><a href="./wooga.lambda.logging.agent.html">LoggingAgent</a></li> -->
-            <!-- <li><a href="./wooga.lambda.network.httpclient.html">Network.HttpClient</a></li> -->
-            <!-- <li><a href="./wooga.lambda.filesystem.html">FileSystem</a></li> -->
-            <li><a href="./wooga.lambda.parser.html">Parser</a></li>
+            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.maybe.html">Monad.Maybe</a></li>
+            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.either.html">Monad.Either</a></li>
+            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.async.html">Concurrent.Async</a></li>
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li> -->
+            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.patternmatch.html">Pattern.Match</a></li>
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.logging.agent.html">LoggingAgent</a></li> -->
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.network.httpclient.html">Network.HttpClient</a></li> -->
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.filesystem.html">FileSystem</a></li> -->
+            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.html">Parser</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="./reference/index.html">API Reference</a></li>
+            <li><a href="/Wooga.Lambda-CSharp/reference/index.html">API Reference</a></li>
 
             <li><img src="https://travis-ci.org/wooga/Wooga.Lambda-CSharp.png" alt="F# Project" style="margin:5px"/></li>
             <li><img src="http://img.shields.io/nuget/v/Wooga.Lambda.svg?style=flat" alt="F# Project" style="margin:5px"/></li>
