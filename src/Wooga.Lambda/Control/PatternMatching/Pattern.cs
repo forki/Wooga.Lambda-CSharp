@@ -32,7 +32,7 @@ namespace Wooga.Lambda.Control.PatternMatching
             return Case(m, v => v is TValueType && t(v), f);
         }
 
-        public static TResult Evaluate<TValue, TResult>(this PatterMatch<TValue, TResult> m)
+        public static TResult Run<TValue, TResult>(this PatterMatch<TValue, TResult> m)
         {
             return m().FromLeft();
         }
