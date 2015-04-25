@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -54,13 +54,12 @@
   <ItemGroup>
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit\lib\nunit.framework.dll</HintPath>
-      <Private>True</Private>
       <Paket>True</Paket>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Wooga.Lambda.Parser\Wooga.Lambda.Parser.csproj">
-      <Project>{dc9fe4ff-8e70-4525-8e2c-3af0a78683ef}</Project>
+      <Project>{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}</Project>
       <Name>Wooga.Lambda.Parser</Name>
     </ProjectReference>
   </ItemGroup>

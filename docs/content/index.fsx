@@ -15,7 +15,7 @@ functional utilities & primitives for C#
     <div class="well well-small" id="nuget">
       The different libraries of Wooga.Lambda can be <a href="https://nuget.org/packages/Wooga.Lambda">installed from NuGet</a>:
       <pre>PM> Install-Package Wooga.Lambda</pre>
-      <pre>PM> Install-Package Wooga.Lambda.Log</pre>
+      <pre>PM> Install-Package Wooga.Lambda.Logging</pre>
       <pre>PM> Install-Package Wooga.Lambda.Network</pre>
       <pre>PM> Install-Package Wooga.Lambda.FileSystem</pre>
       <pre>PM> Install-Package Wooga.Lambda.Parser</pre>
@@ -23,7 +23,7 @@ functional utilities & primitives for C#
     <div class="well well-small" id="nuget">
       Unity3D source-code releases of Wooga.Lambda can be <a href="https://github.com/devboy/Paket.Unity3D">installed from Paket.Unity3D</a> by appending Unity3D.Source to the name:
       <pre>nuget Wooga.Lambda.Unity3D.Source</pre>
-      <pre>nuget Wooga.Lambda.Log.Unity3D.Source</pre>
+      <pre>nuget Wooga.Lambda.Logging.Unity3D.Source</pre>
     </div>
   </div>
   <div class="span1"></div>

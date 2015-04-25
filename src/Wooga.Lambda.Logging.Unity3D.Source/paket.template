@@ -1,5 +1,5 @@
 type file
-id Wooga.Lambda.Log.Unity3D.Source
+id Wooga.Lambda.Logging.Unity3D.Source
 owners wooga
 authors devboy
 projectUrl
@@ -19,6 +19,6 @@ summary
 description
     Functional utilites for C# - inspired by csharp-monads, Haskell & F# - compatible with Unity3D
 files
-	../Wooga.Lambda.Log/*.cs ==> content/Wooga.Lambda.Log
+	../Wooga.Lambda.Logging/*.cs ==> content/Wooga.Lambda.Logging
 dependencies
 	Wooga.Lambda.Unity3D.Source

@@ -1,5 +1,6 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio 2012
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{63297B98-5CED-492C-A5B7-A5B4F73CF142}"
@@ -10,13 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{63297B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{A6A6AF7D-D6E3-442D-9B1E-58CC91879BE1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{BF60BC93-E09B-4E5F-9D85-95A519479D54}"
-	ProjectSection(SolutionItems) = preProject
-		build.fsx = build.fsx
-		README.md = README.md
-		RELEASE_NOTES.md = RELEASE_NOTES.md
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{83F16175-43B1-4C90-A1EE-8E351C33435D}"
 	ProjectSection(SolutionItems) = preProject
 		docs\tools\generate.fsx = docs\tools\generate.fsx
@@ -26,18 +20,24 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D5255-776D-4B61-85F9-73C37AA1FB9A}"
 	ProjectSection(SolutionItems) = preProject
 		docs\content\index.fsx = docs\content\index.fsx
-		docs\content\tutorial.fsx = docs\content\tutorial.fsx
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{BF60BC93-E09B-4E5F-9D85-95A519479D54}"
+	ProjectSection(SolutionItems) = preProject
+		build.fsx = build.fsx
+		README.md = README.md
+		RELEASE_NOTES.md = RELEASE_NOTES.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{ED8079DD-2B06-4030-9F0F-DC548F98E1C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda", "src\Wooga.Lambda\Wooga.Lambda.csproj", "{03231AC8-DCA3-49E4-89CD-E68BE439C2A4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Tests", "tests\Wooga.Lambda.Tests\Wooga.Lambda.Tests.csproj", "{A4C35F19-C520-4912-8F3C-DE7E6324E6FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Network", "src\Wooga.Lambda.Network\Wooga.Lambda.Network.csproj", "{2247283E-0466-40AC-9D05-B8972C8451BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Parser.Tests", "tests\Wooga.Lambda.Parser.Tests\Wooga.Lambda.Parser.Tests.csproj", "{D651D213-21E5-4225-8E47-B44DF5D502A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Log", "src\Wooga.Lambda.Log\Wooga.Lambda.Log.csproj", "{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda", "src\Wooga.Lambda\Wooga.Lambda.csproj", "{03231AC8-DCA3-49E4-89CD-E68BE439C2A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Network", "src\Wooga.Lambda.Network\Wooga.Lambda.Network.csproj", "{2247283E-0466-40AC-9D05-B8972C8451BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.FileSystem", "src\Wooga.Lambda.FileSystem\Wooga.Lambda.FileSystem.csproj", "{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}"
 EndProject
@@ -53,9 +53,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wooga.Lambda.FileSystem.Uni
 		src\Wooga.Lambda.FileSystem.Unity3D.Source\paket.template = src\Wooga.Lambda.FileSystem.Unity3D.Source\paket.template
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wooga.Lambda.Log.Unity3D.Source", "Wooga.Lambda.Log.Unity3D.Source", "{DD381F18-597A-486B-9D44-CCA1E9FBE6C1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wooga.Lambda.Logging.Unity3D.Source", "Wooga.Lambda.Logging.Unity3D.Source", "{DD381F18-597A-486B-9D44-CCA1E9FBE6C1}"
 	ProjectSection(SolutionItems) = preProject
-		src\Wooga.Lambda.Log.Unity3D.Source\paket.template = src\Wooga.Lambda.Log.Unity3D.Source\paket.template
+		src\Wooga.Lambda.Logging.Unity3D.Source\paket.template = src\Wooga.Lambda.Logging.Unity3D.Source\paket.template
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wooga.Lambda.Network.Unity3D.Source", "Wooga.Lambda.Network.Unity3D.Source", "{40C3D7A7-A94A-4925-BA28-6739F0E6F339}"
@@ -65,7 +65,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wooga.Lambda.Network.Unity3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Parser", "src\Wooga.Lambda.Parser\Wooga.Lambda.Parser.csproj", "{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Parser.Tests", "tests\Wooga.Lambda.Parser.Tests\Wooga.Lambda.Parser.Tests.csproj", "{D651D213-21E5-4225-8E47-B44DF5D502A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Logging", "src\Wooga.Lambda.Logging\Wooga.Lambda.Logging.csproj", "{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,42 +77,42 @@ Global
 		{03231AC8-DCA3-49E4-89CD-E68BE439C2A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03231AC8-DCA3-49E4-89CD-E68BE439C2A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03231AC8-DCA3-49E4-89CD-E68BE439C2A4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A4C35F19-C520-4912-8F3C-DE7E6324E6FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A4C35F19-C520-4912-8F3C-DE7E6324E6FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A4C35F19-C520-4912-8F3C-DE7E6324E6FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A4C35F19-C520-4912-8F3C-DE7E6324E6FE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2247283E-0466-40AC-9D05-B8972C8451BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2247283E-0466-40AC-9D05-B8972C8451BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2247283E-0466-40AC-9D05-B8972C8451BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2247283E-0466-40AC-9D05-B8972C8451BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4C35F19-C520-4912-8F3C-DE7E6324E6FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4C35F19-C520-4912-8F3C-DE7E6324E6FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4C35F19-C520-4912-8F3C-DE7E6324E6FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4C35F19-C520-4912-8F3C-DE7E6324E6FE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D651D213-21E5-4225-8E47-B44DF5D502A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D651D213-21E5-4225-8E47-B44DF5D502A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D651D213-21E5-4225-8E47-B44DF5D502A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D651D213-21E5-4225-8E47-B44DF5D502A6}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
+		{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{83F16175-43B1-4C90-A1EE-8E351C33435D} = {A6A6AF7D-D6E3-442D-9B1E-58CC91879BE1}
 		{8E6D5255-776D-4B61-85F9-73C37AA1FB9A} = {A6A6AF7D-D6E3-442D-9B1E-58CC91879BE1}
 		{A4C35F19-C520-4912-8F3C-DE7E6324E6FE} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
+		{D651D213-21E5-4225-8E47-B44DF5D502A6} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
 		{B87CF6E6-0B48-4C2E-BE19-DDCDDEDB3393} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
 		{75137CDF-FBDA-45E6-835C-4F4F38AE395A} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
 		{DD381F18-597A-486B-9D44-CCA1E9FBE6C1} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
 		{40C3D7A7-A94A-4925-BA28-6739F0E6F339} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
-		{D651D213-21E5-4225-8E47-B44DF5D502A6} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
