@@ -15,7 +15,7 @@ namespace AsyncDownloader
     {
         private static readonly Encoding Enc = Encoding.UTF8;
 
-        public static Async<Wooga.Lambda.Data.Tuple<Uri, string>> GetHtmlAsync(this HttpClient http, string uri)
+        public static Async<Wooga.Lambda.Data.ImmutableTuple<Uri, string>> GetHtmlAsync(this HttpClient http, string uri)
         {
             return () =>
             {
@@ -24,7 +24,7 @@ namespace AsyncDownloader
                     .RunSynchronously()
                     .Body
                     .FromJustOrDefault("", Enc.GetString);
-                return new Wooga.Lambda.Data.Tuple<Uri, string>(new Uri(uri), body);
+                return new Wooga.Lambda.Data.ImmutableTuple<Uri, string>(new Uri(uri), body);
             };
         }
 

@@ -94,7 +94,7 @@ namespace Wooga.Lambda.Control.Concurrent
                     {
                         var handle = new AsyncEventHandle<T>();
                         var ma = m.Bind<T, Unit>(v => () => handle.Complete(v));
-                        return new Tuple<Async<Unit>, AsyncEventHandle<T>>(ma, handle);
+                        return new ImmutableTuple<Async<Unit>, AsyncEventHandle<T>>(ma, handle);
                     });
 
                     Array.ForEach(handles, ah => ah.Item1.Start());

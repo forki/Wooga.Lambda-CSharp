@@ -7,5 +7,3 @@ nuget FAKE
 nuget SourceLink.Fake
 
 github fsharp/FAKE modules/Octokit/Octokit.fsx
-
-nuget Rackspace.Collections.Immutable prerelease

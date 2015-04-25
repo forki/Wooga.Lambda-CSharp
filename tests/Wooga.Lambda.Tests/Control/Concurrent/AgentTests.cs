@@ -3,7 +3,7 @@ using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Data;
 using TestAgent =
     Wooga.Lambda.Control.Concurrent.Agent
-        <Wooga.Lambda.Data.Tuple<string, Wooga.Lambda.Control.Concurrent.AsyncReplyChannel<string>>, string>;
+        <Wooga.Lambda.Data.ImmutableTuple<string, Wooga.Lambda.Control.Concurrent.AsyncReplyChannel<string>>, string>;
 
 namespace Wooga.Lambda.Tests.Control.Concurrent
 {
@@ -21,7 +21,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
                 ch.Reply(str + "-Ch");
                 return u;
             });
-            var reply = testAgent.PostAndAsyncReply(x => new Tuple<string, AsyncReplyChannel<string>>("Test2", x));
+            var reply = testAgent.PostAndAsyncReply(x => new ImmutableTuple<string, AsyncReplyChannel<string>>("Test2", x));
             Assert.AreEqual("Test2-Ch", reply.RunSynchronously());
         }
 
@@ -36,7 +36,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
                 ch.Reply(str + "-Ch");
                 return u;
             });
-            var reply = testAgent.PostAndReply(x => new Tuple<string, AsyncReplyChannel<string>>("Test1", x));
+            var reply = testAgent.PostAndReply(x => new ImmutableTuple<string, AsyncReplyChannel<string>>("Test1", x));
             Assert.AreEqual("Test1-Ch", reply);
         }
     }
