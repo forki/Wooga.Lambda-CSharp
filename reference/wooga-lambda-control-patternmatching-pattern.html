@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Tuple<'T1, 'T2> - Wooga.Lambda</title>
+    <title>Pattern - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -35,70 +35,9 @@
 
 
 
-<h1>Tuple<'T1, 'T2></h1>
+<h1>Pattern</h1>
 <div class="xmldoc">
-<p>Represent a value pair.</p>
 </div>
-  <h3>Constructors</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Constructor</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '112', 112)" onmouseover="showTip(event, '112', 112)">
-            new(item1, item2)
-          </code>
-          <div class="tip" id="112">
-            <strong>Signature:</strong> (item1:&#39;T1 * item2:&#39;T2) -&gt; unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <h3>Instance members</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Instance member</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '113', 113)" onmouseover="showTip(event, '113', 113)">
-            Equals(obj)
-          </code>
-          <div class="tip" id="113">
-            <strong>Signature:</strong> obj:obj -&gt; bool<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '114', 114)" onmouseover="showTip(event, '114', 114)">
-            GetHashCode()
-          </code>
-          <div class="tip" id="114">
-            <strong>Signature:</strong> unit -&gt; int<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-    </tbody>
-  </table>
   <h3>Static members</h3>
   <table class="table table-bordered member-list">
     <thead>
@@ -108,12 +47,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '115', 115)" onmouseover="showTip(event, '115', 115)">
-            op_Equality(x, y)
+          <code onmouseout="hideTip(event, '82', 82)" onmouseover="showTip(event, '82', 82)">
+            Case(m, t, f)
           </code>
-          <div class="tip" id="115">
-            <strong>Signature:</strong> (x:Tuple&lt;&#39;T1,&#39;T2&gt; * y:Tuple&lt;&#39;T1,&#39;T2&gt;) -&gt; bool<br />
-                      </div>
+          <div class="tip" id="82">
+            <strong>Signature:</strong> (m:PatterMatch&lt;&#39;TValue,&#39;TResult&gt; * t:Func&lt;&#39;TValue,bool&gt; * f:Func&lt;&#39;TValue,&#39;TResult&gt;) -&gt; PatterMatch&lt;&#39;TValue,&#39;TResult&gt;<br />
+                          <strong>Type parameters:</strong> 'TValue, 'TResult          </div>
         </td>
         <td class="xmldoc">
           
@@ -122,12 +61,68 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '116', 116)" onmouseover="showTip(event, '116', 116)">
-            op_Inequality(x, y)
+          <code onmouseout="hideTip(event, '83', 83)" onmouseover="showTip(event, '83', 83)">
+            Case(m, x, f)
           </code>
-          <div class="tip" id="116">
-            <strong>Signature:</strong> (x:Tuple&lt;&#39;T1,&#39;T2&gt; * y:Tuple&lt;&#39;T1,&#39;T2&gt;) -&gt; bool<br />
-                      </div>
+          <div class="tip" id="83">
+            <strong>Signature:</strong> (m:PatterMatch&lt;&#39;TValue,&#39;TResult&gt; * x:&#39;TValue * f:Func&lt;&#39;TValue,&#39;TResult&gt;) -&gt; PatterMatch&lt;&#39;TValue,&#39;TResult&gt;<br />
+                          <strong>Type parameters:</strong> 'TValue, 'TResult          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '84', 84)" onmouseover="showTip(event, '84', 84)">
+            Case(m, t, f)
+          </code>
+          <div class="tip" id="84">
+            <strong>Signature:</strong> (m:PatterMatch&lt;&#39;TValue,&#39;TResult&gt; * t:Func&lt;&#39;TValue,bool&gt; * f:Func&lt;&#39;TValue,&#39;TResult&gt;) -&gt; PatterMatch&lt;&#39;TValue,&#39;TResult&gt;<br />
+                          <strong>Type parameters:</strong> 'TValue, 'TResult, 'TValueType          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '85', 85)" onmouseover="showTip(event, '85', 85)">
+            Default(m, f)
+          </code>
+          <div class="tip" id="85">
+            <strong>Signature:</strong> (m:PatterMatch&lt;&#39;TValue,&#39;TResult&gt; * f:Func&lt;&#39;TResult&gt;) -&gt; PatterMatch&lt;&#39;TValue,&#39;TResult&gt;<br />
+                          <strong>Type parameters:</strong> 'TValue, 'TResult          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '86', 86)" onmouseover="showTip(event, '86', 86)">
+            Match(x)
+          </code>
+          <div class="tip" id="86">
+            <strong>Signature:</strong> x:&#39;TValue -&gt; PatterMatch&lt;&#39;TValue,&#39;TResult&gt;<br />
+                          <strong>Type parameters:</strong> 'TValue, 'TResult          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '87', 87)" onmouseover="showTip(event, '87', 87)">
+            Run(m)
+          </code>
+          <div class="tip" id="87">
+            <strong>Signature:</strong> m:PatterMatch&lt;&#39;TValue,&#39;TResult&gt; -&gt; &#39;TResult<br />
+                          <strong>Type parameters:</strong> 'TValue, 'TResult          </div>
         </td>
         <td class="xmldoc">
           
