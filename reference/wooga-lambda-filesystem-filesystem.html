@@ -12,8 +12,8 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="/Wooga.Lambda-CSharp/content/style.css" />
-    <script type="text/javascript" src="/Wooga.Lambda-CSharp/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="./content/style.css" />
+    <script type="text/javascript" src="./content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -26,7 +26,7 @@
           <li><a href="http://wooga.com">wooga.com</a></li>
           <li><a href="http://github.com/wooga/Wooga.Lambda-CSharp">github page</a></li>
         </ul>
-        <h3 class="muted"><a href="/Wooga.Lambda-CSharp/index.html">Wooga.Lambda</a></h3>
+        <h3 class="muted"><a href="./index.html">Wooga.Lambda</a></h3>
       </div>
       <hr />
       <div class="row">
@@ -47,10 +47,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '96', 96)" onmouseover="showTip(event, '96', 96)">
+          <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
             new()
           </code>
-          <div class="tip" id="96">
+          <div class="tip" id="99">
             <strong>Signature:</strong> unit -&gt; unit<br />
                       </div>
         </td>
@@ -69,56 +69,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '97', 97)" onmouseover="showTip(event, '97', 97)">
+          <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
             CreateDirectory(d)
           </code>
-          <div class="tip" id="97">
-            <strong>Signature:</strong> d:DirectoryInfo -&gt; Async&lt;Unit&gt;<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '98', 98)" onmouseover="showTip(event, '98', 98)">
-            GetFiles(d)
-          </code>
-          <div class="tip" id="98">
-            <strong>Signature:</strong> d:DirectoryInfo -&gt; Async&lt;Maybe&lt;FileInfo []&gt;&gt;<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
-            GetFiles(d, searchPattern)
-          </code>
-          <div class="tip" id="99">
-            <strong>Signature:</strong> (d:DirectoryInfo * searchPattern:string) -&gt; Async&lt;Maybe&lt;FileInfo []&gt;&gt;<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
-            GetFilesRecursive(d, searchPattern)
-          </code>
           <div class="tip" id="100">
-            <strong>Signature:</strong> (d:DirectoryInfo * searchPattern:string) -&gt; Async&lt;Maybe&lt;FileInfo []&gt;&gt;<br />
+            <strong>Signature:</strong> d:DirectoryInfo -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -130,10 +85,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '101', 101)" onmouseover="showTip(event, '101', 101)">
-            ReadFile(f)
+            GetFiles(d)
           </code>
           <div class="tip" id="101">
-            <strong>Signature:</strong> f:FileInfo -&gt; Async&lt;Maybe&lt;byte []&gt;&gt;<br />
+            <strong>Signature:</strong> d:DirectoryInfo -&gt; Async&lt;Maybe&lt;FileInfo []&gt;&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -145,10 +100,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '102', 102)" onmouseover="showTip(event, '102', 102)">
-            RemoveDirectory(d)
+            GetFiles(d, searchPattern)
           </code>
           <div class="tip" id="102">
-            <strong>Signature:</strong> d:DirectoryInfo -&gt; Async&lt;Unit&gt;<br />
+            <strong>Signature:</strong> (d:DirectoryInfo * searchPattern:string) -&gt; Async&lt;Maybe&lt;FileInfo []&gt;&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -160,10 +115,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '103', 103)" onmouseover="showTip(event, '103', 103)">
-            RemoveFile(f)
+            GetFilesRecursive(d, searchPattern)
           </code>
           <div class="tip" id="103">
-            <strong>Signature:</strong> f:FileInfo -&gt; Async&lt;Unit&gt;<br />
+            <strong>Signature:</strong> (d:DirectoryInfo * searchPattern:string) -&gt; Async&lt;Maybe&lt;FileInfo []&gt;&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -175,9 +130,54 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
-            WriteFile(f, b)
+            ReadFile(f)
           </code>
           <div class="tip" id="104">
+            <strong>Signature:</strong> f:FileInfo -&gt; Async&lt;Maybe&lt;byte []&gt;&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '105', 105)" onmouseover="showTip(event, '105', 105)">
+            RemoveDirectory(d)
+          </code>
+          <div class="tip" id="105">
+            <strong>Signature:</strong> d:DirectoryInfo -&gt; Async&lt;Unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '106', 106)" onmouseover="showTip(event, '106', 106)">
+            RemoveFile(f)
+          </code>
+          <div class="tip" id="106">
+            <strong>Signature:</strong> f:FileInfo -&gt; Async&lt;Unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '107', 107)" onmouseover="showTip(event, '107', 107)">
+            WriteFile(f, b)
+          </code>
+          <div class="tip" id="107">
             <strong>Signature:</strong> (f:FileInfo * b:byte []) -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
@@ -192,32 +192,32 @@
         </div>
         <div class="span3">
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-            <li><img src="/Wooga.Lambda-CSharp/img/logo.png" alt="F# Project" style="width:150px;margin:10px" /></li>
+            <li><img src="./img/logo.png" alt="F# Project" style="width:150px;margin:10px" /></li>
             <!-- <li><img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/issue" alt="F# Project" style="width:180px;margin:5px"/></li>
             <li>
               <img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/pr" alt="F# Project" style="width:180px;margin:5px"/>
             </li> -->
             <li class="nav-header">Wooga.Lambda</li>
-            <li><a href="/Wooga.Lambda-CSharp/index.html">Home page</a></li>
+            <li><a href="./index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/Wooga.Lambda">Get Library via NuGet</a></li>
             <li><a href="http://github.com/wooga/Wooga.Lambda-CSharp">Source Code on GitHub</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/license.html">License</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/release-notes.html">Release Notes</a></li>
+            <li><a href="./license.html">License</a></li>
+            <li><a href="./release-notes.html">Release Notes</a></li>
 
             <li class="nav-header">Get Started</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.maybe.html">Monad.Maybe</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.either.html">Monad.Either</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.async.html">Concurrent.Async</a></li>
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li> -->
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.patternmatch.html">Pattern.Match</a></li>
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.logging.agent.html">LoggingAgent</a></li> -->
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.network.httpclient.html">Network.HttpClient</a></li> -->
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.filesystem.html">FileSystem</a></li> -->
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.html">Parser</a></li>
+            <li><a href="./wooga.lambda.maybe.html">Monad.Maybe</a></li>
+            <li><a href="./wooga.lambda.either.html">Monad.Either</a></li>
+            <li><a href="./wooga.lambda.async.html">Concurrent.Async</a></li>
+            <!-- <li><a href="./wooga.lambda.agent.html">Concurrent.Agent</a></li> -->
+            <li><a href="./wooga.lambda.patternmatch.html">Pattern.Match</a></li>
+            <!-- <li><a href="./wooga.lambda.logging.agent.html">LoggingAgent</a></li> -->
+            <!-- <li><a href="./wooga.lambda.network.httpclient.html">Network.HttpClient</a></li> -->
+            <!-- <li><a href="./wooga.lambda.filesystem.html">FileSystem</a></li> -->
+            <li><a href="./wooga.lambda.parser.html">Parser</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="/Wooga.Lambda-CSharp/reference/index.html">API Reference</a></li>
+            <li><a href="./reference/index.html">API Reference</a></li>
 
             <li><img src="https://travis-ci.org/wooga/Wooga.Lambda-CSharp.png" alt="F# Project" style="margin:5px"/></li>
             <li><img src="http://img.shields.io/nuget/v/Wooga.Lambda.svg?style=flat" alt="F# Project" style="margin:5px"/></li>

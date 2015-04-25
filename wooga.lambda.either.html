@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Monad.Either
+    <title>Working with Either
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="Functional utilities for C#"/>
@@ -13,8 +13,8 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="/Wooga.Lambda-CSharp/content/style.css" />
-    <script type="text/javascript" src="/Wooga.Lambda-CSharp/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="./content/style.css" />
+    <script type="text/javascript" src="./content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -27,144 +27,133 @@
           <li><a href="http://wooga.com">wooga.com</a></li>
           <li><a href="http://github.com/wooga/Wooga.Lambda-CSharp">github page</a></li>
         </ul>
-        <h3 class="muted"><a href="/Wooga.Lambda-CSharp/index.html">Wooga.Lambda</a></h3>
+        <h3 class="muted"><a href="./index.html">Wooga.Lambda</a></h3>
       </div>
       <hr />
       <div class="row">
         <div class="span9" id="main">
           
-<h1><a name="Monad-Either" class="anchor" href="#Monad-Either">Monad.Either</a></h1>
+<h1><a name="Working-with-Either" class="anchor" href="#Working-with-Either">Working with Either</a></h1>
 
-<p><a href="reference/wooga-lambda-control-monad-either.html">(API Reference)</a></p>
+<blockquote>
+  <p>"The <strong>Either</strong> type represents values with two possibilities: a value of type <strong>Either<'L,'R></strong> is either <strong>Left<'L></strong> or <strong>Right<'R></strong>.
+The <strong>Either</strong> type is sometimes used to represent a value which is either correct or an error;
+by convention, <strong>Left</strong> is used to hold an error value and <strong>Right</strong> holds a correct value"
+<em>- Haskell documentation</em></p>
+</blockquote>
 
-<h2><a name="The-problem-exceptions-and-error-handling" class="anchor" href="#The-problem-exceptions-and-error-handling">The problem: exceptions and error-handling</a></h2>
+<h2><a name="Either-instance" class="anchor" href="#Either-instance"><em>Either</em> instance</a></h2>
 
-<table class="pre"><tr><td><pre lang="cs"><span class="k">bool</span> ValidPassword(<span class="k">string</span> x)
+<p>Create an <strong>Either</strong> by injecting a value into either case with <strong>Either.Left<'L,'R>('L)</strong> or <strong>Either.Right<'L,'R>('R)</strong>.</p>
+
+<table class="pre"><tr><td><pre lang="cs">Either&lt;<span class="k">int</span>, <span class="k">string</span>&gt; left <span class="o">=</span> Either.Left&lt;<span class="k">int</span>, <span class="k">string</span>&gt;(2);
+Either&lt;<span class="k">int</span>, <span class="k">string</span>&gt; right <span class="o">=</span> Either.Right&lt;<span class="k">int</span>, <span class="k">string</span>&gt;(<span class="s">"rrr"</span>);
+</pre></td></tr></table>
+
+<p>Use the <strong>FromEither<'L,'R,'T>('L->'T,'R->'T)</strong> function to extract the value from either side.</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> leftV <span class="o">=</span> left.FromEither(l <span class="o">=</span><span class="o">&gt;</span> l.ToString(), r <span class="o">=</span><span class="o">&gt;</span> r); <span class="c">// "2"</span>
+<span class="k">var</span> rightV <span class="o">=</span> right.FromEither(l <span class="o">=</span><span class="o">&gt;</span> l.ToString(), r <span class="o">=</span><span class="o">&gt;</span> r); <span class="c">// "rrr"</span>
+</pre></td></tr></table>
+
+<p>Check out the <a href="reference/wooga-lambda-control-monad-either.html">API Reference</a> for more information.</p>
+
+<h2><a name="Exception-and-error-handling" class="anchor" href="#Exception-and-error-handling"><em>Exception</em> and <em>error</em>-handling</a></h2>
+
+<p>The following snippet depicts a three step process to <strong>load</strong>, <strong>validate</strong> and <strong>launch</strong> a saved game.
+Each of these steps can potentially fail and raise an <strong>Exception</strong> that needs to be caught.</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">void</span> StartGame(<span class="k">byte</span>[] saveGame)
 {
-    <span class="k">if</span>(x.Length <span class="o">&lt;</span> 8)
-        <span class="k">throw</span> <span class="k">new</span> System.Exception(<span class="s">"Password needs at least 8 chars"</span>);
-    <span class="k">if</span>(x.Contains(<span class="s">"-"</span>))
-        <span class="k">throw</span> <span class="k">new</span> System.Exception(<span class="s">"Password needs to contain a dash"</span>);
-    <span class="k">return</span> <span class="k">true</span>;
+    <span class="k">if</span>(ValidateSaveGame(saveGame))
+    {
+        Debug.WriteLine(<span class="s">"Play it!! I could crash here too..."</span>);
+    }
+    <span class="k">else</span>
+    {
+        <span class="k">throw</span> <span class="k">new</span> Exception(<span class="s">"corrupt save game"</span>);
+    }
 }
 
-<span class="k">var</span> valid <span class="o">=</span> <span class="k">false</span>;
+<span class="k">bool</span> ValidateSaveGame(<span class="k">byte</span>[] saveGame)
+{
+    <span class="k">return</span> saveGame.Length <span class="o">&gt;</span> 8;
+}
+
+<span class="k">byte</span>[] LoadSaveGame(<span class="k">string</span> file)
+{
+    <span class="k">return</span> File.ReadAllBytes(file);
+}
+
 <span class="k">try</span>
 {
-    valid <span class="o">=</span> ValidPassword(pw);
+    StartGame(LoadSaveGame(<span class="s">"x.y"</span>));
 }
 <span class="k">catch</span> (Exception e)
 {
-    Console.WriteLine(<span class="s">"Validation error:"</span>+e);
+    <span class="k">throw</span> e; <span class="c">// Which exceptions will I catch here?!?</span>
 }
-<span class="k">if</span>(valid) Console.WriteLine(<span class="s">"Validation succeeded"</span>);
 </pre></td></tr></table>
 
-<h2><a name="The-solution-Either" class="anchor" href="#The-solution-Either">The solution: Either[TL,TR]</a></h2>
+<h2><a name="Composing-Either" class="anchor" href="#Composing-Either">Composing <em>Either</em></a></h2>
 
-<blockquote>
-  <p>"The Either type represents values with two possibilities: a value of type Either[T1,T2] is either Left[T1] or Right[T2].
-The Either type is sometimes used to represent a value which is either correct or an error; by convention, Left is used to hold an error value and Right holds a correct value"</p>
-</blockquote>
+<p>Using the monadic bind function of <strong>Either</strong> we can compose these steps together while preserving granular information like individual error messages.</p>
 
-<h2><a name="An-example-Either" class="anchor" href="#An-example-Either">An example: Either[TL,TR]</a></h2>
-
-<table class="pre"><tr><td><pre lang="cs">Either&lt;Exception,<span class="k">string</span>&gt; ValidPassword(<span class="k">string</span> x)
+<table class="pre"><tr><td><pre lang="cs">Either&lt;<span class="k">string</span>, Unit&gt; StartGame(<span class="k">byte</span>[] saveGame)
 {
-    <span class="k">if</span>(x.Length <span class="o">&lt;</span> 8)
-        <span class="k">return</span> Either.Left&lt;Exception,<span class="k">string</span>&gt;(<span class="k">new</span> Exception(<span class="s">"Password needs at least 8 chars"</span>));
-    <span class="k">if</span> (x.Contains(<span class="s">"-"</span>))
-        <span class="k">return</span> Either.Left&lt;Exception, <span class="k">string</span>&gt;(<span class="k">new</span> Exception(<span class="s">"Password needs to contain a dash"</span>));
-    <span class="k">return</span> Either.Right&lt;Exception,<span class="k">string</span>&gt;(x);
+    <span class="k">return</span> Either.Try(e=<span class="o">&gt;</span> <span class="s">"start failed: "</span><span class="o">+</span> e.Message,
+                     ()<span class="o">=</span><span class="o">&gt;</span> Unit.Default);
 }
 
-<span class="k">var</span> valid <span class="o">=</span> ValidPassword(pw);
-valid.IsLeft()
-    <span class="o">?</span> Console.WriteLine(<span class="s">"Validation error:"</span> <span class="o">+</span> valid.FromLeft())
-    <span class="o">:</span> Console.WriteLine(<span class="s">"Validation succeeded"</span>);
-</pre></td></tr></table>
-
-<h2><a name="Composing-Either" class="anchor" href="#Composing-Either">Composing: Either[TL,TR]</a></h2>
-
-<table class="pre"><tr><td><pre lang="cs">Either&lt;Exception, <span class="k">string</span>&gt; AtLeast8Chars(<span class="k">string</span> x)
+Either&lt;<span class="k">string</span>, <span class="k">byte</span>[]<span class="o">&gt;</span> ValidateSaveGame(<span class="k">byte</span>[] saveGame)
 {
-    <span class="k">return</span> x.Length <span class="o">&lt;</span> 8
-        <span class="o">?</span> Either.Left&lt;Exception, <span class="k">string</span>&gt;(<span class="k">new</span> Exception(<span class="s">"Password needs at least 8 chars"</span>))
-        <span class="o">:</span> Either.Right&lt;Exception, <span class="k">string</span>&gt;(x);
+    <span class="k">return</span> Either.When(()<span class="o">=</span><span class="o">&gt;</span> saveGame.Length&gt;8,
+                       ()<span class="o">=</span><span class="o">&gt;</span> <span class="s">"validation failed"</span>,
+                       ()<span class="o">=</span><span class="o">&gt;</span> saveGame);
 }
 
-Either&lt;Exception, <span class="k">string</span>&gt; ContainsDash(<span class="k">string</span> x)
+Either&lt;<span class="k">string</span>, <span class="k">byte</span>[]<span class="o">&gt;</span> LoadSaveGame(<span class="k">string</span> file)
 {
-    <span class="k">return</span> x.Contains(<span class="s">"-"</span>)
-        <span class="o">?</span> Either.Left&lt;Exception, <span class="k">string</span>&gt;(<span class="k">new</span> Exception(<span class="s">"Password needs to contain a dash"</span>))
-        <span class="o">:</span> Either.Right&lt;Exception, <span class="k">string</span>&gt;(x);
+    <span class="k">return</span> Either.Try(e=<span class="o">&gt;</span> <span class="s">"load failed: "</span><span class="o">+</span> e.Message,
+                     ()<span class="o">=</span><span class="o">&gt;</span> File.ReadAllBytes(file));
 }
 
-Either&lt;Exception,<span class="k">string</span>&gt; ValidPassword(<span class="k">string</span> x)
-{
-    <span class="k">return</span> AtLeast8Chars(x)
-          .Bind(ContainsDash);
-}
-
-<span class="k">var</span> valid <span class="o">=</span> ValidPassword(pw);
-valid.IsLeft()
-    <span class="o">?</span> Console.WriteLine(<span class="s">"Validation error:"</span> <span class="o">+</span> valid.FromLeft())
-    <span class="o">:</span> Console.WriteLine(<span class="s">"Validation succeeded"</span>);
-</pre></td></tr></table>
-
-<h2><a name="The-Try-method-Either" class="anchor" href="#The-Try-method-Either">The Try method: Either[TL,TR]</a></h2>
-
-<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> Uri GetEndpoint(<span class="k">string</span> host)
-{
-    <span class="k">return</span> <span class="k">new</span> Uri(<span class="s">"http://"</span> <span class="o">+</span> host);
-}
-
-<span class="k">var</span> x <span class="o">=</span> GetEndpoint(<span class="s">"~spaghetti~"</span>);
-<span class="c">// System.UriFormatException : Invalid URI: The hostname could not be parsed.</span>
-
-<span class="c">// vs.</span>
-
-<span class="k">public</span> Uri GetEndpoint(<span class="k">string</span> host)
-{
-    <span class="k">return</span> <span class="k">new</span> Uri(<span class="s">"http://"</span> <span class="o">+</span> host);
-}
-
-<span class="k">var</span> x <span class="o">=</span> Either.Try(()<span class="o">=</span>&gt;GetEndpoint(<span class="s">"~spaghetti~"</span>));
-<span class="k">if</span>(x().IsRight())
-{
-    System.Console.WriteLine(x().RightValue());
-}</pre></td></tr></table>
+<span class="k">var</span> launch <span class="o">=</span> LoadSaveGame(<span class="s">"x.y"</span>)
+             .Bind(ValidateSaveGame)
+             .Bind(StartGame)
+             .FromEither(s=<span class="o">&gt;</span><span class="s">"e: "</span>+s,
+                         s=<span class="o">&gt;</span><span class="s">"all good"</span>); <span class="o">/</span><span class="o">/</span> p: FileNotFoundException</pre></td></tr></table>
 
 
         </div>
         <div class="span3">
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-            <li><img src="/Wooga.Lambda-CSharp/img/logo.png" alt="F# Project" style="width:150px;margin:10px" /></li>
+            <li><img src="./img/logo.png" alt="F# Project" style="width:150px;margin:10px" /></li>
             <!-- <li><img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/issue" alt="F# Project" style="width:180px;margin:5px"/></li>
             <li>
               <img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/pr" alt="F# Project" style="width:180px;margin:5px"/>
             </li> -->
             <li class="nav-header">Wooga.Lambda</li>
-            <li><a href="/Wooga.Lambda-CSharp/index.html">Home page</a></li>
+            <li><a href="./index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/Wooga.Lambda">Get Library via NuGet</a></li>
             <li><a href="http://github.com/wooga/Wooga.Lambda-CSharp">Source Code on GitHub</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/license.html">License</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/release-notes.html">Release Notes</a></li>
+            <li><a href="./license.html">License</a></li>
+            <li><a href="./release-notes.html">Release Notes</a></li>
 
             <li class="nav-header">Get Started</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.maybe.html">Monad.Maybe</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.either.html">Monad.Either</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.async.html">Concurrent.Async</a></li>
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li> -->
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.patternmatch.html">Pattern.Match</a></li>
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.logging.agent.html">LoggingAgent</a></li> -->
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.network.httpclient.html">Network.HttpClient</a></li> -->
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.filesystem.html">FileSystem</a></li> -->
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.html">Parser</a></li>
+            <li><a href="./wooga.lambda.maybe.html">Monad.Maybe</a></li>
+            <li><a href="./wooga.lambda.either.html">Monad.Either</a></li>
+            <li><a href="./wooga.lambda.async.html">Concurrent.Async</a></li>
+            <!-- <li><a href="./wooga.lambda.agent.html">Concurrent.Agent</a></li> -->
+            <li><a href="./wooga.lambda.patternmatch.html">Pattern.Match</a></li>
+            <!-- <li><a href="./wooga.lambda.logging.agent.html">LoggingAgent</a></li> -->
+            <!-- <li><a href="./wooga.lambda.network.httpclient.html">Network.HttpClient</a></li> -->
+            <!-- <li><a href="./wooga.lambda.filesystem.html">FileSystem</a></li> -->
+            <li><a href="./wooga.lambda.parser.html">Parser</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="/Wooga.Lambda-CSharp/reference/index.html">API Reference</a></li>
+            <li><a href="./reference/index.html">API Reference</a></li>
 
             <li><img src="https://travis-ci.org/wooga/Wooga.Lambda-CSharp.png" alt="F# Project" style="margin:5px"/></li>
             <li><img src="http://img.shields.io/nuget/v/Wooga.Lambda.svg?style=flat" alt="F# Project" style="margin:5px"/></li>
