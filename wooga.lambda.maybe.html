@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Monad.Maybe
+    <title>Working with Maybe
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="Functional utilities for C#"/>
@@ -33,39 +33,55 @@
       <div class="row">
         <div class="span9" id="main">
           
-<h1><a name="Monad-Maybe" class="anchor" href="#Monad-Maybe">Monad.Maybe</a></h1>
-
-<p><a href="reference/wooga-lambda-control-monad-maybe.html">(API Reference)</a></p>
-
-<h2><a name="The-problem-null" class="anchor" href="#The-problem-null">The problem: null</a></h2>
-
-<table class="pre"><tr><td><pre lang="cs"><span class="k">string</span> FirstOf(<span class="k">string</span>[] xs)
-{
-  <span class="k">return</span> xs.Length <span class="o">&gt;</span> 0 <span class="o">?</span> xs[0] <span class="o">:</span> <span class="k">null</span>;
-}
-
-<span class="k">var</span> name <span class="o">=</span> FirstOf(names);
-<span class="k">var</span> letters <span class="o">=</span> name.Length; <span class="c">// Causes NullReferenceException</span>
-</pre></td></tr></table>
-
-<h2><a name="The-solution-Maybe" class="anchor" href="#The-solution-Maybe">The solution: Maybe[T]</a></h2>
+<h1><a name="Working-with-Maybe" class="anchor" href="#Working-with-Maybe">Working with Maybe</a></h1>
 
 <blockquote>
-  <p>"The Maybe type encapsulates an optional value. A value of type Maybe[T] either contains a value of type T (Just[T]), or it is empty (Nothing[T])."</p>
+  <p>"The <strong>Maybe</strong> type encapsulates an optional value.
+A value of type <strong>Maybe 'T</strong> either contains a value of type <strong>'T</strong>, or it is empty."
+<em>- Haskell documentation</em></p>
 </blockquote>
 
-<h2><a name="An-example-Maybe" class="anchor" href="#An-example-Maybe">An example: Maybe[T]</a></h2>
+<p>The <strong>Maybe</strong> type in <em>Wooga.Lambda</em> borrows its name from Haskell:
+The empty <strong>Maybe</strong> case is called <strong>Nothing</strong> and the <strong>Maybe</strong> holding a value is called <strong>Just</strong>.</p>
 
-<table class="pre"><tr><td><pre lang="cs">Maybe&lt;<span class="k">string</span>&gt; FirstOf(<span class="k">string</span>[] xs)
-{
-  <span class="k">return</span> xs.Length <span class="o">&gt;</span> 0 <span class="o">?</span> Maybe.Just(xs[0]) <span class="o">:</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;();
-}
+<h2><a name="Maybe-instance" class="anchor" href="#Maybe-instance"><em>Maybe</em> instance</a></h2>
 
-<span class="k">var</span> name <span class="o">=</span> FirstOf(names);
-<span class="k">var</span> letters <span class="o">=</span> name.FromJustOrDefault(0,s <span class="o">=</span><span class="o">&gt;</span> s.Length);
+<p>Create a <strong>Maybe</strong> by injecting a value with <strong>Maybe.Just('T)</strong> or create the empty one with <strong>Maybe.Nothing<'T>()</strong>.</p>
+
+<table class="pre"><tr><td><pre lang="cs">Maybe&lt;<span class="k">string</span>&gt; justAnX <span class="o">=</span> Maybe.Just(<span class="s">"x"</span>);
+Maybe&lt;<span class="k">string</span>&gt; nothing <span class="o">=</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;();
 </pre></td></tr></table>
 
-<h2><a name="Composing-Maybe" class="anchor" href="#Composing-Maybe">Composing: Maybe[T]</a></h2>
+<p>Use the <strong>FromMaybe('T)</strong> or <strong>FromJustOrDefault('T2,'T->'T2)</strong> functions to extract the <strong>Just</strong> value;
+both will fallback to the given default value in case of <strong>Nothing</strong>.</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">string</span> ofJustAnX <span class="o">=</span> justAnX.FromMaybe(<span class="s">"not x"</span>); <span class="c">// "x"</span>
+<span class="k">string</span> ofNothing <span class="o">=</span> nothing.FromMaybe(<span class="s">"not x"</span>); <span class="c">// "not x"</span>
+
+<span class="k">int</span> ofJustAnX2 <span class="o">=</span> justAnX.FromJustOrDefault(0, s <span class="o">=</span><span class="o">&gt;</span> s.Length); <span class="c">// 1</span>
+<span class="k">int</span> ofNothing2 <span class="o">=</span> nothing.FromJustOrDefault(0, s <span class="o">=</span><span class="o">&gt;</span> s.Length); <span class="c">// 0</span>
+</pre></td></tr></table>
+
+<p>Check out the <a href="reference/wooga-lambda-control-monad-maybe.html">API Reference</a> for more information.</p>
+
+<h2><a name="Avoiding-null-and-NullReferenceExceptions" class="anchor" href="#Avoiding-null-and-NullReferenceExceptions">Avoiding <em>null</em> and <em>NullReferenceExceptions</em></a></h2>
+
+<p>Avoid using <strong>null</strong> to represent empty values. The following snippet is valid code and will raise a NullReferenceException.</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">string</span> name <span class="o">=</span> <span class="k">null</span>;
+<span class="k">int</span> letters <span class="o">=</span> name.Length;
+</pre></td></tr></table>
+
+<p>By using <strong>Maybe</strong> you make sure that the potential empty case will be handled at runtime.</p>
+
+<table class="pre"><tr><td><pre lang="cs">Maybe&lt;<span class="k">string</span>&gt; name <span class="o">=</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;();
+<span class="k">int</span> letters <span class="o">=</span> name.FromJustOrDefault(0, s <span class="o">=</span><span class="o">&gt;</span> s.Length);
+</pre></td></tr></table>
+
+<h2><a name="Composing-Maybe" class="anchor" href="#Composing-Maybe">Composing <em>Maybe</em></a></h2>
+
+<p>Because <strong>Maybe</strong> is a monad, composing multiple of them is very straightforward.
+The monadic operators <strong>>>=</strong> &amp; <strong>>></strong> are implemented as <strong>Maybe.Bind</strong> and <strong>Maybe.Then</strong>.</p>
 
 <table class="pre"><tr><td><pre lang="cs">Maybe&lt;<span class="k">string</span>&gt; FirstOf(<span class="k">string</span>[] xs)
 {
@@ -90,8 +106,12 @@ Maybe&lt;<span class="k">string</span>&gt; AtLeast5Chars(<span class="k">string<
 
         </div>
         <div class="span3">
-          <img src="/Wooga.Lambda-CSharp/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li><img src="/Wooga.Lambda-CSharp/img/logo.png" alt="F# Project" style="width:150px;margin:10px" /></li>
+            <!-- <li><img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/issue" alt="F# Project" style="width:180px;margin:5px"/></li>
+            <li>
+              <img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/pr" alt="F# Project" style="width:180px;margin:5px"/>
+            </li> -->
             <li class="nav-header">Wooga.Lambda</li>
             <li><a href="/Wooga.Lambda-CSharp/index.html">Home page</a></li>
             <li class="divider"></li>
@@ -100,29 +120,22 @@ Maybe&lt;<span class="k">string</span>&gt; AtLeast5Chars(<span class="k">string<
             <li><a href="/Wooga.Lambda-CSharp/license.html">License</a></li>
             <li><a href="/Wooga.Lambda-CSharp/release-notes.html">Release Notes</a></li>
 
-            <li class="nav-header">Wooga.Lambda</li>
+            <li class="nav-header">Get Started</li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.maybe.html">Monad.Maybe</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.either.html">Monad.Either</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.async.html">Concurrent.Async</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li>
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li> -->
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.patternmatch.html">Pattern.Match</a></li>
-
-            <li class="nav-header">Wooga.Lambda.Logging</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.logging.agent.html">Logging.LoggingAgent</a></li>
-
-            <li class="nav-header">Wooga.Lambda.Network</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.network.httpclient.html">Network.HttpClient</a></li>
-
-            <li class="nav-header">Wooga.Lambda.FileSystem</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.filesystem.html">FileSystem</a></li>
-
-            <li class="nav-header">Wooga.Lambda.Parser</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.chars.html">Parser.Chars</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.strings.html">Parser.Strings</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.charstream.html">Parser.CharStream</a></li>
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.logging.agent.html">LoggingAgent</a></li> -->
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.network.httpclient.html">Network.HttpClient</a></li> -->
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.filesystem.html">FileSystem</a></li> -->
+            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.html">Parser</a></li>
 
             <li class="nav-header">Documentation</li>
             <li><a href="/Wooga.Lambda-CSharp/reference/index.html">API Reference</a></li>
+
+            <li><img src="https://travis-ci.org/wooga/Wooga.Lambda-CSharp.png" alt="F# Project" style="margin:5px"/></li>
+            <li><img src="http://img.shields.io/nuget/v/Wooga.Lambda.svg?style=flat" alt="F# Project" style="margin:5px"/></li>
           </ul>
         </div>
       </div>

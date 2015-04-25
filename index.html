@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Wooga.Lambda
+    <title>Functional primitives for Unity3D
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="Functional utilities for C#"/>
@@ -33,34 +33,11 @@
       <div class="row">
         <div class="span9" id="main">
           
-<h1><a name="Wooga-Lambda" class="anchor" href="#Wooga-Lambda">Wooga.Lambda</a></h1>
+<h1><a name="Functional-primitives-for-Unity3D" class="anchor" href="#Functional-primitives-for-Unity3D">Functional primitives for Unity3D</a></h1>
 
-<p>functional utilities &amp; primitives for C#</p>
+<p>Wooga.Lambda is  which are heavily inspired by <a href="https://github.com/louthy/csharp-monad">csharp-monads</a>, <a href="https://www.haskell.org/">Haskell</a> &amp; <a href="http://fsharp.org">F#</a>.</p>
 
-<div class="row">
-  <div class="span1"></div>
-  <div class="span6">
-    <div class="well well-small" id="nuget">
-      The different libraries of Wooga.Lambda can be <a href="https://nuget.org/packages/Wooga.Lambda">installed from NuGet</a>:
-      <pre>PM> Install-Package Wooga.Lambda</pre>
-      <pre>PM> Install-Package Wooga.Lambda.Logging</pre>
-      <pre>PM> Install-Package Wooga.Lambda.Network</pre>
-      <pre>PM> Install-Package Wooga.Lambda.FileSystem</pre>
-      <pre>PM> Install-Package Wooga.Lambda.Parser</pre>
-    </div>
-    <div class="well well-small" id="nuget">
-      Unity3D source-code releases of Wooga.Lambda can be <a href="https://github.com/devboy/Paket.Unity3D">installed from Paket.Unity3D</a> by appending Unity3D.Source to the name:
-      <pre>nuget Wooga.Lambda.Unity3D.Source</pre>
-      <pre>nuget Wooga.Lambda.Logging.Unity3D.Source</pre>
-    </div>
-  </div>
-  <div class="span1"></div>
-</div>
-
-<h2><a name="Introduction" class="anchor" href="#Introduction">Introduction</a></h2>
-
-<p>Wooga.Lambda is a set of functional utilities &amp; primitives for C# which are inspired by <a href="https://github.com/louthy/csharp-monad">csharp-monads</a>, <a href="https://www.haskell.org/">Haskell</a> &amp; <a href="http://fsharp.org">F#</a>.
-Furthermore they are 100% compatible with Unity3D.</p>
+<p>With Unity3D being still</p>
 
 <h2><a name="Samples-amp-documentation" class="anchor" href="#Samples-amp-documentation">Samples &amp; documentation</a></h2>
 
@@ -86,8 +63,12 @@ redistribution for both commercial and non-commercial purposes. For more informa
 
         </div>
         <div class="span3">
-          <img src="/Wooga.Lambda-CSharp/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li><img src="/Wooga.Lambda-CSharp/img/logo.png" alt="F# Project" style="width:150px;margin:10px" /></li>
+            <!-- <li><img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/issue" alt="F# Project" style="width:180px;margin:5px"/></li>
+            <li>
+              <img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/pr" alt="F# Project" style="width:180px;margin:5px"/>
+            </li> -->
             <li class="nav-header">Wooga.Lambda</li>
             <li><a href="/Wooga.Lambda-CSharp/index.html">Home page</a></li>
             <li class="divider"></li>
@@ -96,29 +77,22 @@ redistribution for both commercial and non-commercial purposes. For more informa
             <li><a href="/Wooga.Lambda-CSharp/license.html">License</a></li>
             <li><a href="/Wooga.Lambda-CSharp/release-notes.html">Release Notes</a></li>
 
-            <li class="nav-header">Wooga.Lambda</li>
+            <li class="nav-header">Get Started</li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.maybe.html">Monad.Maybe</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.either.html">Monad.Either</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.async.html">Concurrent.Async</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li>
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li> -->
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.patternmatch.html">Pattern.Match</a></li>
-
-            <li class="nav-header">Wooga.Lambda.Logging</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.logging.agent.html">Logging.LoggingAgent</a></li>
-
-            <li class="nav-header">Wooga.Lambda.Network</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.network.httpclient.html">Network.HttpClient</a></li>
-
-            <li class="nav-header">Wooga.Lambda.FileSystem</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.filesystem.html">FileSystem</a></li>
-
-            <li class="nav-header">Wooga.Lambda.Parser</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.chars.html">Parser.Chars</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.strings.html">Parser.Strings</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.charstream.html">Parser.CharStream</a></li>
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.logging.agent.html">LoggingAgent</a></li> -->
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.network.httpclient.html">Network.HttpClient</a></li> -->
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.filesystem.html">FileSystem</a></li> -->
+            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.html">Parser</a></li>
 
             <li class="nav-header">Documentation</li>
             <li><a href="/Wooga.Lambda-CSharp/reference/index.html">API Reference</a></li>
+
+            <li><img src="https://travis-ci.org/wooga/Wooga.Lambda-CSharp.png" alt="F# Project" style="margin:5px"/></li>
+            <li><img src="http://img.shields.io/nuget/v/Wooga.Lambda.svg?style=flat" alt="F# Project" style="margin:5px"/></li>
           </ul>
         </div>
       </div>

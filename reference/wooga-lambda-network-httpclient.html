@@ -47,10 +47,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '125', 125)" onmouseover="showTip(event, '125', 125)">
+          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
             new(transport)
           </code>
-          <div class="tip" id="125">
+          <div class="tip" id="120">
             <strong>Signature:</strong> transport:Func&lt;HttpClient,HttpRequest,HttpResponse&gt; -&gt; unit<br />
                       </div>
         </td>
@@ -69,11 +69,81 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '126', 126)" onmouseover="showTip(event, '126', 126)">
+          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
             Delete(endpoint)
           </code>
-          <div class="tip" id="126">
+          <div class="tip" id="121">
             <strong>Signature:</strong> endpoint:string -&gt; HttpResponse<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
+            DeleteAsync(endpoint)
+          </code>
+          <div class="tip" id="122">
+            <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '123', 123)" onmouseover="showTip(event, '123', 123)">
+            Get(endpoint)
+          </code>
+          <div class="tip" id="123">
+            <strong>Signature:</strong> endpoint:string -&gt; HttpResponse<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '124', 124)" onmouseover="showTip(event, '124', 124)">
+            GetAsync(endpoint)
+          </code>
+          <div class="tip" id="124">
+            <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '125', 125)" onmouseover="showTip(event, '125', 125)">
+            Head(endpoint)
+          </code>
+          <div class="tip" id="125">
+            <strong>Signature:</strong> endpoint:string -&gt; HttpResponse<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '126', 126)" onmouseover="showTip(event, '126', 126)">
+            HeadAsync(endpoint)
+          </code>
+          <div class="tip" id="126">
+            <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -84,10 +154,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '127', 127)" onmouseover="showTip(event, '127', 127)">
-            DeleteAsync(endpoint)
+            Post(endpoint, body)
           </code>
           <div class="tip" id="127">
-            <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
+            <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; HttpResponse<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -98,79 +168,9 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '128', 128)" onmouseover="showTip(event, '128', 128)">
-            Get(endpoint)
-          </code>
-          <div class="tip" id="128">
-            <strong>Signature:</strong> endpoint:string -&gt; HttpResponse<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '129', 129)" onmouseover="showTip(event, '129', 129)">
-            GetAsync(endpoint)
-          </code>
-          <div class="tip" id="129">
-            <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '130', 130)" onmouseover="showTip(event, '130', 130)">
-            Head(endpoint)
-          </code>
-          <div class="tip" id="130">
-            <strong>Signature:</strong> endpoint:string -&gt; HttpResponse<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '131', 131)" onmouseover="showTip(event, '131', 131)">
-            HeadAsync(endpoint)
-          </code>
-          <div class="tip" id="131">
-            <strong>Signature:</strong> endpoint:string -&gt; Async&lt;HttpResponse&gt;<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '132', 132)" onmouseover="showTip(event, '132', 132)">
-            Post(endpoint, body)
-          </code>
-          <div class="tip" id="132">
-            <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; HttpResponse<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '133', 133)" onmouseover="showTip(event, '133', 133)">
             PostAsync(endpoint, body)
           </code>
-          <div class="tip" id="133">
+          <div class="tip" id="128">
             <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; Async&lt;HttpResponse&gt;<br />
                       </div>
         </td>
@@ -181,10 +181,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '134', 134)" onmouseover="showTip(event, '134', 134)">
+          <code onmouseout="hideTip(event, '129', 129)" onmouseover="showTip(event, '129', 129)">
             Put(endpoint, body)
           </code>
-          <div class="tip" id="134">
+          <div class="tip" id="129">
             <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; HttpResponse<br />
                       </div>
         </td>
@@ -195,10 +195,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '135', 135)" onmouseover="showTip(event, '135', 135)">
+          <code onmouseout="hideTip(event, '130', 130)" onmouseover="showTip(event, '130', 130)">
             PutAsync(endpoint, body)
           </code>
-          <div class="tip" id="135">
+          <div class="tip" id="130">
             <strong>Signature:</strong> (endpoint:string * body:byte []) -&gt; Async&lt;HttpResponse&gt;<br />
                       </div>
         </td>
@@ -211,8 +211,12 @@
 
         </div>
         <div class="span3">
-          <img src="/Wooga.Lambda-CSharp/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li><img src="/Wooga.Lambda-CSharp/img/logo.png" alt="F# Project" style="width:150px;margin:10px" /></li>
+            <!-- <li><img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/issue" alt="F# Project" style="width:180px;margin:5px"/></li>
+            <li>
+              <img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/pr" alt="F# Project" style="width:180px;margin:5px"/>
+            </li> -->
             <li class="nav-header">Wooga.Lambda</li>
             <li><a href="/Wooga.Lambda-CSharp/index.html">Home page</a></li>
             <li class="divider"></li>
@@ -221,29 +225,22 @@
             <li><a href="/Wooga.Lambda-CSharp/license.html">License</a></li>
             <li><a href="/Wooga.Lambda-CSharp/release-notes.html">Release Notes</a></li>
 
-            <li class="nav-header">Wooga.Lambda</li>
+            <li class="nav-header">Get Started</li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.maybe.html">Monad.Maybe</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.either.html">Monad.Either</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.async.html">Concurrent.Async</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li>
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li> -->
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.patternmatch.html">Pattern.Match</a></li>
-
-            <li class="nav-header">Wooga.Lambda.Logging</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.logging.agent.html">Logging.LoggingAgent</a></li>
-
-            <li class="nav-header">Wooga.Lambda.Network</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.network.httpclient.html">Network.HttpClient</a></li>
-
-            <li class="nav-header">Wooga.Lambda.FileSystem</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.filesystem.html">FileSystem</a></li>
-
-            <li class="nav-header">Wooga.Lambda.Parser</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.chars.html">Parser.Chars</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.strings.html">Parser.Strings</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.charstream.html">Parser.CharStream</a></li>
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.logging.agent.html">LoggingAgent</a></li> -->
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.network.httpclient.html">Network.HttpClient</a></li> -->
+            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.filesystem.html">FileSystem</a></li> -->
+            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.html">Parser</a></li>
 
             <li class="nav-header">Documentation</li>
             <li><a href="/Wooga.Lambda-CSharp/reference/index.html">API Reference</a></li>
+
+            <li><img src="https://travis-ci.org/wooga/Wooga.Lambda-CSharp.png" alt="F# Project" style="margin:5px"/></li>
+            <li><img src="http://img.shields.io/nuget/v/Wooga.Lambda.svg?style=flat" alt="F# Project" style="margin:5px"/></li>
           </ul>
         </div>
       </div>
