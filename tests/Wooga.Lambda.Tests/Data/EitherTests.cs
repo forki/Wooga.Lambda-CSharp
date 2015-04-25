@@ -30,6 +30,28 @@ namespace Wooga.Lambda.Tests.Data
     }
 
     [TestFixture]
+    public class EitherTryTests
+    {
+        [Test]
+        public void WithoutExceptionEitherShouldBeRight()
+        {
+            var tryIo = Either.Try(() => "noError");
+            var result = tryIo();
+            Assert.True(result.IsRight());
+            Assert.AreEqual("noError", result.RightValue());
+        }
+
+        [Test]
+        public void WithExceptionEitherShouldBeLeft()
+        {
+            var tryIo = Either.Try<Unit>(() => { throw new Exception("anError"); });
+            var result = tryIo();
+            Assert.True(result.IsLeft());
+            Assert.AreEqual("anError", result.LeftValue().Message);
+        }
+    }
+
+    [TestFixture]
     public class EitherMonadTests
     {
         [Test]

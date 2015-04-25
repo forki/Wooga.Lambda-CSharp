@@ -74,3 +74,27 @@
     valid.IsLeft()
         ? Console.WriteLine("Validation error:" + valid.FromLeft())
         : Console.WriteLine("Validation succeeded");
+
+        ### The Try method: Either[TL,TR]
+
+            [lang=cs]
+            public Uri GetEndpoint(string host)
+            {
+                return new Uri("http://" + host);
+            }
+
+            var x = GetEndpoint("~spaghetti~");
+            // System.UriFormatException : Invalid URI: The hostname could not be parsed.
+
+            // vs.
+
+            public Uri GetEndpoint(string host)
+            {
+                return new Uri("http://" + host);
+            }
+
+            var x = Either.Try(()=>GetEndpoint("~spaghetti~"))();
+            if(x.IsRight())
+            {
+                System.Console.WriteLine(x.RightValue());
+            }

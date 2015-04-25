@@ -38,7 +38,6 @@
   <ItemGroup>
     <Compile Include="Control\Concurrent\Agent.cs" />
     <Compile Include="Control\Concurrent\Async.cs" />
-    <Compile Include="Control\Monad\Try.cs" />
     <Compile Include="Control\PatternMatching\Pattern.cs" />
     <Compile Include="Data\ArrayExt.cs" />
     <Compile Include="Data\DictionaryExt.cs" />

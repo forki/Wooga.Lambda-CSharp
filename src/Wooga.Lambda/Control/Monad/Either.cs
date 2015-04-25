@@ -66,9 +66,18 @@ namespace Wooga.Lambda.Control.Monad
             return Right<TLeft, TRight>(v);
         }
 
-        
+        public static Either<Exception, T> Try<T>(Func<T> f)
+        {
+            try
+            {
+                return Either.Right<Exception, T>(f());
+            }
+            catch (Exception e)
+            {
+                return Either.Left<Exception, T>(e);
+            }
+        }
 
-        
     }
 
     public static class EitherFunctor
