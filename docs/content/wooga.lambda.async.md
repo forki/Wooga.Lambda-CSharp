@@ -105,4 +105,26 @@ Returns an array of values from the array of input computations.
     Debug.WriteLine("total ms: {0} for threads: {1}",t,threadCount);
     // total ms: 953 for threads: 4
 
+## *Async* gotchas
+
+**Async<'T>** can sleep for a given time using **Async.Sleep(int)**:
+
+    [lang=cs]
+    Async.Sleep(300)
+    .RunSynchronously();
+
+**Async<'T>** exceptions can be caught with **Async.Catch()**:
+
+    [lang=cs]
+    var failure = Async.Return(() =>
+    {
+        throw new System.Exception("ga");
+        return "txt";
+    });
+
+    var txt = failure.Catch().RunSynchronously();
+    if(txt.IsLeft())
+        Debug.WriteLine(txt.LeftValue().Message); // "ga"
+
+
 Check out the [API Reference](http://wooga.github.io/Wooga.Lambda-CSharp/reference/wooga-lambda-control-concurrent-async.html) for more information.
