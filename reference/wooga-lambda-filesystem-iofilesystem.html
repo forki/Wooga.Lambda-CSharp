@@ -47,11 +47,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '126', 126)" onmouseover="showTip(event, '126', 126)">
+          <code onmouseout="hideTip(event, '118', 118)" onmouseover="showTip(event, '118', 118)">
             CreateDirectory(d)
           </code>
-          <div class="tip" id="126">
-            <strong>Signature:</strong> d:DirectoryInfo -&gt; IO&lt;Unit&gt;<br />
+          <div class="tip" id="118">
+            <strong>Signature:</strong> d:DirectoryInfo -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -62,11 +62,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '127', 127)" onmouseover="showTip(event, '127', 127)">
+          <code onmouseout="hideTip(event, '119', 119)" onmouseover="showTip(event, '119', 119)">
             GetFiles(d)
           </code>
-          <div class="tip" id="127">
-            <strong>Signature:</strong> d:DirectoryInfo -&gt; IO&lt;Maybe&lt;FileInfo []&gt;&gt;<br />
+          <div class="tip" id="119">
+            <strong>Signature:</strong> d:DirectoryInfo -&gt; Async&lt;Maybe&lt;FileInfo []&gt;&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -77,11 +77,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '128', 128)" onmouseover="showTip(event, '128', 128)">
+          <code onmouseout="hideTip(event, '120', 120)" onmouseover="showTip(event, '120', 120)">
             GetFiles(d, searchPattern)
           </code>
-          <div class="tip" id="128">
-            <strong>Signature:</strong> (d:DirectoryInfo * searchPattern:string) -&gt; IO&lt;Maybe&lt;FileInfo []&gt;&gt;<br />
+          <div class="tip" id="120">
+            <strong>Signature:</strong> (d:DirectoryInfo * searchPattern:string) -&gt; Async&lt;Maybe&lt;FileInfo []&gt;&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -92,11 +92,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '129', 129)" onmouseover="showTip(event, '129', 129)">
+          <code onmouseout="hideTip(event, '121', 121)" onmouseover="showTip(event, '121', 121)">
             GetFilesRecursive(d, searchPattern)
           </code>
-          <div class="tip" id="129">
-            <strong>Signature:</strong> (d:DirectoryInfo * searchPattern:string) -&gt; IO&lt;Maybe&lt;FileInfo []&gt;&gt;<br />
+          <div class="tip" id="121">
+            <strong>Signature:</strong> (d:DirectoryInfo * searchPattern:string) -&gt; Async&lt;Maybe&lt;FileInfo []&gt;&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -107,11 +107,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '130', 130)" onmouseover="showTip(event, '130', 130)">
+          <code onmouseout="hideTip(event, '122', 122)" onmouseover="showTip(event, '122', 122)">
             ReadFile(f)
           </code>
-          <div class="tip" id="130">
-            <strong>Signature:</strong> f:FileInfo -&gt; IO&lt;Maybe&lt;byte []&gt;&gt;<br />
+          <div class="tip" id="122">
+            <strong>Signature:</strong> f:FileInfo -&gt; Async&lt;Maybe&lt;byte []&gt;&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -122,11 +122,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '131', 131)" onmouseover="showTip(event, '131', 131)">
+          <code onmouseout="hideTip(event, '123', 123)" onmouseover="showTip(event, '123', 123)">
             RemoveDirectory(d)
           </code>
-          <div class="tip" id="131">
-            <strong>Signature:</strong> d:DirectoryInfo -&gt; IO&lt;Unit&gt;<br />
+          <div class="tip" id="123">
+            <strong>Signature:</strong> d:DirectoryInfo -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -137,11 +137,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '132', 132)" onmouseover="showTip(event, '132', 132)">
+          <code onmouseout="hideTip(event, '124', 124)" onmouseover="showTip(event, '124', 124)">
             RemoveFile(f)
           </code>
-          <div class="tip" id="132">
-            <strong>Signature:</strong> f:FileInfo -&gt; IO&lt;Unit&gt;<br />
+          <div class="tip" id="124">
+            <strong>Signature:</strong> f:FileInfo -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -152,11 +152,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '133', 133)" onmouseover="showTip(event, '133', 133)">
+          <code onmouseout="hideTip(event, '125', 125)" onmouseover="showTip(event, '125', 125)">
             WriteFile(f, b)
           </code>
-          <div class="tip" id="133">
-            <strong>Signature:</strong> (f:FileInfo * b:byte []) -&gt; IO&lt;Unit&gt;<br />
+          <div class="tip" id="125">
+            <strong>Signature:</strong> (f:FileInfo * b:byte []) -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -182,7 +182,6 @@
             <li class="nav-header">Wooga.Lambda</li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.maybe.html">Monad.Maybe</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.either.html">Monad.Either</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.io.html">Monad.IO</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.try.html">Monad.Try</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.async.html">Concurrent.Async</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li>
