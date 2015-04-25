@@ -1,25 +1,25 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Wooga.Lambda.Control.Concurrent;
 
 namespace AsyncDownloader
 {
-    class Program
+    internal class Program
     {
-
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            var failure = Async.Return(() => 
+            var failure = Async.Return(() =>
             {
-                throw new System.Exception("ga");
+                throw new Exception("ga");
                 return "txt";
             });
 
             var txt = failure.Catch().RunSynchronously();
-            if(txt.IsLeft())
+            if (txt.IsLeft())
                 Debug.WriteLine(txt.LeftValue().Message); // ga
 
 
-              AsyncBlockSimple.Run();
+            AsyncBlockSimple.Run();
         }
     }
 }

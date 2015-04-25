@@ -1,10 +1,9 @@
 ﻿using System;
-using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Monad
 {
     /// <summary>
-    /// A delegate to label lambdas as Either
+    ///     A delegate to label lambdas as Either
     /// </summary>
     /// <typeparam name="TLeft">The type of the left/failure value.</typeparam>
     /// <typeparam name="TRight">The type of the right/success value.</typeparam>
@@ -23,7 +22,7 @@ namespace Wooga.Lambda.Control.Monad
             return () => new Result<TLeft, TRight>.Right(m);
         }
 
-        public static Boolean IsRight<TLeft, TRight>(this Either<TLeft, TRight> m)
+        public static bool IsRight<TLeft, TRight>(this Either<TLeft, TRight> m)
         {
             return m().IsRight();
         }
@@ -33,7 +32,7 @@ namespace Wooga.Lambda.Control.Monad
             return m().LeftValue();
         }
 
-        public static Boolean IsLeft<TLeft, TRight>(this Either<TLeft, TRight> m)
+        public static bool IsLeft<TLeft, TRight>(this Either<TLeft, TRight> m)
         {
             return m().IsLeft();
         }
@@ -73,7 +72,7 @@ namespace Wooga.Lambda.Control.Monad
             return Right<TLeft, TRight>(v);
         }
 
-        public static Either<TLeft, TRight> Try<TLeft, TRight>(Func<Exception,TLeft> fl, Func<TRight> fr)
+        public static Either<TLeft, TRight> Try<TLeft, TRight>(Func<Exception, TLeft> fl, Func<TRight> fr)
         {
             try
             {
@@ -82,7 +81,7 @@ namespace Wooga.Lambda.Control.Monad
             catch (Exception e)
             {
                 return Left<TLeft, TRight>(fl(e));
-            }     
+            }
         }
 
         public static Either<Exception, T> Try<T>(Func<T> f)
@@ -97,12 +96,9 @@ namespace Wooga.Lambda.Control.Monad
 
         public abstract class Result<TLeft, TRight>
         {
-            public abstract Boolean IsLeft();
-
-            public abstract Boolean IsRight();
-
+            public abstract bool IsLeft();
+            public abstract bool IsRight();
             public abstract TLeft LeftValue();
-
             public abstract TRight RightValue();
 
             internal sealed class Left : Result<TLeft, TRight>
@@ -165,7 +161,6 @@ namespace Wooga.Lambda.Control.Monad
                 }
             }
         }
-
     }
 
     public static class EitherFunctor

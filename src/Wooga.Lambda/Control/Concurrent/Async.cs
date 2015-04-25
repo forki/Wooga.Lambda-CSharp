@@ -7,20 +7,19 @@ using Wooga.Lambda.Data;
 namespace Wooga.Lambda.Control.Concurrent
 {
     /// <summary>
-    /// A delegate to label lambdas as Async
+    ///     A delegate to label lambdas as Async
     /// </summary>
     /// <typeparam name="T">Result type</typeparam>
     /// <returns>Result</returns>
     public delegate T Async<T>();
 
     /// <summary>
-    /// A wrapper to encapsulate a ManualResetEvent.
+    ///     A wrapper to encapsulate a ManualResetEvent.
     /// </summary>
     /// <typeparam name="TReply">The type of the reply.</typeparam>
     internal sealed class AsyncEventHandle<T>
     {
         public readonly ManualResetEvent DoneEvent = new ManualResetEvent(false);
-
         private T _result;
 
         public Unit Complete(T result)
@@ -37,7 +36,7 @@ namespace Wooga.Lambda.Control.Concurrent
     }
 
     /// <summary>
-    /// A handle to a capability to reply to a message.
+    ///     A handle to a capability to reply to a message.
     /// </summary>
     /// <typeparam name="TReply">The type of the reply.</typeparam>
     public sealed class AsyncReplyChannel<TReply>
@@ -57,9 +56,8 @@ namespace Wooga.Lambda.Control.Concurrent
 
     public static class Async
     {
-
         /// <summary>
-        /// Creates an asynchronous computation that runs the given computation and ignores its result.
+        ///     Creates an asynchronous computation that runs the given computation and ignores its result.
         /// </summary>
         /// <typeparam name="T">Type of computation result</typeparam>
         /// <param name="m">The computation.</param>
@@ -74,7 +72,8 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        /// Creates an asynchronous computation that executes all the given asynchronous computations, initially queueing each as work items and using a fork/join pattern.
+        ///     Creates an asynchronous computation that executes all the given asynchronous computations, initially queueing each
+        ///     as work items and using a fork/join pattern.
         /// </summary>
         /// <typeparam name="T">Type of computation result</typeparam>
         /// <param name="ms">The computations.</param>
@@ -107,7 +106,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        /// Runs the provided asynchronous computation and awaits its result.
+        ///     Runs the provided asynchronous computation and awaits its result.
         /// </summary>
         /// <typeparam name="T">Type of computation result</typeparam>
         /// <param name="m">The computation</param>
@@ -118,7 +117,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        /// Creates an asynchronous computation that will sleep for the given time.
+        ///     Creates an asynchronous computation that will sleep for the given time.
         /// </summary>
         /// <param name="ms">The sleep duration in miliseconds</param>
         /// <returns>Async computation</returns>
@@ -133,7 +132,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        /// Starts the asynchronous computation in the thread pool. Do not await its result.
+        ///     Starts the asynchronous computation in the thread pool. Do not await its result.
         /// </summary>
         /// <typeparam name="T">Type of computation result</typeparam>
         /// <param name="m">The computation.</param>
@@ -145,7 +144,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        /// Starts the asynchronous computation in the thread pool. Await result on AsyncReplyChannel.
+        ///     Starts the asynchronous computation in the thread pool. Await result on AsyncReplyChannel.
         /// </summary>
         /// <typeparam name="T">Type of computation result</typeparam>
         /// <param name="m">The computation.</param>
@@ -163,7 +162,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        /// Starts a child computation. This allows multiple asynchronous computations to be executed simultaneously.
+        ///     Starts a child computation. This allows multiple asynchronous computations to be executed simultaneously.
         /// </summary>
         /// <typeparam name="T">Type of computation result</typeparam>
         /// <param name="m">The computation.</param>
@@ -189,7 +188,7 @@ namespace Wooga.Lambda.Control.Concurrent
 
         public static Async<Either.Result<Exception, T>> Catch<T>(this Async<T> m)
         {
-            return () => Either.Try(m.RunSynchronously)();    
+            return () => Either.Try(m.RunSynchronously)();
         }
 
         public static Async<T2> Bind<T1, T2>(this Async<T1> m, Func<T1, Async<T2>> f)

@@ -7,13 +7,6 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
     public class StringsTests
     {
         [Test]
-        public void EqShouldSuccedOnSequenceOfGivenChars()
-        {
-            var p = Strings.Eq("abc");
-            Assert.IsInstanceOf<Result<string>.Success>(p((new CharStream("abc"))));
-        }
-
-        [Test]
         public void EqShouldFailOnCharsNotInSequence()
         {
             var p = Strings.Eq("abc");
@@ -28,7 +21,14 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
             var p = Strings.Eq("abc");
             var r = p((new CharStream("abc")));
             var rs = ((Result<string>.Success) r);
-            Assert.AreEqual("abc",rs.Value);
+            Assert.AreEqual("abc", rs.Value);
+        }
+
+        [Test]
+        public void EqShouldSuccedOnSequenceOfGivenChars()
+        {
+            var p = Strings.Eq("abc");
+            Assert.IsInstanceOf<Result<string>.Success>(p((new CharStream("abc"))));
         }
     }
 }

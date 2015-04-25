@@ -1,4 +1,7 @@
 //using System;
+
+using System;
+using System.Diagnostics;
 using System.Text;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
@@ -8,11 +11,11 @@ using Wooga.Lambda.Network.Transport;
 
 namespace AsyncDownloader
 {
-    static class AsyncParallelSimple
+    internal static class AsyncParallelSimple
     {
         private static readonly Encoding Enc = Encoding.UTF8;
 
-        public static Async<Tuple<System.Uri, string>> GetHtmlAsync(this HttpClient http, string uri)
+        public static Async<Wooga.Lambda.Data.Tuple<Uri, string>> GetHtmlAsync(this HttpClient http, string uri)
         {
             return () =>
             {
@@ -21,7 +24,7 @@ namespace AsyncDownloader
                     .RunSynchronously()
                     .Body
                     .FromJustOrDefault("", Enc.GetString);
-                return new Tuple<System.Uri, string>(new System.Uri(uri), body);
+                return new Wooga.Lambda.Data.Tuple<Uri, string>(new Uri(uri), body);
             };
         }
 
@@ -29,10 +32,10 @@ namespace AsyncDownloader
         {
             var uris = new[]
             {
-                "http://giphy.com/", 
-                "http://google.com", 
-                "http://wooga.com", 
-                "http://apple.com", 
+                "http://giphy.com/",
+                "http://google.com",
+                "http://wooga.com",
+                "http://apple.com",
                 "http://tumblr.com"
             };
 
@@ -42,14 +45,14 @@ namespace AsyncDownloader
                 uris = uris.Append(uris.Head());
 
             var reqs = uris.Map(http.GetHtmlAsync);
-            
+
             var resp = reqs
-                       .Parallel()
-                       .RunSynchronously();
+                .Parallel()
+                .RunSynchronously();
 
-            var bytesTotal = resp.Fold((a,s) => a + Enc.GetByteCount(s.Item2), 0);
+            var bytesTotal = resp.Fold((a, s) => a + Enc.GetByteCount(s.Item2), 0);
 
-            System.Diagnostics.Debug.WriteLine( bytesTotal + " bytesLoaded");
+            Debug.WriteLine(bytesTotal + " bytesLoaded");
 
             // 12932393 bytes = ~12MB total 
         }

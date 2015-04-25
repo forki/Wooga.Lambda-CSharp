@@ -18,7 +18,7 @@ namespace Wooga.Lambda.Network
             Body = body;
         }
 
-        public static HttpRequest Basic(String url, HttpMethod httpMethod)
+        public static HttpRequest Basic(string url, HttpMethod httpMethod)
         {
             return new HttpRequest(new Uri(url), httpMethod, HttpHeaders.Create(), Maybe.Nothing<byte[]>());
         }
@@ -38,7 +38,5 @@ namespace Wooga.Lambda.Network
             return new HttpRequest(httpRequest.Endpoint, httpRequest.HttpMethod, httpRequest.HttpHeaders,
                 Maybe.Return(() => body));
         }
-
-        
     }
 }

@@ -22,17 +22,17 @@ namespace Wooga.Lambda.Parser.Combinators
 
         public static Parser<char> Letter()
         {
-            return Satisfy(Char.IsLetter);
+            return Satisfy(char.IsLetter);
         }
 
         public static Parser<char> Digit()
         {
-            return Satisfy(Char.IsDigit);
+            return Satisfy(char.IsDigit);
         }
 
         public static Parser<char> WhiteSpace()
         {
-            return Satisfy(Char.IsWhiteSpace);
+            return Satisfy(char.IsWhiteSpace);
         }
 
         public static Parser<char> Newline()

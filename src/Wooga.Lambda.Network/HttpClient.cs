@@ -5,16 +5,16 @@ namespace Wooga.Lambda.Network
 {
     public sealed class HttpClient
     {
-        public readonly Func<HttpRequest,Async<HttpResponse>> TransportAsync;
+        public readonly Func<HttpRequest, Async<HttpResponse>> TransportAsync;
 
-        public HttpClient(Func<HttpClient,HttpRequest,HttpResponse> transport)
+        public HttpClient(Func<HttpClient, HttpRequest, HttpResponse> transport)
         {
             TransportAsync = r => () => transport(this, r);
         }
 
-        public HttpResponse Post(String endpoint, byte[] body)
+        public HttpResponse Post(string endpoint, byte[] body)
         {
-            return PostAsync(endpoint, body).RunSynchronously();   
+            return PostAsync(endpoint, body).RunSynchronously();
         }
 
         public Async<HttpResponse> PostAsync(string endpoint, byte[] body)
@@ -22,7 +22,7 @@ namespace Wooga.Lambda.Network
             return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Post).WithBody(body));
         }
 
-        public HttpResponse Get(String endpoint)
+        public HttpResponse Get(string endpoint)
         {
             return GetAsync(endpoint).RunSynchronously();
         }

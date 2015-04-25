@@ -1,31 +1,24 @@
 ﻿using System;
 using NUnit.Framework;
 using Wooga.Lambda.Control.Monad;
-using Wooga.Lambda.Data;
 
-namespace Wooga.Lambda.Tests.Data
+namespace Wooga.Lambda.Tests.Control.Monad
 {
     [TestFixture]
     public class MaybeTests
     {
         [Test]
-        public void JustIsJust()
+        public void _MaybeAppliesFuncForJust()
         {
-            var maybe = Maybe.Just("x");
-            var isJust = maybe.IsJust();
-            var isNothing = maybe.IsNothing();
-            Assert.True(isJust);
-            Assert.False(isNothing);
+            var maybe = Maybe.Just("abc");
+            Assert.AreEqual(99, maybe.FromJustOrDefault(100, _ => 99));
         }
 
         [Test]
-        public void NothingIsNothing()
+        public void _MaybeGetsDefaultForNothing()
         {
-            var maybe = Maybe.Nothing<String>();
-            var isNothing = maybe.IsNothing();
-            var isJust = maybe.IsJust();
-            Assert.True(isNothing);
-            Assert.False(isJust);
+            var maybe = Maybe.Nothing<string>();
+            Assert.AreEqual("xzy", maybe.FromJustOrDefault("xzy", _ => _));
         }
 
         [Test]
@@ -43,13 +36,6 @@ namespace Wooga.Lambda.Tests.Data
         }
 
         [Test]
-        public void FromMaybeGetsValueOfJust()
-        {
-            var maybe = Maybe.Just("abc");
-            Assert.AreEqual("abc", maybe.FromMaybe("xzy"));
-        }
-
-        [Test]
         public void FromMaybeGetsDefaultForNothing()
         {
             var maybe = Maybe.Nothing<string>();
@@ -57,17 +43,30 @@ namespace Wooga.Lambda.Tests.Data
         }
 
         [Test]
-        public void _MaybeGetsDefaultForNothing()
+        public void FromMaybeGetsValueOfJust()
         {
-            var maybe = Maybe.Nothing<string>();
-            Assert.AreEqual("xzy", maybe.FromJustOrDefault("xzy", _ => _));
+            var maybe = Maybe.Just("abc");
+            Assert.AreEqual("abc", maybe.FromMaybe("xzy"));
         }
 
         [Test]
-        public void _MaybeAppliesFuncForJust()
+        public void JustIsJust()
         {
-            var maybe = Maybe.Just("abc");
-            Assert.AreEqual(99, maybe.FromJustOrDefault(100, _ => 99));
+            var maybe = Maybe.Just("x");
+            var isJust = maybe.IsJust();
+            var isNothing = maybe.IsNothing();
+            Assert.True(isJust);
+            Assert.False(isNothing);
+        }
+
+        [Test]
+        public void NothingIsNothing()
+        {
+            var maybe = Maybe.Nothing<string>();
+            var isNothing = maybe.IsNothing();
+            var isJust = maybe.IsJust();
+            Assert.True(isNothing);
+            Assert.False(isJust);
         }
     }
 
@@ -84,15 +83,8 @@ namespace Wooga.Lambda.Tests.Data
         [Test]
         public void BindIsNothingForNothing()
         {
-            var maybe = Maybe.Nothing<String>();
+            var maybe = Maybe.Nothing<string>();
             Assert.True(maybe.Bind(_ => Maybe.Just(12)).IsNothing());
-        }
-
-        [Test]
-        public void ThenIsNothingWhenFirstIsNothing()
-        {
-            var maybe = Maybe.Nothing<String>().Then(Maybe.Just("abc"));
-            Assert.True(maybe.IsNothing());
         }
 
         [Test]
@@ -100,6 +92,13 @@ namespace Wooga.Lambda.Tests.Data
         {
             var maybe = Maybe.Return(() => "x");
             Assert.True(maybe.IsJust());
+        }
+
+        [Test]
+        public void ThenIsNothingWhenFirstIsNothing()
+        {
+            var maybe = Maybe.Nothing<string>().Then(Maybe.Just("abc"));
+            Assert.True(maybe.IsNothing());
         }
     }
 
@@ -110,7 +109,7 @@ namespace Wooga.Lambda.Tests.Data
         public void FirstLaw()
         {
             var str = "abc";
-            Func<String, Maybe<String>> f = s => Maybe.Just(s.ToUpper());
+            Func<string, Maybe<string>> f = s => Maybe.Just(s.ToUpper());
             Assert.AreEqual(Maybe.Return(() => str).Bind(f).FromJust(), f(str).FromJust());
         }
 
@@ -138,19 +137,19 @@ namespace Wooga.Lambda.Tests.Data
     public class MaybeFunctorTests
     {
         [Test]
-        public void FunctorWithNothingIsNothing()
-        {
-            var maybe = Maybe.Nothing<String>();
-            var res = maybe.FMap(_ => 0);
-            Assert.True(res.IsNothing());
-        }
-
-        [Test]
         public void FunctorWithJustAppliesFunctor()
         {
             var maybe = Maybe.Just(42);
             var res = maybe.FMap(_ => "42");
             Assert.AreEqual("42", res.FromJust());
+        }
+
+        [Test]
+        public void FunctorWithNothingIsNothing()
+        {
+            var maybe = Maybe.Nothing<string>();
+            var res = maybe.FMap(_ => 0);
+            Assert.True(res.IsNothing());
         }
     }
 }

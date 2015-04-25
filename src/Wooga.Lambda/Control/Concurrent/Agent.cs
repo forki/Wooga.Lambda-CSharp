@@ -6,15 +6,22 @@ using Wooga.Lambda.Data;
 namespace Wooga.Lambda.Control.Concurrent
 {
     /// <summary>
-    /// Actor/Agent implementation similar to Control.Async.MailboxProcessor in F#
+    ///     Actor/Agent implementation similar to Control.Async.MailboxProcessor in F#
     /// </summary>
     /// <typeparam name="TM">The type of the message consumed by the agent.</typeparam>
     /// <typeparam name="TR">The type of the response produced by the agent.</typeparam>
     public class Agent<TM, TR>
     {
         private readonly Queue<TM> _inbox = new Queue<TM>();
+        private volatile bool _shouldCancel;
 
-        private volatile Boolean _shouldCancel;
+        /// <summary>
+        ///     Gets a value indicating whether this agent is running.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if this agent is running; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsRunning { get; private set; }
 
         private static Async<Unit> Watchdog<TS>(Agent<TM, TR> inbox, Func<Agent<TM, TR>, TS, TS> body, TS state)
         {
@@ -32,7 +39,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        /// Creates and starts an agent.
+        ///     Creates and starts an agent.
         /// </summary>
         /// <typeparam name="TS">The type of the state.</typeparam>
         /// <param name="state">The initial state.</param>
@@ -46,7 +53,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        /// Creates and starts an agent.
+        ///     Creates and starts an agent.
         /// </summary>
         /// <typeparam name="TS">The type of the state.</typeparam>
         /// <param name="state">The initial state.</param>
@@ -60,27 +67,18 @@ namespace Wooga.Lambda.Control.Concurrent
                 Watchdog(agent, body, state).RunSynchronously();
                 return agent;
             };
-
         }
 
         /// <summary>
-        /// Indicates if the agent should cancel and stop
+        ///     Indicates if the agent should cancel and stop
         /// </summary>
-        public Boolean CancellationRequested()
+        public bool CancellationRequested()
         {
             return _shouldCancel;
         }
 
         /// <summary>
-        /// Gets a value indicating whether this agent is running.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this agent is running; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsRunning { get; private set; }
-
-        /// <summary>
-        /// Cancels this agent.
+        ///     Cancels this agent.
         /// </summary>
         public void Cancel()
         {
@@ -88,7 +86,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        /// Cancels this agent.
+        ///     Cancels this agent.
         /// </summary>
         /// <returns>Async computation that cancels the agent.</returns>
         public Async<Unit> CancelAsync()
@@ -96,13 +94,15 @@ namespace Wooga.Lambda.Control.Concurrent
             return () =>
             {
                 _shouldCancel = true;
-                while (IsRunning) {}
+                while (IsRunning)
+                {
+                }
                 return Unit.Default;
             };
         }
 
         /// <summary>
-        /// Posts a message to the message queue of the Agent, asynchronously.
+        ///     Posts a message to the message queue of the Agent, asynchronously.
         /// </summary>
         /// <param name="msg">The message to post.</param>
         public Unit Post(TM msg)
@@ -119,7 +119,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        /// Posts a message to an agent and await a reply on the channel, synchronously.
+        ///     Posts a message to an agent and await a reply on the channel, synchronously.
         /// </summary>
         /// <param name="f">The lambda providing the message.</param>
         /// <returns>The agents reply</returns>
@@ -132,7 +132,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        /// Posts a message to an agent and await a reply on the channel, asynchronously.
+        ///     Posts a message to an agent and await a reply on the channel, asynchronously.
         /// </summary>
         /// <param name="f">The lambda providing the message.</param>
         /// <returns>An async computation providing the agents reply.</returns>
@@ -142,7 +142,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        /// Waits for a message. This will consume the first message in arrival order.
+        ///     Waits for a message. This will consume the first message in arrival order.
         /// </summary>
         /// <returns>An async computation providing a message.</returns>
         public Async<TM> Receive()

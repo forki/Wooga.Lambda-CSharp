@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Wooga.Lambda.Control.Monad;
 
@@ -7,21 +6,11 @@ namespace Wooga.Lambda.Network
 {
     public sealed class HttpHeaders : IEnumerable<HttpHeader>
     {
-        internal readonly Dictionary<String, HttpHeader> Headers;
+        internal readonly Dictionary<string, HttpHeader> Headers;
 
         private HttpHeaders(Dictionary<string, HttpHeader> h)
         {
             Headers = h;
-        }
-
-        public static HttpHeaders Create()
-        {
-            return new HttpHeaders(new Dictionary<string, HttpHeader>());
-        }
-
-        public static HttpHeaders Create(Dictionary<string, HttpHeader> h)
-        {
-            return new HttpHeaders(h);
         }
 
         public IEnumerator<HttpHeader> GetEnumerator()
@@ -32,6 +21,16 @@ namespace Wooga.Lambda.Network
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public static HttpHeaders Create()
+        {
+            return new HttpHeaders(new Dictionary<string, HttpHeader>());
+        }
+
+        public static HttpHeaders Create(Dictionary<string, HttpHeader> h)
+        {
+            return new HttpHeaders(h);
         }
     }
 
@@ -51,7 +50,7 @@ namespace Wooga.Lambda.Network
             return HttpHeaders.Create(r);
         }
 
-        public static Maybe<HttpHeader> TryFindValueWithKey(this HttpHeaders self, String key)
+        public static Maybe<HttpHeader> TryFindValueWithKey(this HttpHeaders self, string key)
         {
             HttpHeader h;
             if (self.Headers.TryGetValue(key, out h))
@@ -61,9 +60,10 @@ namespace Wooga.Lambda.Network
             return Maybe.Nothing<HttpHeader>();
         }
 
-        public static HttpHeaders Append(this HttpHeaders self, String key, String value)
+        public static HttpHeaders Append(this HttpHeaders self, string key, string value)
         {
-            return self.Concat(HttpHeaders.Create(new Dictionary<String, HttpHeader> {{key, new HttpHeader(key, value)}}));
+            return
+                self.Concat(HttpHeaders.Create(new Dictionary<string, HttpHeader> {{key, new HttpHeader(key, value)}}));
         }
     }
 }

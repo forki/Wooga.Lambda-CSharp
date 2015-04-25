@@ -7,22 +7,6 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
     public class CommonTests
     {
         [Test]
-        public void ReturnShouldProduceAlwaysSuccessParser()
-        {
-            var p = Common.Return(100);
-            var r = p((new CharStream("x")));
-            var rs = ((Result<int>.Success) r);
-            Assert.AreEqual(100, rs.Value);
-        }
-
-        [Test]
-        public void ZeroShouldProduceAlwaysFailureParser()
-        {
-            var p = Common.Zero<int>();
-            Assert.IsInstanceOf<Result<int>.Failure>(p((new CharStream("a"))));
-        }
-
-        [Test]
         public void BindAFailureProducesFailure()
         {
             var p = Common.Zero<int>().Bind(_ => Common.Return(100));
@@ -42,16 +26,49 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         public void BindValueProducedByFIsUsed()
         {
             var p = Common.Return(20).Bind(_ => Common.Return(100));
-            var r = ((Result<int>.Success)p((new CharStream("a"))));
-            Assert.AreEqual(100,r.Value);
+            var r = ((Result<int>.Success) p((new CharStream("a"))));
+            Assert.AreEqual(100, r.Value);
         }
 
         [Test]
-        public void ThenProducesValueOnSuccess()
+        public void Many1ShouldNotProduceSuccessValueWithNoMatch()
         {
-            var p = Common.Return(20).Then(100);
-            var r = ((Result<int>.Success)p((new CharStream("a"))));
-            Assert.AreEqual(100, r.Value);
+            var p = Common.Zero<int>().Many1();
+            var r = p((new CharStream("a")));
+            Assert.IsInstanceOf<Result<int[]>.Failure>(r);
+        }
+
+        [Test]
+        public void ManyShouldIncreasePeekWithMultipleMatches()
+        {
+            var p = Chars.Eq('a').Many();
+            var r = ((Result<char[]>.Success) p((new CharStream("aaaa"))));
+            Assert.IsInstanceOf<Result<char[]>.Success>(r);
+        }
+
+        [Test]
+        public void ManyShouldProduceSuccessValueWithNoMatch()
+        {
+            var p = Common.Zero<int>().Many();
+            var r = ((Result<int[]>.Success) p((new CharStream("a"))));
+            Assert.AreEqual(new int[0], r.Value);
+        }
+
+        [Test]
+        public void ManyShouldProduceSuccessWithMultipleMatches()
+        {
+            var p = Chars.Eq('a').Many();
+            var r = ((Result<char[]>.Success) p((new CharStream("aaaa"))));
+            Assert.AreEqual(new[] {'a', 'a', 'a', 'a'}, r.Value);
+        }
+
+        [Test]
+        public void ReturnShouldProduceAlwaysSuccessParser()
+        {
+            var p = Common.Return(100);
+            var r = p((new CharStream("x")));
+            var rs = ((Result<int>.Success) r);
+            Assert.AreEqual(100, rs.Value);
         }
 
         [Test]
@@ -62,35 +79,18 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         }
 
         [Test]
-        public void ManyShouldProduceSuccessValueWithNoMatch()
+        public void ThenProducesValueOnSuccess()
         {
-            var p = Common.Zero<int>().Many();
-            var r = ((Result<int[]>.Success)p((new CharStream("a"))));
-            Assert.AreEqual(new int[0],r.Value);
+            var p = Common.Return(20).Then(100);
+            var r = ((Result<int>.Success) p((new CharStream("a"))));
+            Assert.AreEqual(100, r.Value);
         }
 
         [Test]
-        public void ManyShouldProduceSuccessWithMultipleMatches()
+        public void ZeroShouldProduceAlwaysFailureParser()
         {
-            var p = Chars.Eq('a').Many();
-            var r = ((Result<char[]>.Success)p((new CharStream("aaaa"))));
-            Assert.AreEqual(new[] { 'a', 'a', 'a', 'a' }, r.Value);
-        }
-
-        [Test]
-        public void ManyShouldIncreasePeekWithMultipleMatches()
-        {
-            var p = Chars.Eq('a').Many();
-            var r = ((Result<char[]>.Success)p((new CharStream("aaaa"))));
-            Assert.IsInstanceOf<Result<char[]>.Success>(r);
-        }
-
-        [Test]
-        public void Many1ShouldNotProduceSuccessValueWithNoMatch()
-        {
-            var p = Common.Zero<int>().Many1();
-            var r = p((new CharStream("a")));
-            Assert.IsInstanceOf<Result<int[]>.Failure>(r);
+            var p = Common.Zero<int>();
+            Assert.IsInstanceOf<Result<int>.Failure>(p((new CharStream("a"))));
         }
     }
 }

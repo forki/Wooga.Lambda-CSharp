@@ -1,0 +1,15 @@
+﻿#pragma once
+#include <stdint.h>
+#include <assert.h>
+#include <exception>
+#include "codegen/il2cpp-codegen.h"
+
+// System.Collections.Immutable.RefAsValueType`1<System.Collections.Immutable.SortedInt32KeyNode`1<System.Object>>
+struct RefAsValueType_1_t5569;
+// System.Collections.Immutable.SortedInt32KeyNode`1<System.Object>
+struct SortedInt32KeyNode_1_t5559;
+
+// System.Void System.Collections.Immutable.RefAsValueType`1<System.Collections.Immutable.SortedInt32KeyNode`1<System.Object>>::.ctor(T)
+// System.Collections.Immutable.RefAsValueType`1<System.Object>
+#include "Rackspace_Collections_Immutable_System_Collections_Immutable_99MethodDeclarations.h"
+#define RefAsValueType_1__ctor_m22501(__this, ___value, method) (void)RefAsValueType_1__ctor_m16483_gshared((RefAsValueType_1_t4728 *)__this, (Object_t *)___value, method)

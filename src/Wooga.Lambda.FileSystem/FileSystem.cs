@@ -11,11 +11,11 @@ namespace Wooga.Lambda.FileSystem
         Async<Unit> CreateDirectory(DirectoryInfo d);
         Async<Unit> RemoveDirectory(DirectoryInfo d);
         Async<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d);
-        Async<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d, String searchPattern);
-        Async<Maybe<FileInfo[]>> GetFilesRecursive(DirectoryInfo d, String searchPattern);
+        Async<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d, string searchPattern);
+        Async<Maybe<FileInfo[]>> GetFilesRecursive(DirectoryInfo d, string searchPattern);
         Async<Unit> RemoveFile(FileInfo f);
-        Async<Maybe<Byte[]>> ReadFile(FileInfo f);
-        Async<Unit> WriteFile(FileInfo f, Byte[] b);
+        Async<Maybe<byte[]>> ReadFile(FileInfo f);
+        Async<Unit> WriteFile(FileInfo f, byte[] b);
     }
 
     public class FileSystem : IOFileSystem
@@ -25,12 +25,12 @@ namespace Wooga.Lambda.FileSystem
             return () => Maybe.Return(() => d.GetFiles());
         }
 
-        public Async<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d, String searchPattern)
+        public Async<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d, string searchPattern)
         {
             return () => Maybe.Return(() => d.GetFiles(searchPattern));
         }
 
-        public Async<Maybe<FileInfo[]>> GetFilesRecursive(DirectoryInfo d, String searchPattern)
+        public Async<Maybe<FileInfo[]>> GetFilesRecursive(DirectoryInfo d, string searchPattern)
         {
             return () => Maybe.Return(() => d.GetFiles(searchPattern, SearchOption.AllDirectories));
         }
@@ -53,7 +53,7 @@ namespace Wooga.Lambda.FileSystem
             };
         }
 
-        public Async<Maybe<Byte[]>> ReadFile(FileInfo f)
+        public Async<Maybe<byte[]>> ReadFile(FileInfo f)
         {
             return () => Maybe.Return(() =>
             {
@@ -77,7 +77,7 @@ namespace Wooga.Lambda.FileSystem
             });
         }
 
-        public Async<Unit> WriteFile(FileInfo f, Byte[] b)
+        public Async<Unit> WriteFile(FileInfo f, byte[] b)
         {
             return () =>
             {

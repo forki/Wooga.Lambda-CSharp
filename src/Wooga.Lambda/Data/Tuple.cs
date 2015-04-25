@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Wooga.Lambda.Data
+﻿namespace Wooga.Lambda.Data
 {
     /// <summary>
     ///     Represent a value pair.
@@ -18,7 +16,7 @@ namespace Wooga.Lambda.Data
             Item2 = item2;
         }
 
-        public override bool Equals(Object obj)
+        public override bool Equals(object obj)
         {
             return obj is Tuple<T1, T2> && this == (Tuple<T1, T2>) obj;
         }
@@ -58,7 +56,7 @@ namespace Wooga.Lambda.Data
             Item3 = item3;
         }
 
-        public override bool Equals(Object obj)
+        public override bool Equals(object obj)
         {
             return obj is Tuple<T1, T2, T3> && this == (Tuple<T1, T2, T3>) obj;
         }

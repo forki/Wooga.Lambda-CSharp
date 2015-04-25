@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Wooga.Lambda.Network
+﻿namespace Wooga.Lambda.Network
 {
     public sealed class HttpMethod
     {
@@ -11,17 +9,16 @@ namespace Wooga.Lambda.Network
         public static readonly HttpMethod Post = new HttpMethod("POST");
         public static readonly HttpMethod Put = new HttpMethod("PUT");
         public static readonly HttpMethod Delete = new HttpMethod("DELETE");
+        public readonly string Name;
 
-        public readonly String Name;
-
-        private HttpMethod(String name)
+        private HttpMethod(string name)
         {
             Name = name;
         }
 
-        public override String ToString()
+        public override string ToString()
         {
-            return String.Format("HttpMethod, Name:{0}", Name);
+            return string.Format("HttpMethod, Name:{0}", Name);
         }
     }
 }

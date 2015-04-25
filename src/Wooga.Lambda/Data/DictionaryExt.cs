@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Wooga.Lambda.Data
 {
     /// <summary>
-    /// System.Collection.Generics.Dictionary extension methods
+    ///     System.Collection.Generics.Dictionary extension methods
     /// </summary>
     public static class DictionaryExt
     {

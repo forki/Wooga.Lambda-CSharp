@@ -11,7 +11,7 @@ namespace Wooga.Lambda.Control
         {
             return new MatchCase(() => Either.Right<TResult, TValue>(x));
         }
-        
+
         public sealed class MatchCase
         {
             private readonly PatterMatch<TValue, TResult> _m;
@@ -23,7 +23,10 @@ namespace Wooga.Lambda.Control
 
             public MatchCase Case(Func<TValue, bool> t, Func<TValue, TResult> f)
             {
-                return new MatchCase(() => _m().Bind(y => t(y) ? Either.Left<TResult, TValue>(f(y)) : Either.Right<TResult, TValue>(y)));
+                return
+                    new MatchCase(
+                        () =>
+                            _m().Bind(y => t(y) ? Either.Left<TResult, TValue>(f(y)) : Either.Right<TResult, TValue>(y)));
             }
 
             public MatchCase Case(TValue x, Func<TValue, TResult> f)

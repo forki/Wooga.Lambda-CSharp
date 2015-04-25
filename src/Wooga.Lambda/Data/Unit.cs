@@ -9,6 +9,7 @@
 
         private Unit()
         {
+            System.Collections.Immutable.ImmutableList.Create<int>();
         }
     }
 }

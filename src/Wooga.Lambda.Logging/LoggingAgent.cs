@@ -9,6 +9,8 @@ namespace Wooga.Lambda.Logging
     /// </summary>
     public class LoggingAgent
     {
+        private static volatile LoggingAgent instance;
+        private static readonly object syncRoot = new object();
         private readonly Agent<LogMsg, Func<LogMsg, Unit>[]> _agent;
 
         private LoggingAgent()
@@ -16,19 +18,17 @@ namespace Wooga.Lambda.Logging
             _agent = Agent<LogMsg, Func<LogMsg, Unit>[]>.Start(new Func<LogMsg, Unit>[0], (inbox, handlers) =>
             {
                 var msg = inbox.Receive().RunSynchronously();
-                if(msg is LogMsg.AddHandler)
+                if (msg is LogMsg.AddHandler)
                 {
-                    return handlers.Append(((LogMsg.AddHandler)msg).Handler);
+                    return handlers.Append(((LogMsg.AddHandler) msg).Handler);
                 }
-                
+
                 foreach (var handler in handlers)
                     handler(msg);
                 return handlers;
             });
         }
 
-        private static volatile LoggingAgent instance;
-        private static object syncRoot = new Object();
         public static LoggingAgent SharedAgent
         {
             get
@@ -51,31 +51,31 @@ namespace Wooga.Lambda.Logging
             return Unit.Default;
         }
 
-        public Unit Debug(String msg)
+        public Unit Debug(string msg)
         {
             PostLog(new LogMsg.Debug {Message = msg});
             return Unit.Default;
         }
 
-        public Unit Info(String msg)
+        public Unit Info(string msg)
         {
             PostLog(new LogMsg.Info {Message = msg});
             return Unit.Default;
         }
 
-        public Unit Warn(String msg)
+        public Unit Warn(string msg)
         {
             PostLog(new LogMsg.Warn {Message = msg});
             return Unit.Default;
         }
 
-        public Unit Error(String msg)
+        public Unit Error(string msg)
         {
             PostLog(new LogMsg.Error {Message = msg});
             return Unit.Default;
         }
 
-        public Unit Fatal(String msg)
+        public Unit Fatal(string msg)
         {
             PostLog(new LogMsg.Fatal {Message = msg});
             return Unit.Default;
@@ -83,13 +83,13 @@ namespace Wooga.Lambda.Logging
 
         public Unit AddHandler(Func<LogMsg, Unit> handler)
         {
-            PostLog(new LogMsg.AddHandler { Handler = handler });
+            PostLog(new LogMsg.AddHandler {Handler = handler});
             return Unit.Default;
         }
 
         public abstract class LogMsg
         {
-            public String Message { get; internal set; }
+            public string Message { get; internal set; }
 
             public override string ToString()
             {

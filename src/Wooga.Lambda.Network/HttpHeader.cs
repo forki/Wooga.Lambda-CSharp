@@ -1,21 +1,19 @@
-﻿using System;
-
-namespace Wooga.Lambda.Network
+﻿namespace Wooga.Lambda.Network
 {
     public struct HttpHeader
     {
-        public readonly String Key;
-        public readonly String Value;
+        public readonly string Key;
+        public readonly string Value;
 
-        public HttpHeader(String key, String value)
+        public HttpHeader(string key, string value)
         {
             Key = key;
             Value = value;
         }
 
-        public String HeaderString
+        public string HeaderString
         {
-            get { return String.Join(":", new[] {Key, Value}); }
+            get { return string.Join(":", new[] {Key, Value}); }
         }
     }
 }

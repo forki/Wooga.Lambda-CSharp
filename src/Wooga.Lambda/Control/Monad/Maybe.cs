@@ -1,5 +1,4 @@
 ﻿using System;
-using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Monad
 {
@@ -58,7 +57,8 @@ namespace Wooga.Lambda.Control.Monad
         }
 
         /// <summary>
-        ///     If the Maybe is Nothing, it returns the default values; otherwise, extracts the element out of a Just and applies the function f on it
+        ///     If the Maybe is Nothing, it returns the default values; otherwise, extracts the element out of a Just and applies
+        ///     the function f on it
         /// </summary>
         /// <typeparam name="T1">The type of the element</typeparam>
         /// <typeparam name="T2">The map function return value</typeparam>
@@ -146,7 +146,7 @@ namespace Wooga.Lambda.Control.Monad
         public abstract class Result<T>
         {
             public abstract T Value();
-            public abstract Boolean HasValue();
+            public abstract bool HasValue();
 
             public sealed class Just : Result<T>
             {
