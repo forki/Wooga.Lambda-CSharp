@@ -127,6 +127,32 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
             Assert.AreEqual("Child", ch);
         }
 
+        [Test]
+        public void CatchesException()
+        {
+            var ch = Async
+                     .Return(() =>
+                     {
+                         throw new Exception("exception");
+                         return Unit.Default;
+                     })
+                     .Catch()
+                     .RunSynchronously();
+            Assert.IsTrue(ch.IsLeft());
+            Assert.AreEqual("exception", ch.LeftValue().Message);
+        }
+
+        [Test]
+        public void CatchPropagatesRightValue()
+        {
+            var ch = Async
+                     .Return(() => "no exception")
+                     .Catch()
+                     .RunSynchronously();
+            Assert.IsTrue(ch.IsRight());
+            Assert.AreEqual("no exception", ch.RightValue());
+        }
+
     }
 
     [TestFixture]

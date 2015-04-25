@@ -1,8 +1,8 @@
 # Monad.Maybe
 
-[Documentation](reference/wooga-lambda-control-monad-maybe.html)
+[(API Reference)](reference/wooga-lambda-control-monad-maybe.html)
 
-### The problem: null
+## The problem: null
 
     [lang=cs]
     string FirstOf(string[] xs)
@@ -13,11 +13,11 @@
     var name = FirstOf(names);
     var letters = name.Length; // Causes NullReferenceException
 
-### The solution: Maybe[T]
+## The solution: Maybe[T]
 
 > "The Maybe type encapsulates an optional value. A value of type Maybe[T] either contains a value of type T (Just[T]), or it is empty (Nothing[T])."
 
-### An example: Maybe[T]
+## An example: Maybe[T]
 
     [lang=cs]
     Maybe<string> FirstOf(string[] xs)
@@ -28,7 +28,7 @@
     var name = FirstOf(names);
     var letters = name.FromJustOrDefault(0,s => s.Length);
 
-### Composing: Maybe[T]
+## Composing: Maybe[T]
 
     [lang=cs]
     Maybe<string> FirstOf(string[] xs)

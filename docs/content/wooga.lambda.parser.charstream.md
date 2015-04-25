@@ -1,6 +1,6 @@
 Parser.CharStream
 ======================
 
-[Documentation](http://wooga.github.io/Wooga.Lambda-CSharp/reference/wooga-lambda-parser-charstream.html)
+[(API Reference)](http://wooga.github.io/Wooga.Lambda-CSharp/reference/wooga-lambda-parser-charstream.html)
 
 No documentation yet

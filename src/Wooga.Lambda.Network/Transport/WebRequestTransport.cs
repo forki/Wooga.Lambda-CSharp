@@ -9,7 +9,7 @@ namespace Wooga.Lambda.Network.Transport
 {
     public static class WebRequestTransport
     {
-        public static HttpClient CreteHttpClient()
+        public static HttpClient CreateHttpClient()
         {
             return new HttpClient((c,r) => r.RequestHttpResponse().RunSynchronously());    
         }
@@ -19,11 +19,14 @@ namespace Wooga.Lambda.Network.Transport
             var webRequest = WebRequest.Create(httpRequest.Endpoint) as HttpWebRequest;
             webRequest.Headers = httpRequest.HttpHeaders.ToWebHeaders();
             webRequest.Method = httpRequest.HttpMethod.Name;
-            using (var postStream = webRequest.GetRequestStream())
+            if(httpRequest.Body.IsJust())
             {
-                var body = httpRequest.Body.FromJustOrDefault(new byte[0], _ => _);
-                postStream.Write(body, 0, body.Length);
-                postStream.Close();
+                using (var postStream = webRequest.GetRequestStream())
+                {
+                    var body = httpRequest.Body.FromJustOrDefault(new byte[0], _ => _);
+                    postStream.Write(body, 0, body.Length);
+                    postStream.Close();
+                }
             }
             return webRequest;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Concurrent
@@ -56,21 +57,21 @@ namespace Wooga.Lambda.Control.Concurrent
 
     public static class Async
     {
-        public static TReturn Do<T1, T2, TReturn>(Async<T1> m, Async<T2> h, Func<T1, T2, TReturn> f)
-        {
-            return f(m(), h());
-        }
+        //public static TReturn Do<T1, T2, TReturn>(Async<T1> m, Async<T2> h, Func<T1, T2, TReturn> f)
+        //{
+        //    return f(m(), h());
+        //}
 
-        public static TReturn Do<T1, T2, T3, TReturn>(Async<T1> m, Async<T2> h, Async<T3> i, Func<T1, T2, T3, TReturn> f)
-        {
-            return f(m(), h(), i());
-        }
+        //public static TReturn Do<T1, T2, T3, TReturn>(Async<T1> m, Async<T2> h, Async<T3> i, Func<T1, T2, T3, TReturn> f)
+        //{
+        //    return f(m(), h(), i());
+        //}
 
-        public static TReturn Do<T1, T2, T3, T4, TReturn>(Async<T1> m, Async<T2> h, Async<T3> i, Async<T4> k,
-            Func<T1, T2, T3, T4, TReturn> f)
-        {
-            return f(m(), h(), i(), k());
-        }
+        //public static TReturn Do<T1, T2, T3, T4, TReturn>(Async<T1> m, Async<T2> h, Async<T3> i, Async<T4> k,
+        //    Func<T1, T2, T3, T4, TReturn> f)
+        //{
+        //    return f(m(), h(), i(), k());
+        //}
 
         /// <summary>
         /// Creates an asynchronous computation that runs the given computation and ignores its result.
@@ -199,6 +200,11 @@ namespace Wooga.Lambda.Control.Concurrent
                     return handle.Result();
                 };
             };
+        }
+
+        public static Async<EitherResult<Exception, T>> Catch<T>(this Async<T> m)
+        {
+            return () => Either.Try(m.RunSynchronously)();    
         }
 
         public static Async<T2> Bind<T1, T2>(this Async<T1> m, Func<T1, Async<T2>> f)

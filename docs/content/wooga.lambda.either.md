@@ -1,8 +1,8 @@
 # Monad.Either
 
-[Documentation](reference/wooga-lambda-control-monad-either.html)
+[(API Reference)](reference/wooga-lambda-control-monad-either.html)
 
-### The problem: exceptions and error-handling
+## The problem: exceptions and error-handling
 
     [lang=cs]
     bool ValidPassword(string x)
@@ -25,12 +25,12 @@
     }
     if(valid) Console.WriteLine("Validation succeeded");
 
-### The solution: Either[TL,TR]
+## The solution: Either[TL,TR]
 
 > "The Either type represents values with two possibilities: a value of type Either[T1,T2] is either Left[T1] or Right[T2].
 > The Either type is sometimes used to represent a value which is either correct or an error; by convention, Left is used to hold an error value and Right holds a correct value"
 
-### An example: Either[TL,TR]
+## An example: Either[TL,TR]
 
     [lang=cs]
     Either<Exception,string> ValidPassword(string x)
@@ -47,7 +47,7 @@
         ? Console.WriteLine("Validation error:" + valid.FromLeft())
         : Console.WriteLine("Validation succeeded");
 
-### Composing: Either[TL,TR]
+## Composing: Either[TL,TR]
 
     [lang=cs]
     Either<Exception, string> AtLeast8Chars(string x)
@@ -75,7 +75,7 @@
         ? Console.WriteLine("Validation error:" + valid.FromLeft())
         : Console.WriteLine("Validation succeeded");
 
-### The Try method: Either[TL,TR]
+## The Try method: Either[TL,TR]
 
     [lang=cs]
     public Uri GetEndpoint(string host)
