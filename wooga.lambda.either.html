@@ -129,10 +129,10 @@ valid.IsLeft()
     <span class="k">return</span> <span class="k">new</span> Uri(<span class="s">"http://"</span> <span class="o">+</span> host);
 }
 
-<span class="k">var</span> x <span class="o">=</span> Either.Try(()<span class="o">=</span>&gt;GetEndpoint(<span class="s">"~spaghetti~"</span>))();
-<span class="k">if</span>(x.IsRight())
+<span class="k">var</span> x <span class="o">=</span> Either.Try(()<span class="o">=</span>&gt;GetEndpoint(<span class="s">"~spaghetti~"</span>));
+<span class="k">if</span>(x().IsRight())
 {
-    System.Console.WriteLine(x.RightValue());
+    System.Console.WriteLine(x().RightValue());
 }</pre></td></tr></table>
 
 
