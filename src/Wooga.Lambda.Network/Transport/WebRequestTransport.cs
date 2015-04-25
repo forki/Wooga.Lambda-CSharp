@@ -49,14 +49,17 @@ namespace Wooga.Lambda.Network.Transport
 
         private static IO<HttpResponse> AsHttpResponse(this HttpWebResponse response, HttpRequest httpRequest)
         {
-            var headers = OfWebHeaders(response.Headers);
-            var body = ReadEntireStream(response.GetResponseStream());
-            return () => new HttpResponse(httpRequest, headers, response.StatusCode, body.Invoke(), response.ContentType);
+            return () => 
+            {
+                var headers = OfWebHeaders(response.Headers);
+                var body = ReadEntireStream(response.GetResponseStream())();
+                return new HttpResponse(httpRequest, headers, response.StatusCode, body.Length > 0 ? Maybe.Just<byte[]>(body) : Maybe.Nothing<byte[]>());
+            };
         }
 
-        private static IO<String> ReadEntireStream(Stream stream)
+        private static IO<byte[]> ReadEntireStream(Stream stream)
         {
-            return () => new StreamReader(stream).ReadToEnd();
+            return () => System.Text.Encoding.UTF8.GetBytes(new StreamReader(stream).ReadToEnd());
         }
 
         private static WebHeaderCollection ToWebHeaders(this HttpHeaders self)

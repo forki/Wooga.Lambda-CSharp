@@ -21,7 +21,7 @@ functional utilities & primitives for C#
       <pre>PM> Install-Package Wooga.Lambda.Parser</pre>
     </div>
     <div class="well well-small" id="nuget">
-      Unity3D source-code releases of Wooga.Lambda can be <a href="https://github.com/devboy/Paket.Unity3D">installed from Paket.Unity3D</a> when appending Unity3D.Source to the name:
+      Unity3D source-code releases of Wooga.Lambda can be <a href="https://github.com/devboy/Paket.Unity3D">installed from Paket.Unity3D</a> by appending Unity3D.Source to the name:
       <pre>nuget Wooga.Lambda.Unity3D.Source</pre>
       <pre>nuget Wooga.Lambda.Log.Unity3D.Source</pre>
     </div>
