@@ -13,8 +13,8 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="/Wooga.Lambda-CSharp/content/style.css" />
-    <script type="text/javascript" src="/Wooga.Lambda-CSharp/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="./content/style.css" />
+    <script type="text/javascript" src="./content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -27,7 +27,7 @@
           <li><a href="http://wooga.com">wooga.com</a></li>
           <li><a href="http://github.com/wooga/Wooga.Lambda-CSharp">github page</a></li>
         </ul>
-        <h3 class="muted"><a href="/Wooga.Lambda-CSharp/index.html">Wooga.Lambda</a></h3>
+        <h3 class="muted"><a href="./index.html">Wooga.Lambda</a></h3>
       </div>
       <hr />
       <div class="row">
@@ -35,33 +35,90 @@
           
 <h1><a name="Working-with-Async" class="anchor" href="#Working-with-Async">Working with Async</a></h1>
 
-<p><a href="http://wooga.github.io/Wooga.Lambda-CSharp/reference/wooga-lambda-control-concurrent-async.html">(API Reference)</a></p>
+<blockquote>
+  <p>"An operation is <strong>synchronous</strong> if the caller <strong>must wait</strong> for it to complete before making progress.
+More specifically, the calling thread may <strong>block</strong> until the synchronous operation is complete.
+Note that a CPU-bound task exhibits behavior similar to blocking.</p>
 
-<h2><a name="The-sync-method-Async" class="anchor" href="#The-sync-method-Async">The sync method: Async[T]</a></h2>
+  <p>An operation is <strong>asynchronous</strong> if the request to begin the operation
+and the result of the operation can be delivered through <strong>different channels</strong>.
+This provides a convenient mechanism to encapsulate waiting. In other words,
+an asynchronous operations <strong>decouples</strong> the means of <strong>sending</strong> the request from the means of <strong>receiving</strong> a response."
+<em>- FSharp.Control.AsyncSeq documentation</em></p>
+</blockquote>
 
-<table class="pre"><tr><td><pre lang="cs"><span class="k">using</span> System;
-<span class="k">using</span> System.Diagnostics;
-<span class="k">using</span> Wooga.Lambda.Control.Concurrent;
+<h2><a name="Introducing-Async-computations" class="anchor" href="#Introducing-Async-computations">Introducing <em>Async</em> computations</a></h2>
 
-<span class="k">namespace</span> AsyncDownloader
-{
-    <span class="k">public</span> <span class="k">static</span> <span class="k">class</span> AsyncBlockSimple
-    {
-        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> Run()
-        {
-            <span class="k">var</span> stopwatch <span class="o">=</span> <span class="k">new</span> Stopwatch();
-            stopwatch.Start();
+<p>Asynchronous computations of type <strong>Async<'T></strong> can be executed
+in a non-blocking manner on a worker-thread as well as in a blocking manner on the current thread.
+Creation and manipulation of <strong>Async<'T></strong> computations is done via the various functions in <strong>Concurrent.Async</strong>.</p>
 
-            Async.Sleep(1000).RunSynchronously();
+<h2><a name="Async-instance" class="anchor" href="#Async-instance"><em>Async</em> instance</a></h2>
 
-            stopwatch.Stop();
-            Debug.WriteLine(String.Format(<span class="s">"Method \#1 Total seconds: {0}"</span>, stopwatch.Elapsed.TotalSeconds));
+<p>Creating an <strong>Async<'T></strong> is as simple as defining a Lambda:</p>
 
-            <span class="c">// Method \#1 Total seconds: 1,0038637</span>
-        }
-    }
-}
+<table class="pre"><tr><td><pre lang="cs">Async&lt;<span class="k">string</span>&gt; a <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"async"</span>;
 </pre></td></tr></table>
+
+<p>Computing the value <strong>'T</strong> is done in a blocking manner on the current thread with <strong>RunSynchronously()</strong>:</p>
+
+<table class="pre"><tr><td><pre lang="cs">Async&lt;<span class="k">string</span>&gt; a <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"async"</span>;
+<span class="k">var</span> s <span class="o">=</span> a.RunSynchronously(); <span class="c">// "async"</span>
+</pre></td></tr></table>
+
+<p>The simplest way to execute an <strong>Async<'T></strong> on a worker-thread is done with <strong>Start()</strong>:</p>
+
+<table class="pre"><tr><td><pre lang="cs">Async&lt;<span class="k">string</span>&gt; a <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"async"</span>;
+<span class="k">var</span> s <span class="o">=</span> a.Start(); <span class="c">// Unit (it does not wait for the value)</span>
+</pre></td></tr></table>
+
+<p>To get the result of an <strong>Async<'T></strong> running on another thread an <strong>AsyncReplyChannel<'T></strong> needs to be provided to <strong>StartAndReply('T->'T)</strong>:</p>
+
+<table class="pre"><tr><td><pre lang="cs">Async&lt;<span class="k">string</span>&gt; a <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"async"</span>;
+a.StartAndReply(_ <span class="o">=</span><span class="o">&gt;</span> <span class="k">new</span> AsyncReplyChannel&lt;<span class="k">string</span>&gt;(r <span class="o">=</span><span class="o">&gt;</span>
+{
+    Debug.WriteLine(<span class="s">"reply: "</span> <span class="o">+</span> r); <span class="c">// reply: async</span>
+    <span class="k">return</span> Unit.Default;
+}));
+</pre></td></tr></table>
+
+<h2><a name="Composing-Async-sequentially" class="anchor" href="#Composing-Async-sequentially">Composing <em>Async</em> sequentially</a></h2>
+
+<p>To have multiple <strong>Async<'T></strong> compute sequentially (one after the other) is easily done with a monadic bind:</p>
+
+<table class="pre"><tr><td><pre lang="cs">Func&lt;<span class="k">string</span>, Async&lt;<span class="k">string</span>&gt;<span class="o">&gt;</span> Append(Async&lt;<span class="k">string</span>&gt; x)
+{
+    <span class="k">return</span> s <span class="o">=</span><span class="o">&gt;</span> Async.Return(s <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> x.RunSynchronously());
+}
+
+<span class="k">var</span> first   <span class="o">=</span> Async.Return(<span class="s">"first"</span>);
+<span class="k">var</span> second  <span class="o">=</span> Async.Return(<span class="s">"second"</span>);
+<span class="k">var</span> third   <span class="o">=</span> Async.Return(<span class="s">"third"</span>);
+
+<span class="k">var</span> seq <span class="o">=</span> first
+          .Bind(Append(second))
+          .Bind(Append(third))
+          .RunSynchronously(); <span class="c">// "first second third"</span>
+</pre></td></tr></table>
+
+<p>Another option would be to do it sequentially inside of another <strong>Async<'T></strong>:</p>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">var</span> first <span class="o">=</span> Async.Return(<span class="s">"first"</span>);
+<span class="k">var</span> second <span class="o">=</span> Async.Return(<span class="s">"second"</span>);
+<span class="k">var</span> third <span class="o">=</span> Async.Return(<span class="s">"third"</span>);
+
+Async&lt;<span class="k">string</span>&gt; comp <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span>
+{
+    <span class="k">var</span> x <span class="o">=</span> first.RunSynchronously();
+    <span class="k">var</span> y <span class="o">=</span> second.RunSynchronously();
+    <span class="k">var</span> z <span class="o">=</span> third.RunSynchronously();
+    <span class="k">return</span> x <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> y <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> z;
+};
+
+<span class="k">var</span> r <span class="o">=</span> comp.RunSynchronously(); <span class="c">// "first second third"</span>
+</pre></td></tr></table>
+
+<p><a href="http://wooga.github.io/Wooga.Lambda-CSharp/reference/wooga-lambda-control-concurrent-async.html">(API Reference)</a></p>
 
 <h2><a name="The-parallel-method-Async" class="anchor" href="#The-parallel-method-Async">The parallel method: Async[T]</a></h2>
 
@@ -120,32 +177,32 @@
         </div>
         <div class="span3">
           <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-            <li><img src="/Wooga.Lambda-CSharp/img/logo.png" alt="F# Project" style="width:150px;margin:10px" /></li>
+            <li><img src="./img/logo.png" alt="F# Project" style="width:150px;margin:10px" /></li>
             <!-- <li><img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/issue" alt="F# Project" style="width:180px;margin:5px"/></li>
             <li>
               <img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/pr" alt="F# Project" style="width:180px;margin:5px"/>
             </li> -->
             <li class="nav-header">Wooga.Lambda</li>
-            <li><a href="/Wooga.Lambda-CSharp/index.html">Home page</a></li>
+            <li><a href="./index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="http://nuget.org/packages/Wooga.Lambda">Get Library via NuGet</a></li>
             <li><a href="http://github.com/wooga/Wooga.Lambda-CSharp">Source Code on GitHub</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/license.html">License</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/release-notes.html">Release Notes</a></li>
+            <li><a href="./license.html">License</a></li>
+            <li><a href="./release-notes.html">Release Notes</a></li>
 
             <li class="nav-header">Get Started</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.maybe.html">Monad.Maybe</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.either.html">Monad.Either</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.async.html">Concurrent.Async</a></li>
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li> -->
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.patternmatch.html">Pattern.Match</a></li>
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.logging.agent.html">LoggingAgent</a></li> -->
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.network.httpclient.html">Network.HttpClient</a></li> -->
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.filesystem.html">FileSystem</a></li> -->
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.html">Parser</a></li>
+            <li><a href="./wooga.lambda.maybe.html">Monad.Maybe</a></li>
+            <li><a href="./wooga.lambda.either.html">Monad.Either</a></li>
+            <li><a href="./wooga.lambda.async.html">Concurrent.Async</a></li>
+            <!-- <li><a href="./wooga.lambda.agent.html">Concurrent.Agent</a></li> -->
+            <li><a href="./wooga.lambda.patternmatch.html">Pattern.Match</a></li>
+            <!-- <li><a href="./wooga.lambda.logging.agent.html">LoggingAgent</a></li> -->
+            <!-- <li><a href="./wooga.lambda.network.httpclient.html">Network.HttpClient</a></li> -->
+            <!-- <li><a href="./wooga.lambda.filesystem.html">FileSystem</a></li> -->
+            <li><a href="./wooga.lambda.parser.html">Parser</a></li>
 
             <li class="nav-header">Documentation</li>
-            <li><a href="/Wooga.Lambda-CSharp/reference/index.html">API Reference</a></li>
+            <li><a href="./reference/index.html">API Reference</a></li>
 
             <li><img src="https://travis-ci.org/wooga/Wooga.Lambda-CSharp.png" alt="F# Project" style="margin:5px"/></li>
             <li><img src="http://img.shields.io/nuget/v/Wooga.Lambda.svg?style=flat" alt="F# Project" style="margin:5px"/></li>
