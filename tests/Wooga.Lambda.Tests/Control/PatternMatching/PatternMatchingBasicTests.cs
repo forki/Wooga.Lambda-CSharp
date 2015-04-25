@@ -86,6 +86,15 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
             Assert.AreEqual("dog", t);
         }
 
+        [Test]
+        [ExpectedException( "System.InvalidOperationException" )]
+        public static void ExceptionOnNoMatch()
+        {
+            Pattern
+            .Match<string, string>("fish")
+            .Case("cat", _ => "dog")
+            .Run();
+        }
     }
 
     [TestFixture]
@@ -151,5 +160,18 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
             Assert.AreEqual(5, t);
 
         }
+            
+        [Test]
+        [ExpectedException( "System.InvalidOperationException" )]
+        public static void ExceptionOnNoMatch()
+        {
+            Pattern
+            .Match<A, int>(new A.C())
+            .Case<A, int, A.B>(_ => true, s => 2)
+            .Case<A, int, A.B>(_ => true, s => 1)
+            .Run(); 
+
+        }
+
     }
 }
