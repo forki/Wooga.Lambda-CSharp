@@ -8,7 +8,7 @@ namespace Wooga.Lambda.Control.Monad
     /// </summary>
     /// <typeparam name="T">Result type</typeparam>
     /// <returns>MaybeData representing a value or Nothing.</returns>
-    public delegate MaybeResult<T> Maybe<T>();
+    public delegate Maybe.Result<T> Maybe<T>();
 
     public static class Maybe
     {
@@ -20,7 +20,7 @@ namespace Wooga.Lambda.Control.Monad
         /// <returns>The maybe instance</returns>
         public static Maybe<T> Just<T>(T v)
         {
-            return () => new MaybeResult<T>.Just(v);
+            return () => new Result<T>.Just(v);
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Wooga.Lambda.Control.Monad
         /// <returns>The maybe instance</returns>
         public static Maybe<T> Nothing<T>()
         {
-            return () => new MaybeResult<T>.Nothing();
+            return () => new Result<T>.Nothing();
         }
 
         /// <summary>
@@ -141,6 +141,45 @@ namespace Wooga.Lambda.Control.Monad
         public static Maybe<T> Return<T>(T v)
         {
             return Just(v);
+        }
+
+        public abstract class Result<T>
+        {
+            public abstract T Value();
+            public abstract Boolean HasValue();
+
+            public sealed class Just : Result<T>
+            {
+                private readonly T _v;
+
+                internal Just(T v)
+                {
+                    _v = v;
+                }
+
+                public override T Value()
+                {
+                    return _v;
+                }
+
+                public override bool HasValue()
+                {
+                    return true;
+                }
+            }
+
+            public sealed class Nothing : Result<T>
+            {
+                public override T Value()
+                {
+                    throw new InvalidOperationException("Maybe.FromJust: Nothing");
+                }
+
+                public override bool HasValue()
+                {
+                    return false;
+                }
+            }
         }
     }
 

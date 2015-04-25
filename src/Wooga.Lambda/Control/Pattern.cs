@@ -1,7 +1,7 @@
 ﻿using System;
 using Wooga.Lambda.Control.Monad;
 
-namespace Wooga.Lambda.Control.PatternMatching
+namespace Wooga.Lambda.Control
 {
     public delegate Either<TResult, TValue> PatterMatch<TValue, TResult>();
 

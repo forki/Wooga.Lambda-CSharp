@@ -187,7 +187,7 @@ namespace Wooga.Lambda.Control.Concurrent
             };
         }
 
-        public static Async<EitherResult<Exception, T>> Catch<T>(this Async<T> m)
+        public static Async<Either.Result<Exception, T>> Catch<T>(this Async<T> m)
         {
             return () => Either.Try(m.RunSynchronously)();    
         }

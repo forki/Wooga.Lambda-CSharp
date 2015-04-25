@@ -9,18 +9,18 @@ namespace Wooga.Lambda.Control.Monad
     /// <typeparam name="TLeft">The type of the left/failure value.</typeparam>
     /// <typeparam name="TRight">The type of the right/success value.</typeparam>
     /// <returns>EitherData containing either a success or failure value.</returns>
-    public delegate EitherResult<TLeft, TRight> Either<TLeft, TRight>();
+    public delegate Either.Result<TLeft, TRight> Either<TLeft, TRight>();
 
     public static class Either
     {
         public static Either<TLeft, TRight> Left<TLeft, TRight>(TLeft m)
         {
-            return () => new EitherResult<TLeft, TRight>.Left(m);
+            return () => new Result<TLeft, TRight>.Left(m);
         }
 
         public static Either<TLeft, TRight> Right<TLeft, TRight>(TRight m)
         {
-            return () => new EitherResult<TLeft, TRight>.Right(m);
+            return () => new Result<TLeft, TRight>.Right(m);
         }
 
         public static Boolean IsRight<TLeft, TRight>(this Either<TLeft, TRight> m)
@@ -93,6 +93,77 @@ namespace Wooga.Lambda.Control.Monad
         public static Either<TLeft, TRight> When<TLeft, TRight>(Func<bool> p, Func<TLeft> fl, Func<TRight> fr)
         {
             return p() ? Right<TLeft, TRight>(fr()) : Left<TLeft, TRight>(fl());
+        }
+
+        public abstract class Result<TLeft, TRight>
+        {
+            public abstract Boolean IsLeft();
+
+            public abstract Boolean IsRight();
+
+            public abstract TLeft LeftValue();
+
+            public abstract TRight RightValue();
+
+            internal sealed class Left : Result<TLeft, TRight>
+            {
+                private readonly TLeft _v;
+
+                public Left(TLeft v)
+                {
+                    _v = v;
+                }
+
+                public override bool IsLeft()
+                {
+                    return true;
+                }
+
+                public override bool IsRight()
+                {
+                    return false;
+                }
+
+                public override TLeft LeftValue()
+                {
+                    return _v;
+                }
+
+                public override TRight RightValue()
+                {
+                    throw new InvalidOperationException("Right value: EitherDataLeft");
+                }
+            }
+
+            internal sealed class Right : Result<TLeft, TRight>
+            {
+                private readonly TRight _v;
+
+                public Right(TRight v)
+                {
+                    _v = v;
+                }
+
+                public override bool IsLeft()
+                {
+                    return false;
+                }
+
+                public override bool IsRight()
+                {
+                    return true;
+                }
+
+                public override TLeft LeftValue()
+                {
+                    throw new InvalidOperationException("Left value: EitherDataRight");
+                }
+
+                public override TRight RightValue()
+                {
+                    return _v;
+                }
+            }
         }
 
     }

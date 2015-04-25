@@ -37,11 +37,11 @@
     <Compile Include="Control\Concurrent\AgentTests.cs" />
     <Compile Include="Control\Concurrent\AsyncTests.cs" />
     <Compile Include="Data\ArrayExt.cs" />
-    <Compile Include="Data\EitherTests.cs" />
-    <Compile Include="Data\MaybeTests.cs" />
+    <Compile Include="Control\Monad\EitherTests.cs" />
+    <Compile Include="Control\Monad\MaybeTests.cs" />
     <Compile Include="Data\TupleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Control\PatternMatching\PatternMatchingBasicTests.cs" />
+    <Compile Include="Control\PatternTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.references" />
@@ -67,7 +67,5 @@
     </Reference>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Control\Monad\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

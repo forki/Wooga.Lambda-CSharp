@@ -6,7 +6,10 @@
 (**
 # Functional primitives for Unity3D
 
-Wooga.Lambda is  which are heavily inspired by [csharp-monads](https://github.com/louthy/csharp-monad), [Haskell](https://www.haskell.org/) & [F#](http://fsharp.org).
+This library written in C# library
+
+
+which are heavily inspired by [csharp-monads](https://github.com/louthy/csharp-monad), [Haskell](https://www.haskell.org/) & [F#](http://fsharp.org).
 
 With Unity3D being still
 

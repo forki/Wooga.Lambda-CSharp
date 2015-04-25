@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Wooga.Lambda.Control.PatternMatching;
+using Wooga.Lambda.Control;
 
 namespace Wooga.Lambda.Tests.Control.PatternMatching
 {
@@ -15,7 +15,7 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
     }
 
     [TestFixture]
-    public class PatternMatchingBasicTests
+    public class PatternTests
     {
         [Test]
         public static void ChooseDefaultWhenNoMatch()
