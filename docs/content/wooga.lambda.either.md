@@ -1,100 +1,89 @@
-# Monad.Either
+# Working with Either
 
-[(API Reference)](reference/wooga-lambda-control-monad-either.html)
+> "The **Either** type represents values with two possibilities: a value of type **Either<'L,'R>** is either **Left<'L>** or **Right<'R>**.
+> The **Either** type is sometimes used to represent a value which is either correct or an error;
+> by convention, **Left** is used to hold an error value and **Right** holds a correct value"
+> *- Haskell documentation*
 
-## The problem: exceptions and error-handling
+## *Either* instance
+
+Create an **Either** by injecting a value into either case with **Either.Left<'L,'R>('L)** or **Either.Right<'L,'R>('R)**.
 
     [lang=cs]
-    bool ValidPassword(string x)
+    Either<int, string> left = Either.Left<int, string>(2);
+    Either<int, string> right = Either.Right<int, string>("rrr");
+
+Use the **FromEither<'L,'R,'T>('L->'T,'R->'T)** function to extract the value from either side.
+
+    [lang=cs]
+    var leftV = left.FromEither(l => l.ToString(), r => r); // "2"
+    var rightV = right.FromEither(l => l.ToString(), r => r); // "rrr"
+
+Check out the [API Reference](reference/wooga-lambda-control-monad-either.html) for more information.
+
+## *Exception* and *error*-handling
+
+The following snippet depicts a three step process to **load**, **validate** and **launch** a saved game.
+Each of these steps can potentially fail and raise an **Exception** that needs to be caught.
+
+    [lang=cs]
+    void StartGame(byte[] saveGame)
     {
-        if(x.Length < 8)
-            throw new System.Exception("Password needs at least 8 chars");
-        if(x.Contains("-"))
-            throw new System.Exception("Password needs to contain a dash");
-        return true;
+        if(ValidateSaveGame(saveGame))
+        {
+            Debug.WriteLine("Play it!! I could crash here too...");
+        }
+        else
+        {
+            throw new Exception("corrupt save game");
+        }
     }
 
-    var valid = false;
+    bool ValidateSaveGame(byte[] saveGame)
+    {
+        return saveGame.Length > 8;
+    }
+
+    byte[] LoadSaveGame(string file)
+    {
+        return File.ReadAllBytes(file);
+    }
+
     try
     {
-        valid = ValidPassword(pw);
+        StartGame(LoadSaveGame("x.y"));
     }
     catch (Exception e)
     {
-        Console.WriteLine("Validation error:"+e);
+        throw e; // Which exceptions will I catch here?!?
     }
-    if(valid) Console.WriteLine("Validation succeeded");
 
-## The solution: Either[TL,TR]
+## Composing *Either*
 
-> "The Either type represents values with two possibilities: a value of type Either[T1,T2] is either Left[T1] or Right[T2].
-> The Either type is sometimes used to represent a value which is either correct or an error; by convention, Left is used to hold an error value and Right holds a correct value"
-
-## An example: Either[TL,TR]
+Using the monadic bind function of **Either** we can compose these steps together while preserving granular information like individual error messages.
 
     [lang=cs]
-    Either<Exception,string> ValidPassword(string x)
+    Either<string, Unit> StartGame(byte[] saveGame)
     {
-        if(x.Length < 8)
-            return Either.Left<Exception,string>(new Exception("Password needs at least 8 chars"));
-        if (x.Contains("-"))
-            return Either.Left<Exception, string>(new Exception("Password needs to contain a dash"));
-        return Either.Right<Exception,string>(x);
+        return Either.Try(e=> "start failed: "+ e.Message,
+                         ()=> Unit.Default);
     }
 
-    var valid = ValidPassword(pw);
-    valid.IsLeft()
-        ? Console.WriteLine("Validation error:" + valid.FromLeft())
-        : Console.WriteLine("Validation succeeded");
-
-## Composing: Either[TL,TR]
-
-    [lang=cs]
-    Either<Exception, string> AtLeast8Chars(string x)
+    Either<string, byte[]> ValidateSaveGame(byte[] saveGame)
     {
-        return x.Length < 8
-            ? Either.Left<Exception, string>(new Exception("Password needs at least 8 chars"))
-            : Either.Right<Exception, string>(x);
+        return Either.When(()=> saveGame.Length>8,
+                           ()=> "validation failed",
+                           ()=> saveGame);
     }
 
-    Either<Exception, string> ContainsDash(string x)
+    Either<string, byte[]> LoadSaveGame(string file)
     {
-        return x.Contains("-")
-            ? Either.Left<Exception, string>(new Exception("Password needs to contain a dash"))
-            : Either.Right<Exception, string>(x);
+        return Either.Try(e=> "load failed: "+ e.Message,
+                         ()=> File.ReadAllBytes(file));
     }
 
-    Either<Exception,string> ValidPassword(string x)
-    {
-        return AtLeast8Chars(x)
-              .Bind(ContainsDash);
-    }
-
-    var valid = ValidPassword(pw);
-    valid.IsLeft()
-        ? Console.WriteLine("Validation error:" + valid.FromLeft())
-        : Console.WriteLine("Validation succeeded");
-
-## The Try method: Either[TL,TR]
-
-    [lang=cs]
-    public Uri GetEndpoint(string host)
-    {
-        return new Uri("http://" + host);
-    }
-
-    var x = GetEndpoint("~spaghetti~");
-    // System.UriFormatException : Invalid URI: The hostname could not be parsed.
-
-    // vs.
-
-    public Uri GetEndpoint(string host)
-    {
-        return new Uri("http://" + host);
-    }
-
-    var x = Either.Try(()=>GetEndpoint("~spaghetti~"));
-    if(x().IsRight())
-    {
-        System.Console.WriteLine(x().RightValue());
-    }
+    var launch = LoadSaveGame("x.y")
+                 .Bind(ValidateSaveGame)
+                 .Bind(StartGame)
+                 .FromEither(s=>"e: "+s,
+                             s=>"all good"); // p: FileNotFoundException

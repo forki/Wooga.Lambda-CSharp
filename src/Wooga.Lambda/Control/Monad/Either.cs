@@ -43,6 +43,13 @@ namespace Wooga.Lambda.Control.Monad
             return m().RightValue();
         }
 
+        public static TResult FromEither<TLeft, TRight, TResult>(this Either<TLeft, TRight> m, Func<TLeft, TResult> fl,
+            Func<TRight, TResult> fr)
+        {
+            var r = m();
+            return r.IsLeft() ? fl(r.LeftValue()) : fr(r.RightValue());
+        }
+
         public static Either<TLeft, TRight2> Bind<TLeft, TRight, TRight2>(this Either<TLeft, TRight> m,
             Func<TRight, Either<TLeft, TRight2>> f)
         {
@@ -66,16 +73,26 @@ namespace Wooga.Lambda.Control.Monad
             return Right<TLeft, TRight>(v);
         }
 
-        public static Either<Exception, T> Try<T>(Func<T> f)
+        public static Either<TLeft, TRight> Try<TLeft, TRight>(Func<Exception,TLeft> fl, Func<TRight> fr)
         {
             try
             {
-                return Either.Right<Exception, T>(f());
+                return Either.Right<TLeft, TRight>(fr());
             }
             catch (Exception e)
             {
-                return Either.Left<Exception, T>(e);
-            }
+                return Either.Left<TLeft, TRight>(fl(e));
+            }     
+        }
+
+        public static Either<Exception, T> Try<T>(Func<T> f)
+        {
+            return Try(e => e, f);
+        }
+
+        public static Either<TLeft, TRight> When<TLeft, TRight>(Func<bool> p, Func<TLeft> fl, Func<TRight> fr)
+        {
+            return p() ? Right<TLeft, TRight>(fr()) : Left<TLeft, TRight>(fl());
         }
 
     }

@@ -3,5 +3,5 @@
 while true
 do
 sh build.sh GenerateHelp -st
-sleep 30
+sleep 15
 done

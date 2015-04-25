@@ -4,7 +4,7 @@
 > A value of type **Maybe 'T** either contains a value of type **'T**, or it is empty."
 > *- Haskell documentation*
 
-The **Maybe** type in *Wooga.Lambda* borrows its name from Haskell:
+The **Maybe** type in **Wooga.Lambda** borrows its name from Haskell:
 The empty **Maybe** case is called **Nothing** and the **Maybe** holding a value is called **Just**.
 
 ## *Maybe* instance
