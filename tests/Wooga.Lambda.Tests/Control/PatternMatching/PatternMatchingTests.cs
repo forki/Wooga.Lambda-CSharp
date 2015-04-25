@@ -52,7 +52,7 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         }
 
         [Test]
-        public static void ChooseFirstCorrectMatchDefaultWhenDefaultIsFist()
+        public static void ChooseFirstCorrectMatchDefaultWhenDefaultIsFirst()
         {
             var t = Pattern
                     .Match<string, string>("cat")
@@ -61,6 +61,18 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
                     .Case(s => s == "cat", _ => "dog")
                     .Evaluate();
             Assert.AreEqual("default", t);
+        }
+
+        [Test]
+        public static void ChooseFirstCorrectEqualityMatchAboveDefault()
+        {
+            var t = Pattern
+                .Match<string, string>("cat")
+                .Case(s => s == "fish", s => s)
+                .Case("cat", _ => "dog")
+                .Default(() => "default")
+                .Evaluate();
+            Assert.AreEqual("dog", t);
         }
 
     }
