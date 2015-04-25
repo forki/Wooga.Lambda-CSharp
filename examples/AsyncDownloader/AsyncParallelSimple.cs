@@ -12,7 +12,7 @@ namespace AsyncDownloader
     {
         private static readonly Encoding Enc = Encoding.UTF8;
 
-        public static Async<Tuple<string, string>> GetHtmlAsync(this HttpClient http, string uri)
+        public static Async<Wooga.Lambda.Data.Tuple<string, string>> GetHtmlAsync(this HttpClient http, string uri)
         {
             return () =>
             {
@@ -21,24 +21,35 @@ namespace AsyncDownloader
                     .RunSynchronously()
                     .Body
                     .FromJustOrDefault("", Enc.GetString);
-                return new Tuple<string,string>(uri,body);
+                return new Wooga.Lambda.Data.Tuple<string,string>(uri,body);
             };
         }
 
-        public static void Run(string[] uris)
+        public static void Run()
         {
+            var uris = new[]
+            {
+                "http://giphy.com/", 
+                "http://google.com", 
+                "http://wooga.com", 
+                "http://apple.com", 
+                "http://tumblr.com"
+            };
+
             var http = WebRequestTransport.CreateHttpClient();
-            
+
+            while (uris.Length < 100)
+                uris = uris.Append(uris.Head());
+
             var reqs = uris.Map(http.GetHtmlAsync);
             
             var resp = reqs
                        .Parallel()
                        .RunSynchronously();
 
-            System.Diagnostics.Debug.WriteLine( 
-                resp.Map(t => Enc.GetByteCount(t.Item2) + " bytes of " + t.Item1 + ",\n")
-                    .Fold((a,s)=>a+s,"")
-                );
+            var bytesTotal = resp.Fold((a, s) => a + Enc.GetByteCount(s.Item2), 0);
+
+            System.Diagnostics.Debug.WriteLine( bytesTotal + " bytesLoaded");
 
             // 133025 bytes of http://giphy.com/,
             // 52014 bytes of http://google.com,
