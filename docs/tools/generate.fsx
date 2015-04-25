@@ -64,7 +64,7 @@ subDirectories (directoryInfo templates)
 let copyFiles () =
   CopyRecursive files output true |> Log "Copying file: "
   ensureDirectory (output @@ "content")
-  CopyRecursive (formatting @@ "styles") (output @@ "content") true 
+  CopyRecursive (formatting @@ "styles") (output @@ "content") true
     |> Log "Copying styles and scripts: "
 
 let references =
@@ -85,14 +85,14 @@ let references =
   else None
 
 let binaries =
-    directoryInfo bin 
+    directoryInfo bin
     |> subDirectories
     |> Array.map (fun d -> d.FullName @@ (sprintf "%s.dll" d.Name))
     |> Array.filter (fun f -> File.Exists f)
     |> List.ofArray
 
 let libDirs =
-    directoryInfo bin 
+    directoryInfo bin
     |> subDirectories
     |> Array.map (fun d -> d.FullName)
     |> List.ofArray
