@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 
@@ -7,34 +8,34 @@ namespace Wooga.Lambda.FileSystem
 {
     public interface IOFileSystem
     {
-        IO<Unit> CreateDirectory(DirectoryInfo d);
-        IO<Unit> RemoveDirectory(DirectoryInfo d);
-        IO<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d);
-        IO<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d, String searchPattern);
-        IO<Maybe<FileInfo[]>> GetFilesRecursive(DirectoryInfo d, String searchPattern);
-        IO<Unit> RemoveFile(FileInfo f);
-        IO<Maybe<Byte[]>> ReadFile(FileInfo f);
-        IO<Unit> WriteFile(FileInfo f, Byte[] b);
+        Async<Unit> CreateDirectory(DirectoryInfo d);
+        Async<Unit> RemoveDirectory(DirectoryInfo d);
+        Async<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d);
+        Async<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d, String searchPattern);
+        Async<Maybe<FileInfo[]>> GetFilesRecursive(DirectoryInfo d, String searchPattern);
+        Async<Unit> RemoveFile(FileInfo f);
+        Async<Maybe<Byte[]>> ReadFile(FileInfo f);
+        Async<Unit> WriteFile(FileInfo f, Byte[] b);
     }
 
     public class FileSystem : IOFileSystem
     {
-        public IO<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d)
+        public Async<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d)
         {
             return () => Maybe.Return(() => d.GetFiles());
         }
 
-        public IO<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d, String searchPattern)
+        public Async<Maybe<FileInfo[]>> GetFiles(DirectoryInfo d, String searchPattern)
         {
             return () => Maybe.Return(() => d.GetFiles(searchPattern));
         }
 
-        public IO<Maybe<FileInfo[]>> GetFilesRecursive(DirectoryInfo d, String searchPattern)
+        public Async<Maybe<FileInfo[]>> GetFilesRecursive(DirectoryInfo d, String searchPattern)
         {
             return () => Maybe.Return(() => d.GetFiles(searchPattern, SearchOption.AllDirectories));
         }
 
-        public IO<Unit> CreateDirectory(DirectoryInfo d)
+        public Async<Unit> CreateDirectory(DirectoryInfo d)
         {
             return () =>
             {
@@ -43,7 +44,7 @@ namespace Wooga.Lambda.FileSystem
             };
         }
 
-        public IO<Unit> RemoveDirectory(DirectoryInfo d)
+        public Async<Unit> RemoveDirectory(DirectoryInfo d)
         {
             return () =>
             {
@@ -52,7 +53,7 @@ namespace Wooga.Lambda.FileSystem
             };
         }
 
-        public IO<Maybe<Byte[]>> ReadFile(FileInfo f)
+        public Async<Maybe<Byte[]>> ReadFile(FileInfo f)
         {
             return () => Maybe.Return(() =>
             {
@@ -76,7 +77,7 @@ namespace Wooga.Lambda.FileSystem
             });
         }
 
-        public IO<Unit> WriteFile(FileInfo f, Byte[] b)
+        public Async<Unit> WriteFile(FileInfo f, Byte[] b)
         {
             return () =>
             {
@@ -88,7 +89,7 @@ namespace Wooga.Lambda.FileSystem
             };
         }
 
-        public IO<Unit> RemoveFile(FileInfo f)
+        public Async<Unit> RemoveFile(FileInfo f)
         {
             return () =>
             {

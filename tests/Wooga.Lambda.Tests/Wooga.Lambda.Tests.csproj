@@ -42,7 +42,6 @@
     <Compile Include="Data\MaybeTests.cs" />
     <Compile Include="Data\TupleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="System\IOTests.cs" />
     <Compile Include="Control\PatternMatching\PatternMatchingBasicTests.cs" />
   </ItemGroup>
   <ItemGroup>

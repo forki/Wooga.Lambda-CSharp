@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 
@@ -10,7 +11,7 @@ namespace Wooga.Lambda.Network.Transport
     {
         public static HttpClient CreteHttpClient()
         {
-            return new HttpClient((c,r) => r.RequestHttpResponse().Invoke());    
+            return new HttpClient((c,r) => r.RequestHttpResponse().RunSynchronously());    
         }
 
         private static HttpWebRequest AsWebRequest(this HttpRequest httpRequest)
@@ -27,12 +28,12 @@ namespace Wooga.Lambda.Network.Transport
             return webRequest;
         }
 
-        private static IO<HttpResponse> RequestHttpResponse(this HttpRequest httpRequest)
+        private static Async<HttpResponse> RequestHttpResponse(this HttpRequest httpRequest)
         {
             return GetWebResponse(httpRequest).Bind(webResponse => webResponse.AsHttpResponse(httpRequest));
         }
 
-        private static IO<HttpWebResponse> GetWebResponse(HttpRequest httpRequest)
+        private static Async<HttpWebResponse> GetWebResponse(HttpRequest httpRequest)
         {
             return () =>
             {
@@ -47,17 +48,17 @@ namespace Wooga.Lambda.Network.Transport
             };
         }
 
-        private static IO<HttpResponse> AsHttpResponse(this HttpWebResponse response, HttpRequest httpRequest)
+        private static Async<HttpResponse> AsHttpResponse(this HttpWebResponse response, HttpRequest httpRequest)
         {
             return () => 
             {
                 var headers = OfWebHeaders(response.Headers);
-                var body = ReadEntireStream(response.GetResponseStream())();
+                var body = ReadEntireStream(response.GetResponseStream()).RunSynchronously();
                 return new HttpResponse(httpRequest, headers, response.StatusCode, body.Length > 0 ? Maybe.Just<byte[]>(body) : Maybe.Nothing<byte[]>());
             };
         }
 
-        private static IO<byte[]> ReadEntireStream(Stream stream)
+        private static Async<byte[]> ReadEntireStream(Stream stream)
         {
             return () => System.Text.Encoding.UTF8.GetBytes(new StreamReader(stream).ReadToEnd());
         }
@@ -83,8 +84,7 @@ namespace Wooga.Lambda.Network.Transport
 
         private static HttpHeaders OfWebHeaders(WebHeaderCollection webHeaders)
         {
-            return webHeaders.AllKeys.Fold((headers, key) => headers.Append(key, webHeaders.Get(key)),
-                HttpHeaders.Create());
+            return webHeaders.AllKeys.Fold((headers, key) => headers.Append(key, webHeaders.Get(key)), HttpHeaders.Create());
         }
     }
 }
