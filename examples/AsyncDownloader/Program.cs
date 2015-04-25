@@ -1,5 +1,6 @@
 ﻿using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
+using Wooga.Lambda.Control.PatternMatching;
 using Wooga.Lambda.Data;
 using Wooga.Lambda.Network;
 using Wooga.Lambda.Network.Transport;
@@ -19,7 +20,8 @@ namespace AsyncDownloader
 
         static void Main(string[] args)
         {
-            AsyncParallelSimple.Run(Uris);
+//            AsyncParallelSimple.Run(Uris);
+            AsyncBlockSimple.Run();
         }
     }
 }

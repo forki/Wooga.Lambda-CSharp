@@ -5,37 +5,56 @@ namespace Wooga.Lambda.Control.PatternMatching
 {
     public delegate Either<TResult, TValue> PatterMatch<TValue, TResult>();
 
-    public static class Pattern
+    public static class Pattern<TValue, TResult>
     {
-        public static PatterMatch<TValue, TResult> Match<TValue, TResult>(TValue x)
+        public static MatchCase Match(TValue x)
         {
-            return () => Either.Right<TResult, TValue>(x);
+            return new MatchCase(() => Either.Right<TResult, TValue>(x));
         }
-
-        public static PatterMatch<TValue, TResult> Default<TValue, TResult>(this PatterMatch<TValue, TResult> m, Func<TResult> f)
+        
+        public sealed class MatchCase
         {
-            return Case(m,_ => true, _ => f());
-        }
+            private readonly PatterMatch<TValue, TResult> _m;
 
-        public static PatterMatch<TValue, TResult> Case<TValue, TResult>(this PatterMatch<TValue, TResult> m, Func<TValue, bool> t, Func<TValue, TResult> f)
-        {
-            return () => m().Bind(y => t(y) ? Either.Left<TResult, TValue>(f(y)) : Either.Right<TResult, TValue>(y));
-        }
+            internal MatchCase(PatterMatch<TValue, TResult> m)
+            {
+                _m = m;
+            }
 
-        public static PatterMatch<TValue, TResult> Case<TValue, TResult>(this PatterMatch<TValue, TResult> m, TValue x, Func<TValue, TResult> f)
-        {
-            return Case(m,v => x.Equals(v), f);
-        }
+            public MatchCase Case(Func<TValue, bool> t, Func<TValue, TResult> f)
+            {
+                return new MatchCase(() => _m().Bind(y => t(y) ? Either.Left<TResult, TValue>(f(y)) : Either.Right<TResult, TValue>(y)));
+            }
 
-        public static PatterMatch<TValue, TResult> Case<TValue, TResult, TValueType>(this PatterMatch<TValue, TResult> m, Func<TValue, bool> t, Func<TValue, TResult> f)
-        {
-            return Case(m, v => v is TValueType && t(v), f);
-        }
+            public MatchCase Case(TValue x, Func<TValue, TResult> f)
+            {
+                return Case(v => x.Equals(v), f);
+            }
 
-        public static TResult Run<TValue, TResult>(this PatterMatch<TValue, TResult> m)
-        {
-            return m().FromLeft();
-        }
+            public MatchCase Case<TValueType>(Func<TValue, bool> t, Func<TValue, TResult> f)
+            {
+                return Case(v => v is TValueType && t(v), f);
+            }
 
+            public MatchCase Case<TValueType>(Func<TValue, TResult> f)
+            {
+                return Case(v => v is TValueType, f);
+            }
+
+            public MatchCase Default(Func<TValue, TResult> f)
+            {
+                return Case(_ => true, f);
+            }
+
+            public MatchCase Default(TResult v)
+            {
+                return Case(_ => true, _ => v);
+            }
+
+            public TResult Run()
+            {
+                return _m().FromLeft();
+            }
+        }
     }
 }

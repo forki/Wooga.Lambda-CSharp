@@ -7,11 +7,11 @@ namespace Wooga.Lambda.Data
         public abstract T Value();
         public abstract Boolean HasValue();
 
-        internal sealed class Just : MaybeResult<T>
+        public sealed class Just : MaybeResult<T>
         {
             private readonly T _v;
 
-            public Just(T v)
+            internal Just(T v)
             {
                 _v = v;
             }
@@ -27,7 +27,7 @@ namespace Wooga.Lambda.Data
             }
         }
 
-        internal sealed class Nothing : MaybeResult<T>
+        public sealed class Nothing : MaybeResult<T>
         {
             public override T Value()
             {

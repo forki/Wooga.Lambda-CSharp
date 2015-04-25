@@ -20,10 +20,10 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [Test]
         public static void ChooseDefaultWhenNoMatch()
         {
-            var t = Pattern
-                    .Match<string, int>("hello")
+            var t = Pattern<string, int>
+                    .Match("hello")
                     .Case(s => s == "cat", s => 0)
-                    .Default(()=> 1)
+                    .Default(_ => 1)
                     .Run();
             Assert.AreEqual(1, t);
         }
@@ -31,8 +31,8 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [Test]
         public static void ChooseFirstOfMultipleCorrectMatch()
         {
-            var t = Pattern
-                    .Match<string, int>("cat")
+            var t = Pattern<string, int>
+                    .Match("cat")
                     .Case(s => s == "cat", s => 0)
                     .Case(s => s == "cat", _ => 1)
                     .Run();
@@ -42,8 +42,8 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [Test]
         public static void ChooseFirstCorrectMatch()
         {
-            var t = Pattern
-                    .Match<string, int>("cat")
+            var t = Pattern<string, int>
+                    .Match("cat")
                     .Case(s => s == "fish", s => 0)
                     .Case(s => s == "cat", _ => 2)
                     .Run();
@@ -53,11 +53,11 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [Test]
         public static void ChooseFirstCorrectMatchAboveDefault()
         {
-            var t = Pattern
-                    .Match<string, string>("cat")
+            var t = Pattern<string, string>
+                    .Match("cat")
                     .Case(s => s == "fish", s => s)
                     .Case(s => s == "cat", _ => "dog")
-                    .Default(() => "default")
+                    .Default(_ => "default")
                     .Run();
             Assert.AreEqual("dog", t);
         }
@@ -65,9 +65,9 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [Test]
         public static void ChooseFirstCorrectMatchDefaultWhenDefaultIsFirst()
         {
-            var t = Pattern
-                    .Match<string, string>("cat")
-                    .Default(() => "default")
+            var t = Pattern<string,string>
+                    .Match("cat")
+                    .Default(_ => "default")
                     .Case(s => s == "fish", s => s)
                     .Case(s => s == "cat", _ => "dog")
                     .Run();
@@ -77,11 +77,11 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [Test]
         public static void ChooseFirstCorrectEqualityMatchAboveDefault()
         {
-            var t = Pattern
-                .Match<string, string>("cat")
+            var t = Pattern<string, string>
+                .Match("cat")
                 .Case(s => s == "fish", s => s)
                 .Case("cat", _ => "dog")
-                .Default(() => "default")
+                .Default(_ => "default")
                 .Run();
             Assert.AreEqual("dog", t);
         }
@@ -90,8 +90,8 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [ExpectedException( "System.InvalidOperationException" )]
         public static void ExceptionOnNoMatch()
         {
-            Pattern
-            .Match<string, string>("fish")
+            Pattern<string, string>
+            .Match("fish")
             .Case("cat", _ => "dog")
             .Run();
         }
@@ -103,10 +103,10 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [Test]
         public static void ChooseDefaultWhenNoMatch()
         {
-            var t = Pattern
-                    .Match<A, int>(new A.C())
-                    .Case<A, int, A.B>(s => s is A.B, s => 0)
-                    .Default(()=> 1)
+            var t = Pattern<A, int>
+                    .Match(new A.C())
+                    .Case<A.B>(s => s is A.B, s => 0)
+                    .Default(_=> 1)
                     .Run();
             Assert.AreEqual(1, t);
         }
@@ -114,10 +114,10 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [Test]
         public static void ChooseFirstOfMultipleCorrectMatch()
         {
-            var t = Pattern
-                .Match<A, int>(new A.B())
-                .Case<A, int, A.B>(_ => true, s => 0)
-                .Case<A, int, A.B>(_ => true, s => 1)
+            var t = Pattern<A, int>
+                .Match(new A.B())
+                .Case<A.B>(s => 0)
+                .Case<A.B>(s => 1)
                 .Run();
             Assert.AreEqual(0, t);
         }
@@ -125,11 +125,11 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [Test]
         public static void ChooseFirstCorrectMatch()
         {
-            var t = Pattern
-                .Match<A, int>(new A.B())
-                .Case<A, int, A.C>(_ => true, s => 0)
-                .Case<A, int, A.B>(_ => true, s => 2)
-                .Case<A, int, A.B>(_ => true, s => 1)
+            var t = Pattern<A, int>
+                .Match(new A.B())
+                .Case<A.C>(s => 0)
+                .Case<A.B>(s => 2)
+                .Case<A.B>(s => 1)
                 .Run();
             Assert.AreEqual(2, t);
         }
@@ -137,12 +137,12 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [Test]
         public static void ChooseFirstCorrectMatchAboveDefault()
         {
-            var t = Pattern
-                .Match<A, int>(new A.C())
-                .Case<A, int, A.C>(_ => true, s => 0)
-                .Case<A, int, A.B>(_ => true, s => 2)
-                .Case<A, int, A.B>(_ => true, s => 1)
-                .Default(() => 5)
+            var t = Pattern<A, int>
+                .Match(new A.C())
+                .Case<A.C>(s => 0)
+                .Case<A.B>(s => 2)
+                .Case<A.B>(s => 1)
+                .Default(_ => 5)
                 .Run();
             Assert.AreEqual(0, t);
         }
@@ -150,12 +150,12 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [Test]
         public static void ChooseFirstCorrectMatchDefaultWhenDefaultIsFirst()
         {
-            var t = Pattern
-                .Match<A, int>(new A.C())
-                .Default(() => 5)
-                .Case<A, int, A.C>(_ => true, s => 0)
-                .Case<A, int, A.B>(_ => true, s => 2)
-                .Case<A, int, A.B>(_ => true, s => 1)
+            var t = Pattern<A, int>
+                .Match(new A.C())
+                .Default(_ => 5)
+                .Case<A.C>(s => 0)
+                .Case<A.B>(s => 2)
+                .Case<A.B>(s => 1)
                 .Run();
             Assert.AreEqual(5, t);
 
@@ -165,10 +165,10 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [ExpectedException( "System.InvalidOperationException" )]
         public static void ExceptionOnNoMatch()
         {
-            Pattern
-            .Match<A, int>(new A.C())
-            .Case<A, int, A.B>(_ => true, s => 2)
-            .Case<A, int, A.B>(_ => true, s => 1)
+            Pattern<A, int>
+            .Match(new A.C())
+            .Case<A.B>(s => 2)
+            .Case<A.B>(s => 1)
             .Run(); 
 
         }

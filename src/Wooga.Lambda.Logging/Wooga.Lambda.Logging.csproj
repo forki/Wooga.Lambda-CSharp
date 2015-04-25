@@ -7,8 +7,8 @@
     <ProjectGuid>{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Wooga.Lambda.Log</RootNamespace>
-    <AssemblyName>Wooga.Lambda.Log</AssemblyName>
+    <RootNamespace>Wooga.Lambda.Logging</RootNamespace>
+    <AssemblyName>Wooga.Lambda.Logging</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -28,7 +28,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Wooga.Lambda.Log.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Wooga.Lambda.Logging.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Core" />

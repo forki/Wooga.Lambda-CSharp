@@ -4,36 +4,11 @@
 #I "../../bin"
 
 (**
-Wooga.Lambda
-======================
+# Functional primitives for Unity3D
 
-functional utilities & primitives for C#
+Wooga.Lambda is  which are heavily inspired by [csharp-monads](https://github.com/louthy/csharp-monad), [Haskell](https://www.haskell.org/) & [F#](http://fsharp.org).
 
-<div class="row">
-  <div class="span1"></div>
-  <div class="span6">
-    <div class="well well-small" id="nuget">
-      The different libraries of Wooga.Lambda can be <a href="https://nuget.org/packages/Wooga.Lambda">installed from NuGet</a>:
-      <pre>PM> Install-Package Wooga.Lambda</pre>
-      <pre>PM> Install-Package Wooga.Lambda.Logging</pre>
-      <pre>PM> Install-Package Wooga.Lambda.Network</pre>
-      <pre>PM> Install-Package Wooga.Lambda.FileSystem</pre>
-      <pre>PM> Install-Package Wooga.Lambda.Parser</pre>
-    </div>
-    <div class="well well-small" id="nuget">
-      Unity3D source-code releases of Wooga.Lambda can be <a href="https://github.com/devboy/Paket.Unity3D">installed from Paket.Unity3D</a> by appending Unity3D.Source to the name:
-      <pre>nuget Wooga.Lambda.Unity3D.Source</pre>
-      <pre>nuget Wooga.Lambda.Logging.Unity3D.Source</pre>
-    </div>
-  </div>
-  <div class="span1"></div>
-</div>
-
-Introduction
--------
-
-Wooga.Lambda is a set of functional utilities & primitives for C# which are inspired by [csharp-monads](https://github.com/louthy/csharp-monad), [Haskell](https://www.haskell.org/) & [F#](http://fsharp.org).
-Furthermore they are 100% compatible with Unity3D.
+With Unity3D being still
 
 Samples & documentation
 -----------------------
