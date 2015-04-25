@@ -109,7 +109,31 @@ Either&lt;Exception,<span class="k">string</span>&gt; ValidPassword(<span class=
 <span class="k">var</span> valid <span class="o">=</span> ValidPassword(pw);
 valid.IsLeft()
     <span class="o">?</span> Console.WriteLine(<span class="s">"Validation error:"</span> <span class="o">+</span> valid.FromLeft())
-    <span class="o">:</span> Console.WriteLine(<span class="s">"Validation succeeded"</span>);</pre></td></tr></table>
+    <span class="o">:</span> Console.WriteLine(<span class="s">"Validation succeeded"</span>);
+
+    ### The Try method: Either[TL,TR]
+
+        [lang=cs]
+        <span class="k">public</span> Uri GetEndpoint(<span class="k">string</span> host)
+        {
+            <span class="k">return</span> <span class="k">new</span> Uri(<span class="s">"http://"</span> <span class="o">+</span> host);
+        }
+
+        <span class="k">var</span> x <span class="o">=</span> GetEndpoint(<span class="s">"~spaghetti~"</span>);
+        <span class="c">// System.UriFormatException : Invalid URI: The hostname could not be parsed.</span>
+
+        <span class="c">// vs.</span>
+
+        <span class="k">public</span> Uri GetEndpoint(<span class="k">string</span> host)
+        {
+            <span class="k">return</span> <span class="k">new</span> Uri(<span class="s">"http://"</span> <span class="o">+</span> host);
+        }
+
+        <span class="k">var</span> x <span class="o">=</span> Either.Try(()<span class="o">=</span>&gt;GetEndpoint(<span class="s">"~spaghetti~"</span>))();
+        <span class="k">if</span>(x.IsRight())
+        {
+            System.Console.WriteLine(x.RightValue());
+        }</pre></td></tr></table>
 
 
         </div>
@@ -127,7 +151,6 @@ valid.IsLeft()
             <li class="nav-header">Wooga.Lambda</li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.maybe.html">Monad.Maybe</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.either.html">Monad.Either</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.try.html">Monad.Try</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.async.html">Concurrent.Async</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li>
             <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.patternmatch.html">Pattern.Match</a></li>
