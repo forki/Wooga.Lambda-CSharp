@@ -37,6 +37,32 @@
 
 <p><a href="http://wooga.github.io/Wooga.Lambda-CSharp/reference/wooga-lambda-control-concurrent-async.html">(API Reference)</a></p>
 
+<h2><a name="The-sync-method-Async" class="anchor" href="#The-sync-method-Async">The sync method: Async[T]</a></h2>
+
+<table class="pre"><tr><td><pre lang="cs"><span class="k">using</span> System;
+<span class="k">using</span> System.Diagnostics;
+<span class="k">using</span> Wooga.Lambda.Control.Concurrent;
+
+<span class="k">namespace</span> AsyncDownloader
+{
+    <span class="k">public</span> <span class="k">static</span> <span class="k">class</span> AsyncBlockSimple
+    {
+        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> Run()
+        {
+            <span class="k">var</span> stopwatch <span class="o">=</span> <span class="k">new</span> Stopwatch();
+            stopwatch.Start();
+
+            Async.Sleep(1000).RunSynchronously();
+
+            stopwatch.Stop();
+            Debug.WriteLine(String.Format(<span class="s">"Method \#1 Total seconds: {0}"</span>, stopwatch.Elapsed.TotalSeconds));
+
+            <span class="c">// Method \#1 Total seconds: 1,0038637</span>
+        }
+    }
+}
+</pre></td></tr></table>
+
 <h2><a name="The-parallel-method-Async" class="anchor" href="#The-parallel-method-Async">The parallel method: Async[T]</a></h2>
 
 <table class="pre"><tr><td><pre lang="cs"><span class="k">using</span> System;
