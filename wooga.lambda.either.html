@@ -110,30 +110,30 @@ Either&lt;Exception,<span class="k">string</span>&gt; ValidPassword(<span class=
 valid.IsLeft()
     <span class="o">?</span> Console.WriteLine(<span class="s">"Validation error:"</span> <span class="o">+</span> valid.FromLeft())
     <span class="o">:</span> Console.WriteLine(<span class="s">"Validation succeeded"</span>);
+</pre></td></tr></table>
 
-    ### The Try method: Either[TL,TR]
+<h3><a name="The-Try-method-Either" class="anchor" href="#The-Try-method-Either">The Try method: Either[TL,TR]</a></h3>
 
-        [lang=cs]
-        <span class="k">public</span> Uri GetEndpoint(<span class="k">string</span> host)
-        {
-            <span class="k">return</span> <span class="k">new</span> Uri(<span class="s">"http://"</span> <span class="o">+</span> host);
-        }
+<table class="pre"><tr><td><pre lang="cs"><span class="k">public</span> Uri GetEndpoint(<span class="k">string</span> host)
+{
+    <span class="k">return</span> <span class="k">new</span> Uri(<span class="s">"http://"</span> <span class="o">+</span> host);
+}
 
-        <span class="k">var</span> x <span class="o">=</span> GetEndpoint(<span class="s">"~spaghetti~"</span>);
-        <span class="c">// System.UriFormatException : Invalid URI: The hostname could not be parsed.</span>
+<span class="k">var</span> x <span class="o">=</span> GetEndpoint(<span class="s">"~spaghetti~"</span>);
+<span class="c">// System.UriFormatException : Invalid URI: The hostname could not be parsed.</span>
 
-        <span class="c">// vs.</span>
+<span class="c">// vs.</span>
 
-        <span class="k">public</span> Uri GetEndpoint(<span class="k">string</span> host)
-        {
-            <span class="k">return</span> <span class="k">new</span> Uri(<span class="s">"http://"</span> <span class="o">+</span> host);
-        }
+<span class="k">public</span> Uri GetEndpoint(<span class="k">string</span> host)
+{
+    <span class="k">return</span> <span class="k">new</span> Uri(<span class="s">"http://"</span> <span class="o">+</span> host);
+}
 
-        <span class="k">var</span> x <span class="o">=</span> Either.Try(()<span class="o">=</span>&gt;GetEndpoint(<span class="s">"~spaghetti~"</span>))();
-        <span class="k">if</span>(x.IsRight())
-        {
-            System.Console.WriteLine(x.RightValue());
-        }</pre></td></tr></table>
+<span class="k">var</span> x <span class="o">=</span> Either.Try(()<span class="o">=</span>&gt;GetEndpoint(<span class="s">"~spaghetti~"</span>))();
+<span class="k">if</span>(x.IsRight())
+{
+    System.Console.WriteLine(x.RightValue());
+}</pre></td></tr></table>
 
 
         </div>
