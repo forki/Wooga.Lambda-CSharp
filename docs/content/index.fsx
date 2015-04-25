@@ -20,36 +20,31 @@ functional utilities & primitives for C#
       <pre>PM> Install-Package Wooga.Lambda.FileSystem</pre>
       <pre>PM> Install-Package Wooga.Lambda.Parser</pre>
     </div>
+    <div class="well well-small" id="nuget">
+      Unity3D source-code releases of Wooga.Lambda can be <a href="https://github.com/devboy/Paket.Unity3D">installed from Paket.Unity3D</a> when appending Unity3D.Source to the name:
+      <pre>nuget Wooga.Lambda.Unity3D.Source</pre>
+      <pre>nuget Wooga.Lambda.Log.Unity3D.Source</pre>
+    </div>
   </div>
   <div class="span1"></div>
 </div>
 
-Example
+Introduction
 -------
 
-This example demonstrates using a function defined in this sample library.
-
-*)
-#r "Wooga.Lambda.dll"
-open Wooga.Lambda
-
-printfn "hello = %i" <| Library.hello 0
-
-(**
-Some more info
+Wooga.Lambda is a set of functional utilities & primitives for C# which are inspired by [csharp-monads](https://github.com/louthy/csharp-monad), [Haskell](https://www.haskell.org/) & [F#](http://fsharp.org).
+Furthermore they are 100% compatible with Unity3D.
 
 Samples & documentation
 -----------------------
 
-The library comes with comprehensible documentation.
-It can include tutorials automatically generated from `*.fsx` files in [the content folder][content].
-The API reference is automatically generated from Markdown comments in the library implementation.
+The library comes with comprehensible documentation and includes several tutorials.
 
- * [Tutorial](tutorial.html) contains a further explanation of this sample library.
+ * [Have a look at the Maybe tutorial to get started](wooga.lambda.maybe.html)
 
- * [API Reference](reference/index.html) contains automatically generated documentation for all types, modules
-   and functions in the library. This includes additional brief samples on using most of the
-   functions.
+ * [Check out these Presentation Slides](presentation_04_2015/index.html)
+
+ * [Check out the API Reference](reference/index.html)
 
 Contributing and copyright
 --------------------------
@@ -63,9 +58,9 @@ The library is available under Public Domain license, which allows modification 
 redistribution for both commercial and non-commercial purposes. For more information see the
 [License file][license] in the GitHub repository.
 
-  [content]: https://github.com/fsprojects/Wooga.Lambda/tree/master/docs/content
-  [gh]: https://github.com/fsprojects/Wooga.Lambda
-  [issues]: https://github.com/fsprojects/Wooga.Lambda/issues
-  [readme]: https://github.com/fsprojects/Wooga.Lambda/blob/master/README.md
-  [license]: https://github.com/fsprojects/Wooga.Lambda/blob/master/LICENSE.txt
+  [content]: https://github.com/wooga/Wooga.Lambda-CSharp/tree/master/docs/content
+  [gh]: https://github.com/wooga/Wooga.Lambda-CSharp
+  [issues]: https://github.com/wooga/Wooga.Lambda-CSharp/issues
+  [readme]: https://github.com/wooga/Wooga.Lambda-CSharp/blob/master/README.md
+  [license]: https://github.com/wooga/Wooga.Lambda-CSharp/blob/master/LICENSE.txt
 *)
