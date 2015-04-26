@@ -15,6 +15,7 @@ this library is an attempt at backporting some features found in more
 recent runtimes and *C# libraries* as well as pick up and harness useful
 ideas and patterns from other languages and/or programming paradigms.....
 
+[...continued...](http://wooga.github.io/Wooga.Lambda-CSharp)
 
 Samples & documentation
 -----------------------
