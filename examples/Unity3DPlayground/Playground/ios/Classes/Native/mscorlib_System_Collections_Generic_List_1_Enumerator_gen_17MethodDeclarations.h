@@ -1,0 +1,25 @@
+﻿#pragma once
+
+// System.Collections.Generic.List`1/Enumerator<UnityEngine.EventSystems.EventTrigger/Entry>
+struct Enumerator_t3673;
+// System.Object
+struct Object_t;
+// UnityEngine.EventSystems.EventTrigger/Entry
+struct Entry_t182;
+// System.Collections.Generic.List`1<UnityEngine.EventSystems.EventTrigger/Entry>
+struct List_1_t183;
+
+// System.Void System.Collections.Generic.List`1/Enumerator<UnityEngine.EventSystems.EventTrigger/Entry>::.ctor(System.Collections.Generic.List`1<T>)
+// System.Collections.Generic.List`1/Enumerator<System.Object>
+#include "mscorlib_System_Collections_Generic_List_1_Enumerator_gen_3MethodDeclarations.h"
+#define Enumerator__ctor_m16843(__this, ___l, method) (void)Enumerator__ctor_m13479_gshared((Enumerator_t3193 *)__this, (List_1_t405 *)___l, method)
+// System.Object System.Collections.Generic.List`1/Enumerator<UnityEngine.EventSystems.EventTrigger/Entry>::System.Collections.IEnumerator.get_Current()
+#define Enumerator_System_Collections_IEnumerator_get_Current_m16844(__this, method) (Object_t *)Enumerator_System_Collections_IEnumerator_get_Current_m13480_gshared((Enumerator_t3193 *)__this, method)
+// System.Void System.Collections.Generic.List`1/Enumerator<UnityEngine.EventSystems.EventTrigger/Entry>::Dispose()
+#define Enumerator_Dispose_m16845(__this, method) (void)Enumerator_Dispose_m13481_gshared((Enumerator_t3193 *)__this, method)
+// System.Void System.Collections.Generic.List`1/Enumerator<UnityEngine.EventSystems.EventTrigger/Entry>::VerifyState()
+#define Enumerator_VerifyState_m16846(__this, method) (void)Enumerator_VerifyState_m13482_gshared((Enumerator_t3193 *)__this, method)
+// System.Boolean System.Collections.Generic.List`1/Enumerator<UnityEngine.EventSystems.EventTrigger/Entry>::MoveNext()
+#define Enumerator_MoveNext_m16847(__this, method) (bool)Enumerator_MoveNext_m13483_gshared((Enumerator_t3193 *)__this, method)
+// T System.Collections.Generic.List`1/Enumerator<UnityEngine.EventSystems.EventTrigger/Entry>::get_Current()
+#define Enumerator_get_Current_m16848(__this, method) (Entry_t182 *)Enumerator_get_Current_m13484_gshared((Enumerator_t3193 *)__this, method)

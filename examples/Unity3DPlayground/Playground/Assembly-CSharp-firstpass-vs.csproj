@@ -57,6 +57,7 @@
      <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\TiltInput.cs" />
      <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\TouchPad.cs" />
      <Compile Include="Assets\Standard Assets\CrossPlatformInput\Scripts\VirtualInput.cs" />
+     <Compile Include="Assets\Standard Assets\HopefullyThisWorks.cs" />
      <Compile Include="Assets\Standard Assets\Utility\ActivateTrigger.cs" />
      <Compile Include="Assets\Standard Assets\Utility\AutoMobileShaderSwitch.cs" />
      <Compile Include="Assets\Standard Assets\Utility\AutoMoveAndRotate.cs" />
@@ -85,7 +86,13 @@
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="Wooga.Lambda">
- <HintPath>/Users/devboy/development/wooga/Wooga.Lambda/examples/Unity3DPlayground/Playground/Assets/Wooga.Lambda.dll</HintPath>
+ <HintPath>/Users/devboy/Development/wooga/Wooga.Lambda/examples/Unity3DPlayground/Playground/Assets/Standard Assets/Wooga.Lambda.dll</HintPath>
+ </Reference>
+ <Reference Include="Wooga.Lambda.Network">
+ <HintPath>/Users/devboy/Development/wooga/Wooga.Lambda/examples/Unity3DPlayground/Playground/Assets/Standard Assets/Wooga.Lambda.Network.dll</HintPath>
+ </Reference>
+ <Reference Include="Wooga.Lambda.Logging">
+ <HintPath>/Users/devboy/Development/wooga/Wooga.Lambda/examples/Unity3DPlayground/Playground/Assets/Standard Assets/Wooga.Lambda.Logging.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/iossupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>

@@ -9,8 +9,8 @@ namespace Wooga.Lambda.Logging
     /// </summary>
     public class LoggingAgent
     {
-        private static volatile LoggingAgent instance;
-        private static readonly object syncRoot = new object();
+        private static volatile LoggingAgent _instance;
+        private static readonly object SyncRoot = new object();
         private readonly Agent<LogMsg, ImmutableList<Func<LogMsg, Unit>>> _agent;
 
         private LoggingAgent()
@@ -35,15 +35,15 @@ namespace Wooga.Lambda.Logging
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    lock (syncRoot)
+                    lock (SyncRoot)
                     {
-                        if (instance == null)
-                            instance = new LoggingAgent();
+                        if (_instance == null)
+                            _instance = new LoggingAgent();
                     }
                 }
-                return instance;
+                return _instance;
             }
         }
 

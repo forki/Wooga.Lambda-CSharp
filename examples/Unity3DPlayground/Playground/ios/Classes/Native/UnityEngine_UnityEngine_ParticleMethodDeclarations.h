@@ -1,0 +1,41 @@
+﻿#pragma once
+
+// UnityEngine.Particle
+struct Particle_t1195;
+// UnityEngine.Vector3
+#include "UnityEngine_UnityEngine_Vector3.h"
+// UnityEngine.Color
+#include "UnityEngine_UnityEngine_Color.h"
+
+// UnityEngine.Vector3 UnityEngine.Particle::get_position()
+ Vector3_t10  Particle_get_position_m3695 (Particle_t1195 * __this, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Void UnityEngine.Particle::set_position(UnityEngine.Vector3)
+ void Particle_set_position_m3696 (Particle_t1195 * __this, Vector3_t10  ___value, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// UnityEngine.Vector3 UnityEngine.Particle::get_velocity()
+ Vector3_t10  Particle_get_velocity_m3697 (Particle_t1195 * __this, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Void UnityEngine.Particle::set_velocity(UnityEngine.Vector3)
+ void Particle_set_velocity_m3698 (Particle_t1195 * __this, Vector3_t10  ___value, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Single UnityEngine.Particle::get_energy()
+ float Particle_get_energy_m3699 (Particle_t1195 * __this, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Void UnityEngine.Particle::set_energy(System.Single)
+ void Particle_set_energy_m3700 (Particle_t1195 * __this, float ___value, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Single UnityEngine.Particle::get_startEnergy()
+ float Particle_get_startEnergy_m3701 (Particle_t1195 * __this, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Void UnityEngine.Particle::set_startEnergy(System.Single)
+ void Particle_set_startEnergy_m3702 (Particle_t1195 * __this, float ___value, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Single UnityEngine.Particle::get_size()
+ float Particle_get_size_m3703 (Particle_t1195 * __this, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Void UnityEngine.Particle::set_size(System.Single)
+ void Particle_set_size_m3704 (Particle_t1195 * __this, float ___value, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Single UnityEngine.Particle::get_rotation()
+ float Particle_get_rotation_m3705 (Particle_t1195 * __this, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Void UnityEngine.Particle::set_rotation(System.Single)
+ void Particle_set_rotation_m3706 (Particle_t1195 * __this, float ___value, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Single UnityEngine.Particle::get_angularVelocity()
+ float Particle_get_angularVelocity_m3707 (Particle_t1195 * __this, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Void UnityEngine.Particle::set_angularVelocity(System.Single)
+ void Particle_set_angularVelocity_m3708 (Particle_t1195 * __this, float ___value, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// UnityEngine.Color UnityEngine.Particle::get_color()
+ Color_t168  Particle_get_color_m3709 (Particle_t1195 * __this, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Void UnityEngine.Particle::set_color(UnityEngine.Color)
+ void Particle_set_color_m3710 (Particle_t1195 * __this, Color_t168  ___value, MethodInfo* method) IL2CPP_METHOD_ATTR;

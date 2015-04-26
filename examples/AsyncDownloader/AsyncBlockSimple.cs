@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using Wooga.Lambda.Control.Concurrent;
+using Wooga.Lambda.Data;
+using Wooga.Lambda.Logging;
 
 namespace AsyncDownloader
 {
@@ -8,15 +10,21 @@ namespace AsyncDownloader
     {
         public static void Run()
         {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
+            LoggingAgent.SharedAgent.AddHandler(msg =>
+            {
+                System.Diagnostics.Debug.WriteLine(msg.GetType().ToString()+": "+msg.Message);
+                return Unit.Default;
+            });
 
-            Async.Sleep(1000).RunSynchronously();
+            var rnd = new Random();
+            var waited = 20;
+            for (int i = 0; i < 1000; i++)
+            {
+                Async.Sleep(waited).RunSynchronously();
+                Async.Return(()=>LoggingAgent.SharedAgent.Debug(waited + " ms on  " + System.Threading.Thread.CurrentThread.ManagedThreadId)).Start();
+            }
 
-            stopwatch.Stop();
-//            Debug.WriteLine(String.Format("Method #1 Total seconds: {0}", stopwatch.Elapsed.TotalSeconds));
-
-            // Method #1 Total seconds: 1,0038637
+            System.Console.ReadLine();
         }
     }
 }

@@ -1,0 +1,21 @@
+﻿#pragma once
+
+// System.Array/InternalEnumerator`1<System.Security.Principal.WindowsAccountType>
+struct InternalEnumerator_1_t5182;
+// System.Object
+struct Object_t;
+// System.Array
+struct Array_t;
+// System.Security.Principal.WindowsAccountType
+#include "mscorlib_System_Security_Principal_WindowsAccountType.h"
+
+// System.Void System.Array/InternalEnumerator`1<System.Security.Principal.WindowsAccountType>::.ctor(System.Array)
+ void InternalEnumerator_1__ctor_m26318 (InternalEnumerator_1_t5182 * __this, Array_t * ___array, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Object System.Array/InternalEnumerator`1<System.Security.Principal.WindowsAccountType>::System.Collections.IEnumerator.get_Current()
+ Object_t * InternalEnumerator_1_System_Collections_IEnumerator_get_Current_m26319 (InternalEnumerator_1_t5182 * __this, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Void System.Array/InternalEnumerator`1<System.Security.Principal.WindowsAccountType>::Dispose()
+ void InternalEnumerator_1_Dispose_m26320 (InternalEnumerator_1_t5182 * __this, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// System.Boolean System.Array/InternalEnumerator`1<System.Security.Principal.WindowsAccountType>::MoveNext()
+ bool InternalEnumerator_1_MoveNext_m26321 (InternalEnumerator_1_t5182 * __this, MethodInfo* method) IL2CPP_METHOD_ATTR;
+// T System.Array/InternalEnumerator`1<System.Security.Principal.WindowsAccountType>::get_Current()
+ int32_t InternalEnumerator_1_get_Current_m26322 (InternalEnumerator_1_t5182 * __this, MethodInfo* method) IL2CPP_METHOD_ATTR;

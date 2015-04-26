@@ -6,22 +6,22 @@
 (**
 # Functional primitives for Unity3D
 
-*Unity3D* being so far behind the *.NET* and *Mono* world,
-this library is an attempt at backporting some features found in more
-recent runtimes and *C# libraries* as well as pick up and harness useful
-ideas and patterns from other languages and/or programming paradigms.
+**Unity3D** being so far behind the **.NET** and **Mono** world,
+this library is an attempt at **backporting** some features found in more
+recent **runtimes** and **C# libraries** as well as pick up and harness useful
+**ideas** and **patterns** from other languages and/or programming paradigms.
 
 
-Immutable and persistent data-structures, parser-combinators,
-monads for concurrency and control-flow
-as well as network and filesystem utilities can already be found here
-thanks to the heavy inspiration by
-[csharp-monads](https://github.com/louthy/csharp-monad), [Haskell](https://www.haskell.org/) & [F#](http://fsharp.org).
+**Immutable** and **persistent** data-structures, **parser-combinators**,
+**monads** for **concurrency** and control-flow
+as well as network and filesystem utilities can already be found here.
+Main influence came from the following projects [csharp-monads](https://github.com/louthy/csharp-monad), [Haskell](https://www.haskell.org/) & [F#](http://fsharp.org).
 
 
-It's all still far from feature complete,
-but as it turns out C# is actually not so bad for functional programming:
-parametric-polymorphism, delegates, higher-order functions/lambdas, type-inference and extension-methods are quite a good fit.
+All in all it's still *pretty early days*
+but as it turns out **C#** is actually not so bad for **functional programming**:
+parametric-polymorphism, delegates, higher-order functions/lambdas,
+**type-inference** and **extension-methods** are quite a good fit.
 
 
 Samples & documentation

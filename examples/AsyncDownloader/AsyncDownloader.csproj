@@ -45,6 +45,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Wooga.Lambda.Logging\Wooga.Lambda.Logging.csproj">
+      <Project>{a07f2d08-5db7-44e7-a33b-9bfdc1292272}</Project>
+      <Name>Wooga.Lambda.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Wooga.Lambda.Network\Wooga.Lambda.Network.csproj">
       <Project>{2247283e-0466-40ac-9d05-b8972c8451bf}</Project>
       <Name>Wooga.Lambda.Network</Name>

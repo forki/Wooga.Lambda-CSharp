@@ -83,14 +83,13 @@ namespace Wooga.Lambda.Control.Concurrent
             return () =>
             {
                 var num = (uint) Math.Min(32, ms.Count); // 64 is maximum here
-                var xs = ms.Take(num);
-                var rest = ms.RemoveRange(0, (int) num);
-
                 if (num == 0)
                 {
                     return empty;
                 }
 
+                var xs = ms.Take(num);
+                var rest = ms.RemoveRange(0, (int)num);
                 var asyncs = xs.Map(x =>
                 {
                     var handle = new AsyncEventHandle<T>();

@@ -56,7 +56,7 @@
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="Wooga.Lambda">
- <HintPath>/Users/devboy/development/wooga/Wooga.Lambda/examples/Unity3DPlayground/Playground/Assets/Wooga.Lambda.dll</HintPath>
+ <HintPath>/Users/devboy/Development/wooga/Wooga.Lambda/examples/Unity3DPlayground/Playground/Assets/Standard Assets/Wooga.Lambda.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.Graphs.dll</HintPath>
@@ -82,6 +82,12 @@
  <Reference Include="UnityEditor.OSXStandalone.Extensions">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
  </Reference>
+ <Reference Include="Wooga.Lambda.Network">
+ <HintPath>/Users/devboy/Development/wooga/Wooga.Lambda/examples/Unity3DPlayground/Playground/Assets/Standard Assets/Wooga.Lambda.Network.dll</HintPath>
+ </Reference>
+ <Reference Include="Wooga.Lambda.Logging">
+ <HintPath>/Users/devboy/Development/wooga/Wooga.Lambda/examples/Unity3DPlayground/Playground/Assets/Standard Assets/Wooga.Lambda.Logging.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
  <HintPath>/Applications/Unity/Unity.app/Contents/PlaybackEngines/iossupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>
@@ -89,8 +95,6 @@
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
       <Project>{F99BEF21-02C4-FFDB-CCD5-A3CAD3834027}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
-    <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{99E9C9AD-937D-E4A9-DF50-AE34478454AD}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

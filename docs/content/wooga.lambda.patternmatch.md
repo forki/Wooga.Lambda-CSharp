@@ -7,7 +7,7 @@
 > *- Wikipedia*
 
 Most of these ideas are stolen from [**Bob Nystrom**](http://journal.stuffwithstuff.com/) and his blogpost on [*ML-style Pattern Matching in C#*](http://journal.stuffwithstuff.com/2009/05/13/ml-style-pattern-matching-in-c/).
-In contrast to his examples: this version is entirely **expression-based** and does **not yet extract fields** of input values like **monads** or **discriminated unions**. It might be possible to use **tuples** with **structural equality** to allow for matching on **nested data-structures**,
+In contrast to his examples: this version is entirely **expression-based** and does **not yet extract fields** of input values like **monads** or **discriminated unions**. It might be possible to use **tuples** with **structural equality** to allow for matching on **nested data-structures** in the future,
 which would be pretty close to what most functional languages offer.
 
 ## Matching on *equality*

@@ -53,6 +53,38 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
         }
 
         [Test]
+        public void RunParallelWithEmptyShouldBeFine()
+        {
+            var asyncs = new ImmutableList<Async<int>>();
+            var vals = asyncs.Parallel().RunSynchronously();
+            Assert.AreEqual(vals.Distinct().Count(), 0, "Nothing shoul have happened");
+        }
+
+        [Test]
+        public void RunParallelWithOnlyAFewShouldBeFine()
+        {
+            const int wait = 3;
+            var rnd = new Random();
+            const int num = 4;
+            var asyncs = new ImmutableList<Async<int>>();
+            for (var i = 0; i < num; i++)
+            {
+                asyncs = asyncs.Add(() =>
+                {
+                    Async
+                        .Sleep(rnd.Next(10) + wait)
+                        .RunSynchronously();
+                    return Thread.CurrentThread.ManagedThreadId;
+                });
+            }
+
+            var vals = asyncs.Parallel().RunSynchronously();
+            Assert.True(!vals.Contains(Thread.CurrentThread.ManagedThreadId),
+                "Used threads are different from the launcher thread.");
+            Assert.GreaterOrEqual(vals.Distinct().Count(), 2, "Used threads are multiple worker threads.");
+        }
+
+        [Test]
         public void RunParallelShouldSpawnWorkerThreads()
         {
             const int wait = 3;

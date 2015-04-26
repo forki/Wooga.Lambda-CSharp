@@ -1,0 +1,15 @@
+﻿#pragma once
+// System.Object
+struct Object_t;
+// Wooga.Lambda.Control.Concurrent.AsyncReplyChannel`1<System.Object>
+struct AsyncReplyChannel_1_t4190;
+// System.IAsyncResult
+struct IAsyncResult_t188;
+// System.AsyncCallback
+struct AsyncCallback_t189;
+// System.MulticastDelegate
+#include "mscorlib_System_MulticastDelegate.h"
+// System.Func`2<Wooga.Lambda.Control.Concurrent.AsyncReplyChannel`1<System.Object>,System.Object>
+struct Func_2_t4187  : public MulticastDelegate_t311
+{
+};

@@ -1,3 +1,6 @@
+#### 0.3.4 - April 26 2015
+* Small bugfix in Async.Parallel
+
 #### 0.3.3 - April 26 2015
 * Fighting Fake :(
 

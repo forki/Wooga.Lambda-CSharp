@@ -7,3 +7,11 @@ nuget FAKE
 nuget SourceLink.Fake
 
 github fsharp/FAKE modules/Octokit/Octokit.fsx
+
+# Unity3D
+
+nuget Wooga.Lambda.Unity3D.Source
+nuget Wooga.Lambda.Logging.Unity3D.Source
+nuget Wooga.Lambda.Network.Unity3D.Source
+nuget Wooga.Lambda.Storage.Unity3D.Source
+nuget Wooga.Lambda.Parser.Unity3D.Source

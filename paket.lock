@@ -19,6 +19,14 @@ NUGET
     Octokit (0.10.0)
       Microsoft.Net.Http
     SourceLink.Fake (0.5.0)
+    Wooga.Lambda.Logging.Unity3D.Source (0.3.3)
+      Wooga.Lambda.Unity3D.Source
+    Wooga.Lambda.Network.Unity3D.Source (0.3.3)
+      Wooga.Lambda.Unity3D.Source
+    Wooga.Lambda.Parser.Unity3D.Source (0.3.3)
+    Wooga.Lambda.Storage.Unity3D.Source (0.3.3)
+      Wooga.Lambda.Unity3D.Source
+    Wooga.Lambda.Unity3D.Source (0.3.3)
 GITHUB
   remote: fsharp/FAKE
   specs:
