@@ -1,5 +1,0 @@
-﻿#pragma once
-
-// UnityEngine.TouchScreenKeyboard_InternalConstructorHelperArguments
-struct TouchScreenKeyboard_InternalConstructorHelperArguments_t1161;
-

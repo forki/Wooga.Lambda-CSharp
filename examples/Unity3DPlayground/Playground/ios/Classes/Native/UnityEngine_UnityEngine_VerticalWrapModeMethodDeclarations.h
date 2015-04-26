@@ -1,5 +1,0 @@
-﻿#pragma once
-
-// UnityEngine.VerticalWrapMode
-struct VerticalWrapMode_t443;
-
