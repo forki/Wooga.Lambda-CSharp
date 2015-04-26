@@ -16,7 +16,7 @@ let githubLink = "http://github.com/wooga/Wooga.Lambda-CSharp"
 let info =
   [ "project-name", "Wooga.Lambda"
     "project-author", "devboy"
-    "project-summary", "Functional utilities for C#"
+    "project-summary", "Functional primitives for Unity3D"
     "project-github", githubLink
     "project-nuget", "http://nuget.org/packages/Wooga.Lambda" ]
 

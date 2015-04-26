@@ -1,3 +1,6 @@
+#### 0.3.1 - April 26 2015
+* Fixed NuGet packages and github releases
+
 #### 0.3.0 - April 26 2015
 * Big cleanup many things removed, many added...
 * No more IO monad, Async does the job better

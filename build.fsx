@@ -315,6 +315,11 @@ Target "ReleaseDocs" (fun _ ->
 #load "paket-files/fsharp/FAKE/modules/Octokit/Octokit.fsx"
 open Octokit
 
+let nupkgs assembly version draft =
+    draft
+    |> uploadFile (sprintf "./bin/%s.%s.nupkg" assembly version)
+    |> uploadFile (sprintf "./bin/%s.Unity3D.Source.%s.nupkg" assembly version)
+
 Target "Release" (fun _ ->
     StageAll ""
     Git.Commit.Commit "" (sprintf "Bump version to %s" release.NugetVersion)
@@ -326,7 +331,11 @@ Target "Release" (fun _ ->
     // release on github
     createClient (getBuildParamOrDefault "github-user" "") (getBuildParamOrDefault "github-pw" "")
     |> createDraft gitOwner gitName release.NugetVersion (release.SemVer.PreRelease <> None) release.Notes
-    // TODO: |> uploadFile "PATH_TO_FILE"
+    |> nupkgs "Wooga.Lambda" release.NugetVersion
+    |> nupkgs "Wooga.Lambda.Logging" release.NugetVersion
+    |> nupkgs "Wooga.Lambda.Network" release.NugetVersion
+    |> nupkgs "Wooga.Lambda.Parser" release.NugetVersion
+    |> nupkgs "Wooga.Lambda.Storage" release.NugetVersion
     |> releaseDraft
     |> Async.RunSynchronously
 )

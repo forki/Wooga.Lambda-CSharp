@@ -6,7 +6,7 @@ authors
 projectUrl
     http://github.com/wooga/Wooga.Lambda
 iconUrl
-    https://raw.githubusercontent.com/wooga/Wooga.Lambda/master/docs/files/img/logo.png
+    http://wooga.github.io/Wooga.Lambda-CSharp/img/logo.png
 licenseUrl
     http://github.com/wooga/Wooga.Lambda/blob/master/LICENSE.txt
 requireLicenseAcceptance
@@ -16,6 +16,6 @@ copyright
 tags
     wooga f# c# functional haskell data-structures
 summary
-    Functional utilities for C#
+    Functional primitives for Unity3D
 description
-    Functional utilites for C# - inspired by csharp-monads, Haskell & F# - compatible with Unity3D
+    Functional primitives for Unity3D - inspired by csharp-monads, Haskell & F#
