@@ -1,4 +1,3 @@
-using System.Linq;
 using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Parser.Combinators

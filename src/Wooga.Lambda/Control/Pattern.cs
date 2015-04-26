@@ -1,18 +1,19 @@
 ﻿using System;
 using Wooga.Lambda.Control.Monad;
+using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control
 {
     public delegate Either<TResult, TValue> PatterMatch<TValue, TResult>();
 
-    public static class Pattern<TValue, TResult>
+    public static class Pattern<TResult>
     {
-        public static MatchCase Match(TValue x)
+        public static MatchCase<TValue> Match<TValue>(TValue x)
         {
-            return new MatchCase(() => Either.Right<TResult, TValue>(x));
+            return new MatchCase<TValue>(() => Either.Right<TResult, TValue>(x));
         }
 
-        public sealed class MatchCase
+        public sealed class MatchCase<TValue>
         {
             private readonly PatterMatch<TValue, TResult> _m;
 
@@ -21,35 +22,27 @@ namespace Wooga.Lambda.Control
                 _m = m;
             }
 
-            public MatchCase Case(Func<TValue, bool> t, Func<TValue, TResult> f)
+            public MatchCase<TValue> Case(Func<TValue, bool> t, Func<TValue, TResult> f)
             {
-                return
-                    new MatchCase(
-                        () =>
-                            _m().Bind(y => t(y) ? Either.Left<TResult, TValue>(f(y)) : Either.Right<TResult, TValue>(y)));
+                return new MatchCase<TValue>(()=> _m().Bind(y=> Either.When(()=> !t(y),()=> f(y),()=> y)));
             }
 
-            public MatchCase Case(TValue x, Func<TValue, TResult> f)
+            public MatchCase<TValue> Case(TValue x, Func<TValue, TResult> f)
             {
                 return Case(v => x.Equals(v), f);
             }
 
-            public MatchCase Case<TValueType>(Func<TValue, bool> t, Func<TValue, TResult> f)
+            public MatchCase<TValue> Case<TValueType>(Func<TValueType, TResult> f) where TValueType : TValue
             {
-                return Case(v => v is TValueType && t(v), f);
+                return Case(v => v is TValueType, x=> f((TValueType) x));
             }
 
-            public MatchCase Case<TValueType>(Func<TValue, TResult> f)
-            {
-                return Case(v => v is TValueType, f);
-            }
-
-            public MatchCase Default(Func<TValue, TResult> f)
+            public MatchCase<TValue> Default(Func<TValue, TResult> f)
             {
                 return Case(_ => true, f);
             }
 
-            public MatchCase Default(TResult v)
+            public MatchCase<TValue> Default(TResult v)
             {
                 return Case(_ => true, _ => v);
             }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+using System;
 using System.Threading;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
@@ -86,7 +85,7 @@ namespace Wooga.Lambda.Control.Concurrent
                 var num = (uint) Math.Min(32, ms.Count); // 64 is maximum here
                 var xs = ms.Take(num);
                 var rest = ms.RemoveRange(0, (int) num);
-                
+
                 if (num == 0)
                 {
                     return empty;
@@ -103,31 +102,6 @@ namespace Wooga.Lambda.Control.Concurrent
                 return empty.AddRange(rest.Count > 0 ? ps.AddRange(rest.Parallel().RunSynchronously()) : ps);
             };
         }
-
-
-//            return () =>
-//            {
-//                var results = new List<T>();
-//                while (ms.Length > 0)
-//                {
-//                    const int limit = 32; // 64 is maximum here
-//                    var take = Math.Min(limit, ms.Length);
-//                    var ps = ms.RangeSubset(0, take);
-//                    ms = ms.RangeSubset(take, ms.Length - take);
-//
-//                    var handles = ps.Map(m =>
-//                    {
-//                        var handle = new AsyncEventHandle<T>();
-//                        var ma = m.Bind<T, Unit>(v => () => handle.Complete(v));
-//                        return new ImmutableTuple<Async<Unit>, AsyncEventHandle<T>>(ma, handle);
-//                    });
-//
-//                    Array.ForEach(handles, ah => ah.Item1.Start());
-//                    WaitHandle.WaitAll(handles.Map(ah => (WaitHandle) ah.Item2.DoneEvent));
-//                    results.AddRange(handles.Map(ah => ah.Item2.Result()));
-//                }
-//                return results.ToArray();
-//            };
 
         /// <summary>
         ///     Runs the provided asynchronous computation and awaits its result.

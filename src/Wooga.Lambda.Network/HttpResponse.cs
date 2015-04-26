@@ -6,12 +6,12 @@ namespace Wooga.Lambda.Network
 {
     public struct HttpResponse
     {
-        public HttpResponse(HttpRequest httpRequest) 
-            : this(httpRequest, HttpHeaders.Create(), 0, Maybe.Nothing<ImmutableList<byte>>())
+        public HttpResponse(HttpRequest httpRequest)
+            : this(httpRequest, ImmutableList.Empty<HttpHeader>(), 0, Maybe.Nothing<ImmutableList<byte>>())
         {
         }
 
-        public HttpResponse(HttpRequest httpRequest, HttpHeaders httpHeaders, HttpStatusCode statusCode,
+        public HttpResponse(HttpRequest httpRequest, ImmutableList<HttpHeader> httpHeaders, HttpStatusCode statusCode,
             Maybe<ImmutableList<byte>> body) : this()
         {
             HttpRequest = httpRequest;
@@ -21,13 +21,13 @@ namespace Wooga.Lambda.Network
         }
 
         public Maybe<ImmutableList<byte>> Body { get; private set; }
-        public HttpHeaders HttpHeaders { get; private set; }
+        public ImmutableList<HttpHeader> HttpHeaders { get; private set; }
         public HttpRequest HttpRequest { get; private set; }
         public HttpStatusCode StatusCode { get; private set; }
 
-        public HttpResponse With(HttpHeaders httpHeaders)
+        public HttpResponse With(ImmutableList<HttpHeader> httpHeaders)
         {
-            return new HttpResponse(HttpRequest, HttpHeaders.Concat(httpHeaders), StatusCode, Body);
+            return new HttpResponse(HttpRequest, HttpHeaders.AddRange(httpHeaders), StatusCode, Body);
         }
 
         public HttpResponse With(HttpStatusCode statusCode)

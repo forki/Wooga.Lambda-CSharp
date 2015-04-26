@@ -84,13 +84,13 @@ Another option would be to do it sequentially inside of another **Async<'T>**:
 
 ## Composing *Async* parallel
 
-Multiple **Async<'T>** can be executed in parallel with **Async.Parallel(Async<'T>[])**.
+Multiple **Async<'T>** can be executed in parallel with **Async.Parallel(ImmutableList< Async<'T>>)**.
 Returns an array of values from the array of input computations.
 
     [lang=cs]
     Async<int> threadId = () => Thread.CurrentThread.ManagedThreadId;
     var blocker = Async.Sleep(300).Bind(_ => threadId);
-    var sleeps = new[]{blocker,...,blocker};
+    var sleeps = new[]{blocker,...,blocker}.ToImmutableList();
 
     var stopwatch = new Stopwatch();
     stopwatch.Start();

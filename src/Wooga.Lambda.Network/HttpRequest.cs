@@ -8,10 +8,10 @@ namespace Wooga.Lambda.Network
     {
         public readonly Maybe<ImmutableList<byte>> Body;
         public readonly Uri Endpoint;
-        public readonly HttpHeaders HttpHeaders;
+        public readonly ImmutableList<HttpHeader> HttpHeaders;
         public readonly HttpMethod HttpMethod;
 
-        public HttpRequest(Uri endpoint, HttpMethod httpMethod, HttpHeaders httpHeaders, Maybe<ImmutableList<byte>> body)
+        public HttpRequest(Uri endpoint, HttpMethod httpMethod, ImmutableList<HttpHeader> httpHeaders, Maybe<ImmutableList<byte>> body)
         {
             Endpoint = endpoint;
             HttpMethod = httpMethod;
@@ -21,16 +21,16 @@ namespace Wooga.Lambda.Network
 
         public static HttpRequest Basic(string url, HttpMethod httpMethod)
         {
-            return new HttpRequest(new Uri(url), httpMethod, HttpHeaders.Create(), Maybe.Nothing<ImmutableList<byte>>());
+            return new HttpRequest(new Uri(url), httpMethod, ImmutableList.Empty<HttpHeader>(), Maybe.Nothing<ImmutableList<byte>>());
         }
     }
 
     public static class HttpRequestExt
     {
-        public static HttpRequest WithHeaders(this HttpRequest httpRequest, HttpHeaders httpHeaders)
+        public static HttpRequest WithHeaders(this HttpRequest httpRequest, ImmutableList<HttpHeader> httpHeaders)
         {
             return new HttpRequest(httpRequest.Endpoint, httpRequest.HttpMethod,
-                httpRequest.HttpHeaders.Concat(httpHeaders),
+                httpRequest.HttpHeaders.AddRange(httpHeaders),
                 httpRequest.Body);
         }
 

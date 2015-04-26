@@ -1,6 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using Wooga.Lambda.Control.Concurrent;
+﻿using Wooga.Lambda.Control;
+using Wooga.Lambda.Control.Monad;
 
 namespace AsyncDownloader
 {
@@ -8,18 +7,20 @@ namespace AsyncDownloader
     {
         private static void Main(string[] args)
         {
-            var failure = Async.Return(() =>
-            {
-                throw new Exception("ga");
-                return "txt";
-            });
+            var just = Maybe.Just("hans")();
+            var not = Maybe.Nothing<string>()();
 
-            var txt = failure.Catch().RunSynchronously();
-            if (txt.IsLeft())
-                Debug.WriteLine(txt.LeftValue().Message); // ga
+            var s1 = Pattern<string>
+                    .Match(just)
+                    .Case<Maybe.Result<string>.Just>(x => "just")
+                    .Case<Maybe.Result<string>.Nothing>(x => "not")
+                    .Run(); // "just"
 
-
-            AsyncBlockSimple.Run();
+            var s2 = Pattern<string>
+                    .Match(not)
+                    .Case<Maybe.Result<string>.Just>(x => "just")
+                    .Case<Maybe.Result<string>.Nothing>(x => "not")
+                    .Run(); // "not"
         }
     }
 }

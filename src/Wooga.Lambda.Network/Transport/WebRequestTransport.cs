@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
 using Wooga.Lambda.Control.Concurrent;
@@ -68,9 +67,9 @@ namespace Wooga.Lambda.Network.Transport
             return () => Encoding.UTF8.GetBytes(new StreamReader(stream).ReadToEnd()).ToImmutableList();
         }
 
-        private static WebHeaderCollection ToWebHeaders(this HttpHeaders self)
+        private static WebHeaderCollection ToWebHeaders(this ImmutableList<HttpHeader> self)
         {
-            return self.Headers.Fold((headers, _, header) =>
+            return self.Fold((headers, header) =>
             {
                 headers.Add(header.Key, header.Value);
                 return headers;
@@ -78,18 +77,9 @@ namespace Wooga.Lambda.Network.Transport
                 new WebHeaderCollection());
         }
 
-        private static HttpWebRequest AppendToRequest(this HttpHeaders self, HttpWebRequest request)
+        private static ImmutableList<HttpHeader> OfWebHeaders(WebHeaderCollection webHeaders)
         {
-            foreach (var h in self.Headers.Values)
-            {
-                request.Headers.Add(h.Key, h.Value);
-            }
-            return request;
-        }
-
-        private static HttpHeaders OfWebHeaders(WebHeaderCollection webHeaders)
-        {
-            return webHeaders.AllKeys.ToImmutableList().Fold((headers, key) => headers.Append(key, webHeaders.Get(key)), HttpHeaders.Create());
+            return webHeaders.AllKeys.ToImmutableList().Fold((headers, key) => headers.Add(new HttpHeader(key, webHeaders.Get(key))), ImmutableList.Empty<HttpHeader>());
         }
     }
 }

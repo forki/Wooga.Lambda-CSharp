@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Wooga.Lambda.Data;
 
@@ -38,7 +37,7 @@ namespace Wooga.Lambda.Parser
         }
 
         public CharStream(char[] chars)
-            : this(new MemoryStream(Encoding.GetBytes(chars.ToArray())))
+            : this(new MemoryStream(Encoding.GetBytes(chars)))
         {
         }
 
