@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>HttpRequestExt - Wooga.Lambda</title>
+    <title>Pattern<'TResult> - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -41,7 +41,7 @@
 
 
 
-<h1>HttpRequestExt</h1>
+<h1>Pattern<'TResult></h1>
 <div class="xmldoc">
 </div>
   <h3>Static members</h3>
@@ -53,25 +53,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '161', 161)" onmouseover="showTip(event, '161', 161)">
-            WithBody(httpRequest, body)
+          <code onmouseout="hideTip(event, '5', 5)" onmouseover="showTip(event, '5', 5)">
+            Match(x)
           </code>
-          <div class="tip" id="161">
-            <strong>Signature:</strong> (httpRequest:HttpRequest * body:ImmutableList&lt;byte&gt;) -&gt; HttpRequest<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '162', 162)" onmouseover="showTip(event, '162', 162)">
-            WithHeaders(httpRequest, httpHeaders)
-          </code>
-          <div class="tip" id="162">
-            <strong>Signature:</strong> (httpRequest:HttpRequest * httpHeaders:ImmutableList&lt;HttpHeader&gt;) -&gt; HttpRequest<br />
+          <div class="tip" id="5">
+            <strong>Signature:</strong> x:&#39;TValue -&gt; MatchCase&lt;&#39;TResult,&#39;TValue&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">

@@ -53,10 +53,38 @@
       <tr>
         <td class="member-name">
 
+          <code onmouseout="hideTip(event, '94', 94)" onmouseover="showTip(event, '94', 94)">
+            Choose(xs, f)
+          </code>
+          <div class="tip" id="94">
+            <strong>Signature:</strong> (xs:ImmutableList&lt;&#39;T&gt; * f:Func&lt;&#39;T,Maybe&lt;&#39;T2&gt;&gt;) -&gt; ImmutableList&lt;&#39;T2&gt;<br />
+                          <strong>Type parameters:</strong> 'T, 'T2          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
           <code onmouseout="hideTip(event, '95', 95)" onmouseover="showTip(event, '95', 95)">
-            Fold(xs, f, a)
+            Find(xs, f)
           </code>
           <div class="tip" id="95">
+            <strong>Signature:</strong> (xs:ImmutableList&lt;&#39;T&gt; * f:Func&lt;&#39;T,bool&gt;) -&gt; Maybe&lt;&#39;T&gt;<br />
+                          <strong>Type parameters:</strong> 'T          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '96', 96)" onmouseover="showTip(event, '96', 96)">
+            Fold(xs, f, a)
+          </code>
+          <div class="tip" id="96">
             <strong>Signature:</strong> (xs:ImmutableList&lt;&#39;T1&gt; * f:Func&lt;&#39;T2,&#39;T1,&#39;T2&gt; * a:&#39;T2) -&gt; &#39;T2<br />
                           <strong>Type parameters:</strong> 'T1, 'T2          </div>
         </td>
@@ -67,10 +95,24 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '96', 96)" onmouseover="showTip(event, '96', 96)">
+          <code onmouseout="hideTip(event, '97', 97)" onmouseover="showTip(event, '97', 97)">
+            Fold(kvs, f, a)
+          </code>
+          <div class="tip" id="97">
+            <strong>Signature:</strong> (kvs:Dictionary&lt;&#39;T1,&#39;T2&gt; * f:Func&lt;&#39;T3,&#39;T1,&#39;T2,&#39;T3&gt; * a:&#39;T3) -&gt; &#39;T3<br />
+                          <strong>Type parameters:</strong> 'T1, 'T2, 'T3          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '98', 98)" onmouseover="showTip(event, '98', 98)">
             Map(xs, f)
           </code>
-          <div class="tip" id="96">
+          <div class="tip" id="98">
             <strong>Signature:</strong> (xs:ImmutableList&lt;&#39;T&gt; * f:Func&lt;&#39;T,&#39;TReturn&gt;) -&gt; ImmutableList&lt;&#39;TReturn&gt;<br />
                           <strong>Type parameters:</strong> 'T, 'TReturn          </div>
         </td>
@@ -81,10 +123,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '97', 97)" onmouseover="showTip(event, '97', 97)">
+          <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
             Take(xs, num)
           </code>
-          <div class="tip" id="97">
+          <div class="tip" id="99">
             <strong>Signature:</strong> (xs:ImmutableList&lt;&#39;T&gt; * num:uint32) -&gt; ImmutableList&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
@@ -95,10 +137,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '98', 98)" onmouseover="showTip(event, '98', 98)">
+          <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
             ToArray(xs)
           </code>
-          <div class="tip" id="98">
+          <div class="tip" id="100">
             <strong>Signature:</strong> xs:ImmutableList&lt;&#39;T&gt; -&gt; &#39;T []<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
@@ -109,10 +151,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '99', 99)" onmouseover="showTip(event, '99', 99)">
+          <code onmouseout="hideTip(event, '101', 101)" onmouseover="showTip(event, '101', 101)">
             ToImmutableList(xs)
           </code>
-          <div class="tip" id="99">
+          <div class="tip" id="101">
             <strong>Signature:</strong> (xs:&#39;T []) -&gt; ImmutableList&lt;&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
@@ -167,7 +209,7 @@
                     <a href="./wooga.lambda.agent.html">Concurrent.Agent</a>
                 </li> -->
                 <li>
-                    <a href="./wooga.lambda.patternmatch.html">Pattern.Match</a>
+                    <a href="./wooga.lambda.patternmatch.html">Control.Pattern</a>
                 </li>
                 <!-- <li>
                     <a href="./wooga.lambda.logging.agent.html">LoggingAgent</a>

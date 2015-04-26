@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>HttpRequestExt - Wooga.Lambda</title>
+    <title>ImmutableTuple<'T1, 'T2, 'T3, 'T4> - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -41,23 +41,47 @@
 
 
 
-<h1>HttpRequestExt</h1>
+<h1>ImmutableTuple<'T1, 'T2, 'T3, 'T4></h1>
 <div class="xmldoc">
+<p>Represent a value triplet.</p>
 </div>
-  <h3>Static members</h3>
+  <h3>Constructors</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Static member</td><td>Description</td></tr>
+      <tr><td>Constructor</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '161', 161)" onmouseover="showTip(event, '161', 161)">
-            WithBody(httpRequest, body)
+          <code onmouseout="hideTip(event, '102', 102)" onmouseover="showTip(event, '102', 102)">
+            new(item1, item2, item3, item4)
           </code>
-          <div class="tip" id="161">
-            <strong>Signature:</strong> (httpRequest:HttpRequest * body:ImmutableList&lt;byte&gt;) -&gt; HttpRequest<br />
+          <div class="tip" id="102">
+            <strong>Signature:</strong> (item1:&#39;T1 * item2:&#39;T2 * item3:&#39;T3 * item4:&#39;T4) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '103', 103)" onmouseover="showTip(event, '103', 103)">
+            Equals(obj)
+          </code>
+          <div class="tip" id="103">
+            <strong>Signature:</strong> obj:obj -&gt; bool<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -67,11 +91,48 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '162', 162)" onmouseover="showTip(event, '162', 162)">
-            WithHeaders(httpRequest, httpHeaders)
+          <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
+            Equals(other)
           </code>
-          <div class="tip" id="162">
-            <strong>Signature:</strong> (httpRequest:HttpRequest * httpHeaders:ImmutableList&lt;HttpHeader&gt;) -&gt; HttpRequest<br />
+          <div class="tip" id="104">
+            <strong>Signature:</strong> other:ImmutableTuple&lt;&#39;T1,&#39;T2,&#39;T3,&#39;T4&gt; -&gt; bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '105', 105)" onmouseover="showTip(event, '105', 105)">
+            GetHashCode()
+          </code>
+          <div class="tip" id="105">
+            <strong>Signature:</strong> unit -&gt; int<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Static members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Static member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '106', 106)" onmouseover="showTip(event, '106', 106)">
+            ImmutableTupleComparer
+          </code>
+          <div class="tip" id="106">
+            <strong>Signature:</strong> IEqualityComparer&lt;ImmutableTuple&lt;&#39;T1,&#39;T2,&#39;T3,&#39;T4&gt;&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">

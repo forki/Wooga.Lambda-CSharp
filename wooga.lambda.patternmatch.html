@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Pattern.Match
+    <title>Working with Pattern.Match
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="Functional utilities for C#"/>
@@ -39,11 +39,135 @@
     <div class="row">
         <div class="span9" id="main">
             
-<h1><a name="Pattern-Match" class="anchor" href="#Pattern-Match">Pattern.Match</a></h1>
+<h1><a name="Working-with-Pattern-Match" class="anchor" href="#Working-with-Pattern-Match">Working with Pattern.Match</a></h1>
 
-<p><a href="http://wooga.github.io/Wooga.Lambda-CSharp/reference/wooga-lambda-control-patternmatching-pattern.html">(API Reference)</a></p>
+<blockquote>
+  <p>In computer science, <strong>pattern matching</strong> is the act of checking
+a given sequence of tokens for the presence of the constituents of some pattern.
+In contrast to pattern recognition, the match usually has to be exact.
+The patterns generally have the form of either sequences or tree structures.
+<em>- Wikipedia</em></p>
+</blockquote>
 
-<p>No documentation yet</p>
+<p>Most of these ideas are stolen from <a href="http://journal.stuffwithstuff.com/"><strong>Bob Nystrom</strong></a> and his blogpost on <a href="http://journal.stuffwithstuff.com/2009/05/13/ml-style-pattern-matching-in-c/"><em>ML-style Pattern Matching in C#</em></a>.
+In contrast to his examples: this version is entirely <strong>expression-based</strong> and does <strong>not yet extract fields</strong> of input values like <strong>monads</strong> or <strong>discriminated unions</strong>. It might be possible to use <strong>tuples</strong> with <strong>structural equality</strong> to allow for matching on <strong>nested data-structures</strong>,
+which would be pretty close to what most functional languages offer.</p>
+
+<h2><a name="Matching-on-equality" class="anchor" href="#Matching-on-equality">Matching on <em>equality</em></a></h2>
+
+<p>In this case the objects <strong>Equals('T)</strong> method is used</p>
+
+<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</td>
+<td class="snippet"><pre lang="cs"><span class="k">var</span> i <span class="o">=</span> Pattern&lt;<span class="k">int</span>&gt;
+        .Match(<span class="s">"hugo"</span>)
+        .Case(<span class="s">"hans"</span>, _ <span class="o">=</span><span class="o">&gt;</span> 1)
+        .Case(<span class="s">"hugo"</span>, _ <span class="o">=</span><span class="o">&gt;</span> 2)
+        .Run(); <span class="c">// 2</span>
+</pre></td></tr></table>
+
+<h2><a name="Case-order-is-important" class="anchor" href="#Case-order-is-important"><em>Case order</em> is important</a></h2>
+
+<p>The first <strong>case</strong> to match the input will yield the result</p>
+
+<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</td>
+<td class="snippet"><pre lang="cs"><span class="k">var</span> i <span class="o">=</span> Pattern&lt;<span class="k">int</span>&gt;
+        .Match(<span class="s">"hugo"</span>)
+        .Case(<span class="s">"hugo"</span>, _ <span class="o">=</span><span class="o">&gt;</span> 1)
+        .Case(<span class="s">"hugo"</span>, _ <span class="o">=</span><span class="o">&gt;</span> 2)
+        .Run(); <span class="c">// 1</span>
+</pre></td></tr></table>
+
+<h2><a name="Providing-a-default-case" class="anchor" href="#Providing-a-default-case">Providing a <em>default case</em></a></h2>
+
+<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</td>
+<td class="snippet"><pre lang="cs"><span class="k">var</span> i <span class="o">=</span> Pattern&lt;<span class="k">int</span>&gt;
+        .Match(<span class="s">"hugo"</span>)
+        .Run(); <span class="c">// this causes an exception</span>
+</pre></td></tr></table>
+
+<p>When no case matches the input an <strong>exception</strong> is thrown,
+providing a <strong>default case</strong> will avoid that</p>
+
+<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</td>
+<td class="snippet"><pre lang="cs"><span class="k">var</span> i <span class="o">=</span> Pattern&lt;<span class="k">int</span>&gt;
+        .Match(<span class="s">"hugo"</span>)
+        .Default(_ <span class="o">=</span><span class="o">&gt;</span> 0)
+        .Run(); <span class="c">// 0</span>
+</pre></td></tr></table>
+
+<h2><a name="Matching-on-predicates" class="anchor" href="#Matching-on-predicates">Matching on <em>predicates</em></a></h2>
+
+<p>Lambdas of the type <strong>'T-&gt;bool</strong> can also be used to match the input</p>
+
+<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</td>
+<td class="snippet"><pre lang="cs">Func&lt;<span class="k">int</span>,Func&lt;<span class="k">string</span>,<span class="k">bool</span>&gt;<span class="o">&gt;</span> p <span class="o">=</span> x <span class="o">=</span><span class="o">&gt;</span> s <span class="o">=</span><span class="o">&gt;</span> s.Length <span class="o">&lt;</span> x;
+<span class="k">var</span> i <span class="o">=</span> Pattern&lt;<span class="k">string</span>&gt;
+        .Match(<span class="s">"hugo"</span>)
+        .Case(s <span class="o">=</span><span class="o">&gt;</span> s.Length <span class="o">=</span><span class="o">=</span> 0, _ <span class="o">=</span><span class="o">&gt;</span> <span class="s">"A"</span>)
+        .Case(p(3), _ <span class="o">=</span><span class="o">&gt;</span> <span class="s">"B"</span>)
+        .Case(p(5), _ <span class="o">=</span><span class="o">&gt;</span> <span class="s">"C"</span>)
+        .Default(_ <span class="o">=</span><span class="o">&gt;</span> <span class="s">"D"</span>)
+        .Run(); <span class="c">// "C"</span>
+</pre></td></tr></table>
+
+<h2><a name="Matching-on-types" class="anchor" href="#Matching-on-types">Matching on <em>types</em></a></h2>
+
+<p>Adding a type parameter allows for sub-type matching of the input</p>
+
+<table class="pre"><tr><td class="lines"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+</td>
+<td class="snippet"><pre lang="cs"><span class="k">var</span> just <span class="o">=</span> Maybe.Just(<span class="s">"hans"</span>)();
+<span class="k">var</span> not <span class="o">=</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;()();
+
+<span class="k">var</span> s1 <span class="o">=</span> Pattern&lt;<span class="k">string</span>&gt;
+        .Match(just)
+        .Case&lt;Maybe.Result&lt;<span class="k">string</span>&gt;.Just&gt;(x <span class="o">=</span><span class="o">&gt;</span> <span class="s">"just"</span>)
+        .Case&lt;Maybe.Result&lt;<span class="k">string</span>&gt;.Nothing&gt;(x <span class="o">=</span><span class="o">&gt;</span> <span class="s">"not"</span>)
+        .Run(); <span class="c">// "just"</span>
+
+<span class="k">var</span> s2 <span class="o">=</span> Pattern&lt;<span class="k">string</span>&gt;
+        .Match(not)
+        .Case&lt;Maybe.Result&lt;<span class="k">string</span>&gt;.Just&gt;(x <span class="o">=</span><span class="o">&gt;</span> <span class="s">"just"</span>)
+        .Case&lt;Maybe.Result&lt;<span class="k">string</span>&gt;.Nothing&gt;(x <span class="o">=</span><span class="o">&gt;</span> <span class="s">"not"</span>)
+        .Run(); <span class="o">/</span><span class="o">/</span> <span class="s">"not"</span></pre></td></tr></table>
 
 
         </div>
@@ -90,7 +214,7 @@
                     <a href="./wooga.lambda.agent.html">Concurrent.Agent</a>
                 </li> -->
                 <li>
-                    <a href="./wooga.lambda.patternmatch.html">Pattern.Match</a>
+                    <a href="./wooga.lambda.patternmatch.html">Control.Pattern</a>
                 </li>
                 <!-- <li>
                     <a href="./wooga.lambda.logging.agent.html">LoggingAgent</a>
