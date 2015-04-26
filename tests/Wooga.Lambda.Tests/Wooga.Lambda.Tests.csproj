@@ -40,7 +40,6 @@
   <ItemGroup>
     <Compile Include="Control\Concurrent\AgentTests.cs" />
     <Compile Include="Control\Concurrent\AsyncTests.cs" />
-    <Compile Include="Data\ArrayExt.cs" />
     <Compile Include="Control\Monad\EitherTests.cs" />
     <Compile Include="Control\Monad\MaybeTests.cs" />
     <Compile Include="Data\TupleTests.cs" />

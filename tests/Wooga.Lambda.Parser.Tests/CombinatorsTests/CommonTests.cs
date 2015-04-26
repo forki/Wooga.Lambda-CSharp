@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Wooga.Lambda.Data;
 using Wooga.Lambda.Parser.Combinators;
 
 namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
@@ -35,31 +36,32 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         {
             var p = Common.Zero<int>().Many1();
             var r = p((new CharStream("a")));
-            Assert.IsInstanceOf<Result<int[]>.Failure>(r);
+            Assert.IsInstanceOf<Result<ImmutableList<int>>.Failure>(r);
         }
 
         [Test]
         public void ManyShouldIncreasePeekWithMultipleMatches()
         {
             var p = Chars.Eq('a').Many();
-            var r = ((Result<char[]>.Success) p((new CharStream("aaaa"))));
-            Assert.IsInstanceOf<Result<char[]>.Success>(r);
+            var r = ((Result<ImmutableList<char>>.Success)p((new CharStream("aaaa"))));
+            Assert.IsInstanceOf<Result<ImmutableList<char>>.Success>(r);
         }
 
         [Test]
         public void ManyShouldProduceSuccessValueWithNoMatch()
         {
             var p = Common.Zero<int>().Many();
-            var r = ((Result<int[]>.Success) p((new CharStream("a"))));
-            Assert.AreEqual(new int[0], r.Value);
+            var r = ((Result<ImmutableList<int>>.Success)p((new CharStream("a"))));
+            Assert.AreEqual(new ImmutableList<int>(), r.Value);
         }
 
         [Test]
         public void ManyShouldProduceSuccessWithMultipleMatches()
         {
             var p = Chars.Eq('a').Many();
-            var r = ((Result<char[]>.Success) p((new CharStream("aaaa"))));
-            Assert.AreEqual(new[] {'a', 'a', 'a', 'a'}, r.Value);
+            var r = ((Result<ImmutableList<char>>.Success)p((new CharStream("aaaa"))));
+            var immutableList = new ImmutableList<char>(new []{ 'a', 'a', 'a', 'a' });
+            Assert.AreEqual(immutableList, r.Value);
         }
 
         [Test]

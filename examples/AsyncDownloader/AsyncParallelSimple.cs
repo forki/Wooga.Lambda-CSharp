@@ -15,7 +15,7 @@ namespace AsyncDownloader
     {
         private static readonly Encoding Enc = Encoding.UTF8;
 
-        public static Async<Wooga.Lambda.Data.ImmutableTuple<Uri, string>> GetHtmlAsync(this HttpClient http, string uri)
+        public static Async<ImmutableTuple<Uri, string>> GetHtmlAsync(this HttpClient http, string uri)
         {
             return () =>
             {
@@ -24,35 +24,35 @@ namespace AsyncDownloader
                     .RunSynchronously()
                     .Body
                     .FromJustOrDefault("", Enc.GetString);
-                return new Wooga.Lambda.Data.ImmutableTuple<Uri, string>(new Uri(uri), body);
+                return new ImmutableTuple<Uri, string>(new Uri(uri), body);
             };
         }
 
         public static void Run()
         {
-            var uris = new[]
-            {
-                "http://giphy.com/",
-                "http://google.com",
-                "http://wooga.com",
-                "http://apple.com",
-                "http://tumblr.com"
-            };
-
-            var http = WebRequestTransport.CreateHttpClient();
-
-            while (uris.Length < 100)
-                uris = uris.Append(uris.Head());
-
-            var reqs = uris.Map(http.GetHtmlAsync);
-
-            var resp = reqs
-                .Parallel()
-                .RunSynchronously();
-
-            var bytesTotal = resp.Fold((a, s) => a + Enc.GetByteCount(s.Item2), 0);
-
-            Debug.WriteLine(bytesTotal + " bytesLoaded");
+//            var uris = new ImmutableList<string>()
+//            {   
+//                "http://giphy.com/",
+//                "http://google.com",
+//                "http://wooga.com",
+//                "http://apple.com",
+//                "http://tumblr.com"
+//            };
+//
+//            var http = WebRequestTransport.CreateHttpClient();
+//
+//            while (uris.Count < 100)
+//                uris = uris.Add(uris.Head());
+//
+//            var reqs = uris.Map(http.GetHtmlAsync);
+//
+//            var resp = reqs
+//                .Parallel()
+//                .RunSynchronously();
+//
+//            var bytesTotal = resp.Fold((a, s) => a + Enc.GetByteCount(s.Item2), 0);
+//
+//            Debug.WriteLine(bytesTotal + " bytesLoaded");
 
             // 12932393 bytes = ~12MB total 
         }

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
@@ -78,32 +78,56 @@ namespace Wooga.Lambda.Control.Concurrent
         /// <typeparam name="T">Type of computation result</typeparam>
         /// <param name="ms">The computations.</param>
         /// <returns>Computation results</returns>
-        public static Async<T[]> Parallel<T>(this Async<T>[] ms)
+        public static Async<Data.ImmutableList<T>> Parallel<T>(this Data.ImmutableList<Async<T>> ms)
         {
+            var empty = new Data.ImmutableList<T>();
             return () =>
             {
-                var results = new List<T>();
-                while (ms.Length > 0)
+                var num = (uint) Math.Min(32, ms.Count); // 64 is maximum here
+                var xs = ms.Take(num);
+                var rest = ms.RemoveRange(0, (int) num);
+                
+                if (num == 0)
                 {
-                    const int limit = 32; // 64 is maximum here
-                    var take = Math.Min(limit, ms.Length);
-                    var ps = ms.RangeSubset(0, take);
-                    ms = ms.RangeSubset(take, ms.Length - take);
-
-                    var handles = ps.Map(m =>
-                    {
-                        var handle = new AsyncEventHandle<T>();
-                        var ma = m.Bind<T, Unit>(v => () => handle.Complete(v));
-                        return new ImmutableTuple<Async<Unit>, AsyncEventHandle<T>>(ma, handle);
-                    });
-
-                    Array.ForEach(handles, ah => ah.Item1.Start());
-                    WaitHandle.WaitAll(handles.Map(ah => (WaitHandle) ah.Item2.DoneEvent));
-                    results.AddRange(handles.Map(ah => ah.Item2.Result()));
+                    return empty;
                 }
-                return results.ToArray();
+
+                var asyncs = xs.Map(x =>
+                {
+                    var handle = new AsyncEventHandle<T>();
+                    x.Bind<T, Unit>(v => () => handle.Complete(v)).Start();
+                    return handle;
+                });
+                WaitHandle.WaitAll(asyncs.Map(ah => (WaitHandle) ah.DoneEvent).ToArray());
+                var ps = asyncs.Map(x => x.Result());
+                return empty.AddRange(rest.Count > 0 ? ps.AddRange(rest.Parallel().RunSynchronously()) : ps);
             };
         }
+
+
+//            return () =>
+//            {
+//                var results = new List<T>();
+//                while (ms.Length > 0)
+//                {
+//                    const int limit = 32; // 64 is maximum here
+//                    var take = Math.Min(limit, ms.Length);
+//                    var ps = ms.RangeSubset(0, take);
+//                    ms = ms.RangeSubset(take, ms.Length - take);
+//
+//                    var handles = ps.Map(m =>
+//                    {
+//                        var handle = new AsyncEventHandle<T>();
+//                        var ma = m.Bind<T, Unit>(v => () => handle.Complete(v));
+//                        return new ImmutableTuple<Async<Unit>, AsyncEventHandle<T>>(ma, handle);
+//                    });
+//
+//                    Array.ForEach(handles, ah => ah.Item1.Start());
+//                    WaitHandle.WaitAll(handles.Map(ah => (WaitHandle) ah.Item2.DoneEvent));
+//                    results.AddRange(handles.Map(ah => ah.Item2.Result()));
+//                }
+//                return results.ToArray();
+//            };
 
         /// <summary>
         ///     Runs the provided asynchronous computation and awaits its result.

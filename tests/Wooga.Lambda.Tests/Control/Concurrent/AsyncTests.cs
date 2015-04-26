@@ -57,16 +57,16 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
             const int wait = 3;
             var rnd = new Random();
             const int num = 1000;
-            var asyncs = new Async<int>[num];
+            var asyncs = new ImmutableList<Async<int>>();
             for (var i = 0; i < num; i++)
             {
-                asyncs[i] = () =>
+                asyncs = asyncs.Add(() =>
                 {
                     Async
                         .Sleep(rnd.Next(10) + wait)
                         .RunSynchronously();
                     return Thread.CurrentThread.ManagedThreadId;
-                };
+                });
             }
 
             var vals = asyncs.Parallel().RunSynchronously();

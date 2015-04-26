@@ -11,21 +11,22 @@ namespace Wooga.Lambda.Logging
     {
         private static volatile LoggingAgent instance;
         private static readonly object syncRoot = new object();
-        private readonly Agent<LogMsg, Func<LogMsg, Unit>[]> _agent;
+        private readonly Agent<LogMsg, ImmutableList<Func<LogMsg, Unit>>> _agent;
 
         private LoggingAgent()
         {
-            _agent = Agent<LogMsg, Func<LogMsg, Unit>[]>.Start(new Func<LogMsg, Unit>[0], (inbox, handlers) =>
+            _agent = Agent<LogMsg, ImmutableList<Func<LogMsg, Unit>>>.Start(new ImmutableList<Func<LogMsg, Unit>>(), (inbox, handlers) =>
             {
                 var msg = inbox.Receive().RunSynchronously();
+                
                 if (msg is LogMsg.AddHandler)
+                    return handlers.Add(((LogMsg.AddHandler) msg).Handler);
+                
+                return handlers.Map(handler =>
                 {
-                    return handlers.Append(((LogMsg.AddHandler) msg).Handler);
-                }
-
-                foreach (var handler in handlers)
                     handler(msg);
-                return handlers;
+                    return handler;
+                });
             });
         }
 

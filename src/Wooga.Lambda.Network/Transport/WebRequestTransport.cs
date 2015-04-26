@@ -88,8 +88,7 @@ namespace Wooga.Lambda.Network.Transport
 
         private static HttpHeaders OfWebHeaders(WebHeaderCollection webHeaders)
         {
-            return webHeaders.AllKeys.Fold((headers, key) => headers.Append(key, webHeaders.Get(key)),
-                HttpHeaders.Create());
+            return new ImmutableList<string>(webHeaders.AllKeys).Fold((headers, key) => headers.Append(key, webHeaders.Get(key)), HttpHeaders.Create());
         }
     }
 }

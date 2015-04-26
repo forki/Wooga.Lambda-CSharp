@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Wooga.Lambda.Data;
 
@@ -37,7 +38,7 @@ namespace Wooga.Lambda.Parser
         }
 
         public CharStream(char[] chars)
-            : this(new MemoryStream(Encoding.GetBytes(chars)))
+            : this(new MemoryStream(Encoding.GetBytes(chars.ToArray())))
         {
         }
 
@@ -56,17 +57,17 @@ namespace Wooga.Lambda.Parser
             return Peek(1)[0];
         }
 
-        public char[] Peek(long count)
+        public ImmutableList<char> Peek(long count)
         {
-            var readChars = new char[0];
+            var readChars = new ImmutableList<char>();
             if (BufferChars(CharsNeeded(count, Position)))
             {
                 memory.Seek(Position.Index, SeekOrigin.Begin);
-                readChars = memoryReader.ReadChars((int) count);
+                readChars = new ImmutableList<char>(memoryReader.ReadChars((int) count));
             }
-            if (readChars.Length < count)
+            if (readChars.Count < count)
             {
-                readChars = readChars.Append(EndOfStream);
+                readChars = readChars.Add(EndOfStream);
             }
             return readChars;
         }
@@ -114,14 +115,14 @@ namespace Wooga.Lambda.Parser
             Column = column;
         }
 
-        public CharStreamPosition PositionAfterChars(char[] cs)
+        public CharStreamPosition PositionAfterChars(ImmutableList<char> cs)
         {
             Predicate<char> f = c => c == '\n' || c == '\r';
-            var n = Array.FindAll(cs, f).Length;
-            var l = Array.FindLastIndex(cs, f);
+            var n = Array.FindAll(cs.ToArray(), f).Length;
+            var l = Array.FindLastIndex(cs.ToArray(), f);
             var line = Line + n;
-            var col = Column + l > -1 ? cs.Length - l : cs.Length;
-            var idx = Index + cs.Length;
+            var col = Column + l > -1 ? cs.Count - l : cs.Count;
+            var idx = Index + cs.Count;
             return new CharStreamPosition(idx, line, col);
         }
     }

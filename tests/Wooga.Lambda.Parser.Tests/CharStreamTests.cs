@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Parser.Tests
 {
@@ -66,7 +67,7 @@ namespace Wooga.Lambda.Parser.Tests
         [Test]
         public void PeekShouldReturnTheFirstCharWithChars()
         {
-            var s = new CharStream(new[] {'x'});
+            var s = new CharStream(new [] { 'x' });
             Assert.AreEqual('x', s.Peek());
         }
 

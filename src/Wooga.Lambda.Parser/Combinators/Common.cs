@@ -40,30 +40,30 @@ namespace Wooga.Lambda.Parser.Combinators
 //            return p.Bind(a => p2.Bind(b => Return<R3,US>(f(a,b))));
 //        }
 
-        private static Parser<R[]> _Many<R>(this Parser<R> p, R[] rs, int min = 0, int max = int.MaxValue)
+        private static Parser<ImmutableList<R>> _Many<R>(this Parser<R> p, ImmutableList<R> rs, int min = 0, int max = int.MaxValue)
         {
             return chars =>
             {
-                var f = p.Bind(value => _Many(p, rs.Append(value), min, max))(chars);
+                var f = p.Bind(value => _Many(p, rs.Add(value), min, max))(chars);
                 return
                     f.MatchResult(
                         value =>
-                            rs.Length > max ? Result.Fail<R[]>("", value.Peek) : Result.Succeed(value.Value, value.Peek),
+                            rs.Count > max ? Result.Fail<ImmutableList<R>>("", value.Peek) : Result.Succeed(value.Value, value.Peek),
                         value =>
-                            rs.Length > max || rs.Length < min
-                                ? Result.Fail<R[]>("", value.Peek)
+                            rs.Count > max || rs.Count < min
+                                ? Result.Fail<ImmutableList<R>>("", value.Peek)
                                 : Result.Succeed(rs, chars.Position));
             };
         }
 
-        public static Parser<R[]> Many<R>(this Parser<R> p)
+        public static Parser<ImmutableList<R>> Many<R>(this Parser<R> p)
         {
-            return _Many(p, new R[0]);
+            return _Many(p, new ImmutableList<R>());
         }
 
-        public static Parser<R[]> Many1<R>(this Parser<R> p)
+        public static Parser<ImmutableList<R>> Many1<R>(this Parser<R> p)
         {
-            return _Many(p, new R[0], 1, 1);
+            return _Many(p, new ImmutableList<R>(), 1, 1);
         }
     }
 }

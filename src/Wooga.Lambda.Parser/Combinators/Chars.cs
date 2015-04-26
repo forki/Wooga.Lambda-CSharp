@@ -37,7 +37,7 @@ namespace Wooga.Lambda.Parser.Combinators
 
         public static Parser<char> Newline()
         {
-            return AnyOf(new[] {'\n', '\r'});
+            return AnyOf(new ImmutableList<char>{'\n', '\r'});
         }
 
         public static Parser<char> Any()
@@ -45,19 +45,19 @@ namespace Wooga.Lambda.Parser.Combinators
             return Satisfy(x => true);
         }
 
-        public static Parser<char> AnyOf(char[] cs)
+        public static Parser<char> AnyOf(ImmutableList<char> cs)
         {
-            return Satisfy(x => Array.Exists(cs, c => c.Equals(x)));
+            return Satisfy(cs.Contains);
         }
 
-        public static Parser<char> NoneOf(char[] cs)
+        public static Parser<char> NoneOf(ImmutableList<char> cs)
         {
-            return Satisfy(x => Array.TrueForAll(cs, c => !c.Equals(x)));
+            return Satisfy(x => !cs.Contains(x));
         }
 
-        public static Parser<char[]> SeqOf(char[] cs)
+        public static Parser<ImmutableList<char>> SeqOf(ImmutableList<char> cs)
         {
-            return cs.Fold((p, c) => p.Bind(r => Eq(c).Then(r.Append(c))), Common.Return(new char[0]));
+            return cs.Fold((p, c) => p.Bind(r => Eq(c).Then(r.Add(c))), Common.Return(new ImmutableList<char>()));
         }
     }
 }

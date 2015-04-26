@@ -56,6 +56,10 @@
       <Project>{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}</Project>
       <Name>Wooga.Lambda.Parser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Wooga.Lambda\Wooga.Lambda.csproj">
+      <Project>{03231AC8-DCA3-49E4-89CD-E68BE439C2A4}</Project>
+      <Name>Wooga.Lambda</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
