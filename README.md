@@ -24,15 +24,13 @@ The library comes with ~~comprehensible~~ documentation and includes ~~several~~
 
  * [Documentation](http://wooga.github.io/Wooga.Lambda-CSharp)
 
- * [Have a look at the **Maybe** tutorial to get started](http://wooga.github.io/wooga.lambda.maybe.html)
+ * [Have a look at the **Maybe** tutorial to get started](http://wooga.github.io/Wooga.Lambda-CSharp/wooga.lambda.maybe.html)
 
- * [If you know that already, how about **Either**?](http://wooga.github.io/wooga.lambda.either.html)
+ * [If you know that already, how about **Either**?](http://wooga.github.io/Wooga.Lambda-CSharp/wooga.lambda.either.html)
 
- * [Have a peek at a rather small slide deck](http://wooga.github.io/presentation_04_2015/index.html)
+ * [Have a peek at a rather small slide deck](http://wooga.github.io/Wooga.Lambda-CSharp/presentation_04_2015/index.html)
 
- * [Check out the API Reference](http://wooga.github.io/reference/index.html)
-
- * [Or straight to the source-code](http://github.com/wooga/Wooga.Lambda-CSharp)
+ * [Check out the API Reference](http://wooga.github.io/Wooga.Lambda-CSharp/reference/index.html)
 
 Contributing and copyright
 --------------------------

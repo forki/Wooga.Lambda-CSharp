@@ -1,3 +1,9 @@
+#### 0.3.3 - April 26 2015
+* Fighting Fake :(
+
+#### 0.3.2 - April 26 2015
+* Fixed NuGet packages and github releases
+
 #### 0.3.1 - April 26 2015
 * Fixed NuGet packages and github releases
 
