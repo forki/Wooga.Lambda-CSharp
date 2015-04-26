@@ -31,11 +31,11 @@ let project = "Wooga.Lambda"
 
 // Short summary of the project
 // (used as description in AssemblyInfo and as a short summary for NuGet package)
-let summary = "Functional utilities for C#"
+let summary = "Functional primitives for Unity3D"
 
 // Longer description of the project
 // (used as a description for NuGet package; line breaks are automatically cleaned up)
-let description = "Functional utilites for C# - inspired by csharp-monads, Haskell & F# - compatible with Unity3D"
+let description = "Functional primitives for Unity3D - inspired by csharp-monads, Haskell & F#"
 
 // List of author names (for NuGet package)
 let authors = [ "devboy" ]

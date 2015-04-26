@@ -11,9 +11,7 @@ namespace Wooga.Lambda.Network.Transport
     public static class WebRequestTransport
     {
         /// <summary>   Creates HTTP client. </summary>
-        ///
         /// <returns>   The new HTTP client. </returns>
-
         public static HttpClient CreateHttpClient()
         {
             return new HttpClient((c, r) => r.RequestHttpResponse().RunSynchronously());
@@ -84,7 +82,10 @@ namespace Wooga.Lambda.Network.Transport
 
         private static ImmutableList<HttpHeader> OfWebHeaders(WebHeaderCollection webHeaders)
         {
-            return webHeaders.AllKeys.ToImmutableList().Fold((headers, key) => headers.Add(new HttpHeader(key, webHeaders.Get(key))), ImmutableList.Empty<HttpHeader>());
+            return
+                webHeaders.AllKeys.ToImmutableList()
+                    .Fold((headers, key) => headers.Add(new HttpHeader(key, webHeaders.Get(key))),
+                        ImmutableList.Empty<HttpHeader>());
         }
     }
 }

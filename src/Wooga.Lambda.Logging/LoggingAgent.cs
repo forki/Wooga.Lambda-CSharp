@@ -15,19 +15,20 @@ namespace Wooga.Lambda.Logging
 
         private LoggingAgent()
         {
-            _agent = Agent<LogMsg, ImmutableList<Func<LogMsg, Unit>>>.Start(new ImmutableList<Func<LogMsg, Unit>>(), (inbox, handlers) =>
-            {
-                var msg = inbox.Receive().RunSynchronously();
-                
-                if (msg is LogMsg.AddHandler)
-                    return handlers.Add(((LogMsg.AddHandler) msg).Handler);
-                
-                return handlers.Map(handler =>
+            _agent = Agent<LogMsg, ImmutableList<Func<LogMsg, Unit>>>.Start(new ImmutableList<Func<LogMsg, Unit>>(),
+                (inbox, handlers) =>
                 {
-                    handler(msg);
-                    return handler;
+                    var msg = inbox.Receive().RunSynchronously();
+
+                    if (msg is LogMsg.AddHandler)
+                        return handlers.Add(((LogMsg.AddHandler) msg).Handler);
+
+                    return handlers.Map(handler =>
+                    {
+                        handler(msg);
+                        return handler;
+                    });
                 });
-            });
         }
 
         public static LoggingAgent SharedAgent

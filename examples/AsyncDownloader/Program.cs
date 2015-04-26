@@ -4,6 +4,7 @@ using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 using Wooga.Lambda.Storage;
+using Wooga.Lambda.Storage.Apis;
 
 namespace AsyncDownloader
 {

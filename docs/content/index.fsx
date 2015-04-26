@@ -6,23 +6,38 @@
 (**
 # Functional primitives for Unity3D
 
-This library written in C# library
+*Unity3D* being so far behind the *.NET* and *Mono* world,
+this library is an attempt at backporting some features found in more
+recent runtimes and *C# libraries* as well as pick up and harness useful
+ideas and patterns from other languages and/or programming paradigms.
 
 
-which are heavily inspired by [csharp-monads](https://github.com/louthy/csharp-monad), [Haskell](https://www.haskell.org/) & [F#](http://fsharp.org).
+Immutable and persistent data-structures, parser-combinators,
+monads for concurrency and control-flow
+as well as network and filesystem utilities can already be found here
+thanks to the heavy inspiration by
+[csharp-monads](https://github.com/louthy/csharp-monad), [Haskell](https://www.haskell.org/) & [F#](http://fsharp.org).
 
-With Unity3D being still
+
+It's all still far from feature complete,
+but as it turns out C# is actually not so bad for functional programming:
+parametric-polymorphism, delegates, higher-order functions/lambdas, type-inference and extension-methods are quite a good fit.
+
 
 Samples & documentation
 -----------------------
 
-The library comes with comprehensible documentation and includes several tutorials.
+The library comes with ~~comprehensible~~ documentation and includes ~~several~~ tutorials.
 
- * [Have a look at the Maybe tutorial to get started](wooga.lambda.maybe.html)
+ * [Have a look at the **Maybe** tutorial to get started](wooga.lambda.maybe.html)
 
- * [Check out these Presentation Slides](presentation_04_2015/index.html)
+ * [If you know that already, how about **Either**?](wooga.lambda.either.html)
+
+ * [Have a peek at a rather small slide deck](presentation_04_2015/index.html)
 
  * [Check out the API Reference](reference/index.html)
+
+ * [Or straight to the source-code](http://github.com/wooga/Wooga.Lambda-CSharp)
 
 Contributing and copyright
 --------------------------

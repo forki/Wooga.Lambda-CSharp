@@ -1,6 +1,5 @@
 ﻿using System;
 using Wooga.Lambda.Control.Monad;
-using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control
 {
@@ -24,7 +23,7 @@ namespace Wooga.Lambda.Control
 
             public MatchCase<TValue> Case(Func<TValue, bool> t, Func<TValue, TResult> f)
             {
-                return new MatchCase<TValue>(()=> _m().Bind(y=> Either.When(()=> !t(y),()=> f(y),()=> y)));
+                return new MatchCase<TValue>(() => _m().Bind(y => Either.When(() => !t(y), () => f(y), () => y)));
             }
 
             public MatchCase<TValue> Case(TValue x, Func<TValue, TResult> f)
@@ -34,7 +33,7 @@ namespace Wooga.Lambda.Control
 
             public MatchCase<TValue> Case<TValueType>(Func<TValueType, TResult> f) where TValueType : TValue
             {
-                return Case(v => v is TValueType, x=> f((TValueType) x));
+                return Case(v => v is TValueType, x => f((TValueType) x));
             }
 
             public MatchCase<TValue> Default(Func<TValue, TResult> f)

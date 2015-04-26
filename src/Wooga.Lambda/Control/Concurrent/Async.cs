@@ -77,9 +77,9 @@ namespace Wooga.Lambda.Control.Concurrent
         /// <typeparam name="T">Type of computation result</typeparam>
         /// <param name="ms">The computations.</param>
         /// <returns>Computation results</returns>
-        public static Async<Data.ImmutableList<T>> Parallel<T>(this Data.ImmutableList<Async<T>> ms)
+        public static Async<ImmutableList<T>> Parallel<T>(this ImmutableList<Async<T>> ms)
         {
-            var empty = new Data.ImmutableList<T>();
+            var empty = new ImmutableList<T>();
             return () =>
             {
                 var num = (uint) Math.Min(32, ms.Count); // 64 is maximum here

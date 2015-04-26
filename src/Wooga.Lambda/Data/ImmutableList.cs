@@ -10,7 +10,7 @@ namespace Wooga.Lambda.Data
     {
         public static ImmutableList<T> Take<T>(this ImmutableList<T> xs, uint num)
         {
-            return new ImmutableList<T>(Enumerable.Take(xs,(int) num));
+            return new ImmutableList<T>(xs.Take((int) num));
         }
 
         public static ImmutableList<TReturn> Map<T, TReturn>(this ImmutableList<T> xs, Func<T, TReturn> f)
@@ -33,13 +33,13 @@ namespace Wooga.Lambda.Data
 
         public static ImmutableList<T2> Choose<T, T2>(this ImmutableList<T> xs, Func<T, Maybe<T2>> f)
         {
-            return xs.Fold((a,x) => f(x).FromJustOrDefault(a, a.Add), ImmutableList.Empty<T2>());
+            return xs.Fold((a, x) => f(x).FromJustOrDefault(a, a.Add), ImmutableList.Empty<T2>());
         }
 
-        public static Maybe<T> Find<T>(this ImmutableList<T> xs, Func<T,bool> f)
+        public static Maybe<T> Find<T>(this ImmutableList<T> xs, Func<T, bool> f)
         {
             return Either.Try(xs.Choose(x => f(x) ? Maybe.Just(x) : Maybe.Nothing<T>()).First)
-                         .FromEither(_ => Maybe.Nothing<T>(), Maybe.Just);
+                .FromEither<Exception, T, Maybe<T>>(_ => Maybe.Nothing<T>(), Maybe.Just);
         }
 
         public static T3 Fold<T1, T2, T3>(this Dictionary<T1, T2> kvs, Func<T3, T1, T2, T3> f, T3 a)
@@ -65,7 +65,7 @@ namespace Wooga.Lambda.Data
 
         public static ImmutableList<T> Create<T>(IEnumerable<T> xs)
         {
-            return new ImmutableList<T>(xs);    
+            return new ImmutableList<T>(xs);
         }
     }
 

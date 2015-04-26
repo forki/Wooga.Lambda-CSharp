@@ -1,4 +1,4 @@
-FileSystem
+Storage.Api
 ======================
 
 [(API Reference)](http://wooga.github.io/Wooga.Lambda-CSharp/reference/wooga-lambda-filesystem-filesystem.html)

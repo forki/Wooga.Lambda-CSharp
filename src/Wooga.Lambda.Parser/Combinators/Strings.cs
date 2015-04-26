@@ -2,6 +2,7 @@ using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Parser.Combinators
 {
+    /// <summary>   A strings. </summary>
     public static class Strings
     {
         private static Parser<string> ToStringsParser(this Parser<ImmutableList<char>> p)
@@ -14,6 +15,9 @@ namespace Wooga.Lambda.Parser.Combinators
             return p.Bind(c => Common.Return(c.ToString()));
         }
 
+        /// <summary>   Eqs. </summary>
+        /// <param name="s">    The string. </param>
+        /// <returns>   A Parser&lt;string&gt; </returns>
         public static Parser<string> Eq(string s)
         {
             return Chars.SeqOf(new ImmutableList<char>(s.ToCharArray())).ToStringsParser();

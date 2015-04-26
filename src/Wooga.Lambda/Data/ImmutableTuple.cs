@@ -6,7 +6,7 @@ namespace Wooga.Lambda.Data
     {
         public static ImmutableTuple<T1, T2> Create<T1, T2>(T1 x, T2 y)
         {
-            return new ImmutableTuple<T1, T2>(x,y);    
+            return new ImmutableTuple<T1, T2>(x, y);
         }
 
         public static ImmutableTuple<T1, T2, T3> Create<T1, T2, T3>(T1 x, T2 y, T3 z)
@@ -27,6 +27,9 @@ namespace Wooga.Lambda.Data
     /// <typeparam name="T2">The type of the second value.</typeparam>
     public struct ImmutableTuple<T1, T2>
     {
+        private static readonly IEqualityComparer<ImmutableTuple<T1, T2>> Item1Item2ComparerInstance =
+            new Item1Item2EqualityComparer();
+
         public readonly T1 Item1;
         public readonly T2 Item2;
 
@@ -36,9 +39,15 @@ namespace Wooga.Lambda.Data
             Item2 = item2;
         }
 
+        public static IEqualityComparer<ImmutableTuple<T1, T2>> Item1Item2Comparer
+        {
+            get { return Item1Item2ComparerInstance; }
+        }
+
         public bool Equals(ImmutableTuple<T1, T2> other)
         {
-            return EqualityComparer<T1>.Default.Equals(Item1, other.Item1) && EqualityComparer<T2>.Default.Equals(Item2, other.Item2);
+            return EqualityComparer<T1>.Default.Equals(Item1, other.Item1) &&
+                   EqualityComparer<T2>.Default.Equals(Item2, other.Item2);
         }
 
         public override bool Equals(object obj)
@@ -51,7 +60,8 @@ namespace Wooga.Lambda.Data
         {
             unchecked
             {
-                return (EqualityComparer<T1>.Default.GetHashCode(Item1)*397) ^ EqualityComparer<T2>.Default.GetHashCode(Item2);
+                return (EqualityComparer<T1>.Default.GetHashCode(Item1)*397) ^
+                       EqualityComparer<T2>.Default.GetHashCode(Item2);
             }
         }
 
@@ -59,23 +69,18 @@ namespace Wooga.Lambda.Data
         {
             public bool Equals(ImmutableTuple<T1, T2> x, ImmutableTuple<T1, T2> y)
             {
-                return EqualityComparer<T1>.Default.Equals(x.Item1, y.Item1) && EqualityComparer<T2>.Default.Equals(x.Item2, y.Item2);
+                return EqualityComparer<T1>.Default.Equals(x.Item1, y.Item1) &&
+                       EqualityComparer<T2>.Default.Equals(x.Item2, y.Item2);
             }
 
             public int GetHashCode(ImmutableTuple<T1, T2> obj)
             {
                 unchecked
                 {
-                    return (EqualityComparer<T1>.Default.GetHashCode(obj.Item1)*397) ^ EqualityComparer<T2>.Default.GetHashCode(obj.Item2);
+                    return (EqualityComparer<T1>.Default.GetHashCode(obj.Item1)*397) ^
+                           EqualityComparer<T2>.Default.GetHashCode(obj.Item2);
                 }
             }
-        }
-
-        private static readonly IEqualityComparer<ImmutableTuple<T1, T2>> Item1Item2ComparerInstance = new Item1Item2EqualityComparer();
-
-        public static IEqualityComparer<ImmutableTuple<T1, T2>> Item1Item2Comparer
-        {
-            get { return Item1Item2ComparerInstance; }
         }
     }
 
@@ -87,6 +92,9 @@ namespace Wooga.Lambda.Data
     /// <typeparam name="T3">The type of the third value.</typeparam>
     public struct ImmutableTuple<T1, T2, T3>
     {
+        private static readonly IEqualityComparer<ImmutableTuple<T1, T2, T3>> Item1Item2Item3ComparerInstance =
+            new Item1Item2Item3EqualityComparer();
+
         public readonly T1 Item1;
         public readonly T2 Item2;
         public readonly T3 Item3;
@@ -98,9 +106,16 @@ namespace Wooga.Lambda.Data
             Item3 = item3;
         }
 
+        public static IEqualityComparer<ImmutableTuple<T1, T2, T3>> Item1Item2Item3Comparer
+        {
+            get { return Item1Item2Item3ComparerInstance; }
+        }
+
         public bool Equals(ImmutableTuple<T1, T2, T3> other)
         {
-            return EqualityComparer<T1>.Default.Equals(Item1, other.Item1) && EqualityComparer<T2>.Default.Equals(Item2, other.Item2) && EqualityComparer<T3>.Default.Equals(Item3, other.Item3);
+            return EqualityComparer<T1>.Default.Equals(Item1, other.Item1) &&
+                   EqualityComparer<T2>.Default.Equals(Item2, other.Item2) &&
+                   EqualityComparer<T3>.Default.Equals(Item3, other.Item3);
         }
 
         public override bool Equals(object obj)
@@ -124,7 +139,9 @@ namespace Wooga.Lambda.Data
         {
             public bool Equals(ImmutableTuple<T1, T2, T3> x, ImmutableTuple<T1, T2, T3> y)
             {
-                return EqualityComparer<T1>.Default.Equals(x.Item1, y.Item1) && EqualityComparer<T2>.Default.Equals(x.Item2, y.Item2) && EqualityComparer<T3>.Default.Equals(x.Item3, y.Item3);
+                return EqualityComparer<T1>.Default.Equals(x.Item1, y.Item1) &&
+                       EqualityComparer<T2>.Default.Equals(x.Item2, y.Item2) &&
+                       EqualityComparer<T3>.Default.Equals(x.Item3, y.Item3);
             }
 
             public int GetHashCode(ImmutableTuple<T1, T2, T3> obj)
@@ -138,13 +155,6 @@ namespace Wooga.Lambda.Data
                 }
             }
         }
-
-        private static readonly IEqualityComparer<ImmutableTuple<T1, T2, T3>> Item1Item2Item3ComparerInstance = new Item1Item2Item3EqualityComparer();
-
-        public static IEqualityComparer<ImmutableTuple<T1, T2, T3>> Item1Item2Item3Comparer
-        {
-            get { return Item1Item2Item3ComparerInstance; }
-        }
     }
 
     /// <summary>
@@ -156,6 +166,9 @@ namespace Wooga.Lambda.Data
     /// <typeparam name="T4">The type of the third value.</typeparam>
     public struct ImmutableTuple<T1, T2, T3, T4>
     {
+        private static readonly IEqualityComparer<ImmutableTuple<T1, T2, T3, T4>> ImmutableTupleComparerInstance =
+            new ImmutableTupleEqualityComparer();
+
         public readonly T1 Item1;
         public readonly T2 Item2;
         public readonly T3 Item3;
@@ -169,6 +182,11 @@ namespace Wooga.Lambda.Data
             Item4 = item4;
         }
 
+        public static IEqualityComparer<ImmutableTuple<T1, T2, T3, T4>> ImmutableTupleComparer
+        {
+            get { return ImmutableTupleComparerInstance; }
+        }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -177,7 +195,10 @@ namespace Wooga.Lambda.Data
 
         public bool Equals(ImmutableTuple<T1, T2, T3, T4> other)
         {
-            return EqualityComparer<T1>.Default.Equals(Item1, other.Item1) && EqualityComparer<T2>.Default.Equals(Item2, other.Item2) && EqualityComparer<T3>.Default.Equals(Item3, other.Item3) && EqualityComparer<T4>.Default.Equals(Item4, other.Item4);
+            return EqualityComparer<T1>.Default.Equals(Item1, other.Item1) &&
+                   EqualityComparer<T2>.Default.Equals(Item2, other.Item2) &&
+                   EqualityComparer<T3>.Default.Equals(Item3, other.Item3) &&
+                   EqualityComparer<T4>.Default.Equals(Item4, other.Item4);
         }
 
         public override int GetHashCode()
@@ -196,7 +217,10 @@ namespace Wooga.Lambda.Data
         {
             public bool Equals(ImmutableTuple<T1, T2, T3, T4> x, ImmutableTuple<T1, T2, T3, T4> y)
             {
-                return EqualityComparer<T1>.Default.Equals(x.Item1, y.Item1) && EqualityComparer<T2>.Default.Equals(x.Item2, y.Item2) && EqualityComparer<T3>.Default.Equals(x.Item3, y.Item3) && EqualityComparer<T4>.Default.Equals(x.Item4, y.Item4);
+                return EqualityComparer<T1>.Default.Equals(x.Item1, y.Item1) &&
+                       EqualityComparer<T2>.Default.Equals(x.Item2, y.Item2) &&
+                       EqualityComparer<T3>.Default.Equals(x.Item3, y.Item3) &&
+                       EqualityComparer<T4>.Default.Equals(x.Item4, y.Item4);
             }
 
             public int GetHashCode(ImmutableTuple<T1, T2, T3, T4> obj)
@@ -210,13 +234,6 @@ namespace Wooga.Lambda.Data
                     return hashCode;
                 }
             }
-        }
-
-        private static readonly IEqualityComparer<ImmutableTuple<T1, T2, T3, T4>> ImmutableTupleComparerInstance = new ImmutableTupleEqualityComparer();
-
-        public static IEqualityComparer<ImmutableTuple<T1, T2, T3, T4>> ImmutableTupleComparer
-        {
-            get { return ImmutableTupleComparerInstance; }
         }
     }
 }

@@ -10,8 +10,6 @@ Most of these ideas are stolen from [**Bob Nystrom**](http://journal.stuffwithst
 In contrast to his examples: this version is entirely **expression-based** and does **not yet extract fields** of input values like **monads** or **discriminated unions**. It might be possible to use **tuples** with **structural equality** to allow for matching on **nested data-structures**,
 which would be pretty close to what most functional languages offer.
 
-
-
 ## Matching on *equality*
 
 In this case the objects **Equals('T)** method is used

@@ -11,7 +11,8 @@ namespace Wooga.Lambda.Network
         public readonly ImmutableList<HttpHeader> HttpHeaders;
         public readonly HttpMethod HttpMethod;
 
-        public HttpRequest(Uri endpoint, HttpMethod httpMethod, ImmutableList<HttpHeader> httpHeaders, Maybe<ImmutableList<byte>> body)
+        public HttpRequest(Uri endpoint, HttpMethod httpMethod, ImmutableList<HttpHeader> httpHeaders,
+            Maybe<ImmutableList<byte>> body)
         {
             Endpoint = endpoint;
             HttpMethod = httpMethod;
@@ -21,7 +22,8 @@ namespace Wooga.Lambda.Network
 
         public static HttpRequest Basic(string url, HttpMethod httpMethod)
         {
-            return new HttpRequest(new Uri(url), httpMethod, ImmutableList.Empty<HttpHeader>(), Maybe.Nothing<ImmutableList<byte>>());
+            return new HttpRequest(new Uri(url), httpMethod, ImmutableList.Empty<HttpHeader>(),
+                Maybe.Nothing<ImmutableList<byte>>());
         }
     }
 

@@ -1,22 +1,40 @@
-﻿using System;
+﻿// file:	CharStream.cs
+//
+// summary:	Implements the character stream class
+
+using System;
 using System.IO;
 using System.Text;
 using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Parser
 {
+    /// <summary>   Parsers the given characters. </summary>
+    /// <typeparam name="T">    Generic type parameter. </typeparam>
+    /// <param name="chars">    The characters. </param>
+    /// <returns>   A Result&lt;T&gt; </returns>
     public delegate Result<T> Parser<T>(CharStream chars);
 
+    /// <summary>   A character stream. This class cannot be inherited. </summary>
     public sealed class CharStream
     {
+        /// <summary>   The encoding. </summary>
         public static readonly Encoding Encoding = Encoding.UTF8;
+
+        /// <summary>   The end of stream. </summary>
         public static readonly char EndOfStream = '\uFFFF';
+
         private readonly MemoryStream memory;
         private readonly BinaryReader memoryReader;
         private readonly BinaryWriter memoryWriter;
+
+        /// <summary>   The position. </summary>
         public readonly CharStreamPosition Position;
+
         private readonly BinaryReader sourceReader;
 
+        /// <summary>   Constructor. </summary>
+        /// <param name="source">   Source for the. </param>
         public CharStream(Stream source)
         {
             sourceReader = new BinaryReader(source, Encoding);
@@ -36,26 +54,38 @@ namespace Wooga.Lambda.Parser
             Position = position;
         }
 
+        /// <summary>   Constructor. </summary>
+        /// <param name="chars">    The characters. </param>
         public CharStream(char[] chars)
             : this(new MemoryStream(Encoding.GetBytes(chars)))
         {
         }
 
+        /// <summary>   Constructor. </summary>
+        /// <param name="text"> The text. </param>
         public CharStream(string text)
             : this(new MemoryStream(Encoding.GetBytes(text.ToCharArray())))
         {
         }
 
+        /// <summary>   At position. </summary>
+        /// <param name="position"> The position. </param>
+        /// <returns>   A CharStream. </returns>
         public CharStream AtPosition(CharStreamPosition position)
         {
             return new CharStream(memory, memoryReader, memoryWriter, sourceReader, position);
         }
 
+        /// <summary>   Returns the top-of-stack object without removing it. </summary>
+        /// <returns>   The current top-of-stack object. </returns>
         public char Peek()
         {
             return Peek(1)[0];
         }
 
+        /// <summary>   Returns the top-of-stack object without removing it. </summary>
+        /// <param name="count">    Number of. </param>
+        /// <returns>   The current top-of-stack object. </returns>
         public ImmutableList<char> Peek(long count)
         {
             var readChars = new ImmutableList<char>();
@@ -71,6 +101,9 @@ namespace Wooga.Lambda.Parser
             return readChars;
         }
 
+        /// <summary>   Peek position. </summary>
+        /// <param name="count">    Number of. </param>
+        /// <returns>   A CharStreamPosition. </returns>
         public CharStreamPosition PeekPosition(long count)
         {
             return Position.PositionAfterChars(Peek(count));
@@ -101,12 +134,22 @@ namespace Wooga.Lambda.Parser
         }
     }
 
+    /// <summary>   A character stream position. </summary>
     public struct CharStreamPosition
     {
+        /// <summary>   The column. </summary>
         public readonly long Column;
+
+        /// <summary>   Zero-based index of the. </summary>
         public readonly long Index;
+
+        /// <summary>   The line. </summary>
         public readonly long Line;
 
+        /// <summary>   Constructor. </summary>
+        /// <param name="index">    Zero-based index of the. </param>
+        /// <param name="line">     The line. </param>
+        /// <param name="column">   The column. </param>
         public CharStreamPosition(long index, long line, long column)
         {
             Index = index;
@@ -114,6 +157,9 @@ namespace Wooga.Lambda.Parser
             Column = column;
         }
 
+        /// <summary>   Position after characters. </summary>
+        /// <param name="cs">   The create struct. </param>
+        /// <returns>   A CharStreamPosition. </returns>
         public CharStreamPosition PositionAfterChars(ImmutableList<char> cs)
         {
             Predicate<char> f = c => c == '\n' || c == '\r';
