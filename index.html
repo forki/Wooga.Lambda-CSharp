@@ -41,20 +41,31 @@
             
 <h1><a name="Functional-primitives-for-Unity3D" class="anchor" href="#Functional-primitives-for-Unity3D">Functional primitives for Unity3D</a></h1>
 
-<p>This library written in C# library</p>
+<p><em>Unity3D</em> being so far behind the <em>.NET</em> and <em>Mono</em> world,
+this library is an attempt at backporting some features found in more
+recent runtimes and <em>C# libraries</em> as well as pick up and harness useful
+ideas and patterns from other languages and/or programming paradigms.</p>
 
-<p>which are heavily inspired by <a href="https://github.com/louthy/csharp-monad">csharp-monads</a>, <a href="https://www.haskell.org/">Haskell</a> &amp; <a href="http://fsharp.org">F#</a>.</p>
+<p>Immutable and persistent data-structures, parser-combinators,
+monads for concurrency and control-flow
+as well as network and filesystem utilities can already be found here
+thanks to the heavy inspiration by
+<a href="https://github.com/louthy/csharp-monad">csharp-monads</a>, <a href="https://www.haskell.org/">Haskell</a> &amp; <a href="http://fsharp.org">F#</a>.</p>
 
-<p>With Unity3D being still</p>
+<p>It's all still far from feature complete,
+but as it turns out C# is actually not so bad for functional programming:
+parametric-polymorphism, delegates, higher-order functions/lambdas, type-inference and extension-methods are quite a good fit.</p>
 
 <h2><a name="Samples-amp-documentation" class="anchor" href="#Samples-amp-documentation">Samples &amp; documentation</a></h2>
 
-<p>The library comes with comprehensible documentation and includes several tutorials.</p>
+<p>The library comes with ~~comprehensible~~ documentation and includes ~~several~~ tutorials.</p>
 
 <ul>
-<li><p><a href="wooga.lambda.maybe.html">Have a look at the Maybe tutorial to get started</a></p></li>
-<li><p><a href="presentation_04_2015/index.html">Check out these Presentation Slides</a></p></li>
+<li><p><a href="wooga.lambda.maybe.html">Have a look at the <strong>Maybe</strong> tutorial to get started</a></p></li>
+<li><p><a href="wooga.lambda.either.html">If you know that already, how about <strong>Either</strong>?</a></p></li>
+<li><p><a href="presentation_04_2015/index.html">Have a peek at a rather small slide deck</a></p></li>
 <li><p><a href="reference/index.html">Check out the API Reference</a></p></li>
+<li><p><a href="http://github.com/wooga/Wooga.Lambda-CSharp">Or straight to the source-code</a></p></li>
 </ul>
 
 <h2><a name="Contributing-and-copyright" class="anchor" href="#Contributing-and-copyright">Contributing and copyright</a></h2>
