@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8"/>
     <title>Either - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -12,26 +12,32 @@
     <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
 
-    <link type="text/css" rel="stylesheet" href="/Wooga.Lambda-CSharp/content/style.css" />
-    <script type="text/javascript" src="/Wooga.Lambda-CSharp/content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="./content/style.css"/>
+    <script type="text/javascript" src="./content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-  </head>
-  <body>
-    <div class="container">
-      <div class="masthead">
+</head>
+<body>
+<div class="container">
+    <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li><a href="http://wooga.com">wooga.com</a></li>
-          <li><a href="http://github.com/wooga/Wooga.Lambda-CSharp">github page</a></li>
+            <li>
+                <a href="http://wooga.com">wooga.com</a>
+            </li>
+            <li>
+                <a href="http://github.com/wooga/Wooga.Lambda-CSharp">github page</a>
+            </li>
         </ul>
-        <h3 class="muted"><a href="/Wooga.Lambda-CSharp/index.html">Wooga.Lambda</a></h3>
-      </div>
-      <hr />
-      <div class="row">
+        <h3 class="muted">
+            <a href="./index.html">Wooga.Lambda</a>
+        </h3>
+    </div>
+    <hr/>
+    <div class="row">
         <div class="span9" id="main">
-          
+            
 
 
 
@@ -47,10 +53,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '34', 34)" onmouseover="showTip(event, '34', 34)">
+          <code onmouseout="hideTip(event, '39', 39)" onmouseover="showTip(event, '39', 39)">
             Bind(m, f)
           </code>
-          <div class="tip" id="34">
+          <div class="tip" id="39">
             <strong>Signature:</strong> (m:Either&lt;&#39;TLeft,&#39;TRight&gt; * f:Func&lt;&#39;TRight,Either&lt;&#39;TLeft,&#39;TRight2&gt;&gt;) -&gt; Either&lt;&#39;TLeft,&#39;TRight2&gt;<br />
                           <strong>Type parameters:</strong> 'TLeft, 'TRight, 'TRight2          </div>
         </td>
@@ -61,10 +67,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '35', 35)" onmouseover="showTip(event, '35', 35)">
+          <code onmouseout="hideTip(event, '40', 40)" onmouseover="showTip(event, '40', 40)">
             FromEither(m, fl, fr)
           </code>
-          <div class="tip" id="35">
+          <div class="tip" id="40">
             <strong>Signature:</strong> (m:Either&lt;&#39;TLeft,&#39;TRight&gt; * fl:Func&lt;&#39;TLeft,&#39;TResult&gt; * fr:Func&lt;&#39;TRight,&#39;TResult&gt;) -&gt; &#39;TResult<br />
                           <strong>Type parameters:</strong> 'TLeft, 'TRight, 'TResult          </div>
         </td>
@@ -75,10 +81,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '36', 36)" onmouseover="showTip(event, '36', 36)">
+          <code onmouseout="hideTip(event, '41', 41)" onmouseover="showTip(event, '41', 41)">
             FromLeft(m)
           </code>
-          <div class="tip" id="36">
+          <div class="tip" id="41">
             <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; &#39;TLeft<br />
                           <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
         </td>
@@ -89,10 +95,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '37', 37)" onmouseover="showTip(event, '37', 37)">
+          <code onmouseout="hideTip(event, '42', 42)" onmouseover="showTip(event, '42', 42)">
             FromRight(m)
           </code>
-          <div class="tip" id="37">
+          <div class="tip" id="42">
             <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; &#39;TRight<br />
                           <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
         </td>
@@ -103,81 +109,11 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '38', 38)" onmouseover="showTip(event, '38', 38)">
+          <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
             IsLeft(m)
           </code>
-          <div class="tip" id="38">
-            <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; bool<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '39', 39)" onmouseover="showTip(event, '39', 39)">
-            IsRight(m)
-          </code>
-          <div class="tip" id="39">
-            <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; bool<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '40', 40)" onmouseover="showTip(event, '40', 40)">
-            Left(m)
-          </code>
-          <div class="tip" id="40">
-            <strong>Signature:</strong> m:&#39;TLeft -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '41', 41)" onmouseover="showTip(event, '41', 41)">
-            Return(f)
-          </code>
-          <div class="tip" id="41">
-            <strong>Signature:</strong> f:Func&lt;&#39;TRight&gt; -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '42', 42)" onmouseover="showTip(event, '42', 42)">
-            Return(v)
-          </code>
-          <div class="tip" id="42">
-            <strong>Signature:</strong> v:&#39;TRight -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
-            Right(m)
-          </code>
           <div class="tip" id="43">
-            <strong>Signature:</strong> m:&#39;TRight -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
+            <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; bool<br />
                           <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
         </td>
         <td class="xmldoc">
@@ -188,11 +124,11 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '44', 44)" onmouseover="showTip(event, '44', 44)">
-            Then(m, h)
+            IsRight(m)
           </code>
           <div class="tip" id="44">
-            <strong>Signature:</strong> (m:Either&lt;&#39;TLeft,&#39;TRight&gt; * h:Either&lt;&#39;TLeft,&#39;TRight2&gt;) -&gt; Either&lt;&#39;TLeft,&#39;TRight2&gt;<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight, 'TRight2          </div>
+            <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; bool<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
         </td>
         <td class="xmldoc">
           
@@ -202,10 +138,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
-            Try(fl, fr)
+            Left(m)
           </code>
           <div class="tip" id="45">
-            <strong>Signature:</strong> (fl:Func&lt;exn,&#39;TLeft&gt; * fr:Func&lt;&#39;TRight&gt;) -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
+            <strong>Signature:</strong> m:&#39;TLeft -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
                           <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
         </td>
         <td class="xmldoc">
@@ -216,9 +152,79 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
-            Try(f)
+            Return(f)
           </code>
           <div class="tip" id="46">
+            <strong>Signature:</strong> f:Func&lt;&#39;TRight&gt; -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
+            Return(v)
+          </code>
+          <div class="tip" id="47">
+            <strong>Signature:</strong> v:&#39;TRight -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '48', 48)" onmouseover="showTip(event, '48', 48)">
+            Right(m)
+          </code>
+          <div class="tip" id="48">
+            <strong>Signature:</strong> m:&#39;TRight -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '49', 49)" onmouseover="showTip(event, '49', 49)">
+            Then(m, h)
+          </code>
+          <div class="tip" id="49">
+            <strong>Signature:</strong> (m:Either&lt;&#39;TLeft,&#39;TRight&gt; * h:Either&lt;&#39;TLeft,&#39;TRight2&gt;) -&gt; Either&lt;&#39;TLeft,&#39;TRight2&gt;<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight, 'TRight2          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
+            Try(fl, fr)
+          </code>
+          <div class="tip" id="50">
+            <strong>Signature:</strong> (fl:Func&lt;exn,&#39;TLeft&gt; * fr:Func&lt;&#39;TRight&gt;) -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
+                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '51', 51)" onmouseover="showTip(event, '51', 51)">
+            Try(f)
+          </code>
+          <div class="tip" id="51">
             <strong>Signature:</strong> f:Func&lt;&#39;T&gt; -&gt; Either&lt;exn,&#39;T&gt;<br />
                           <strong>Type parameters:</strong> 'T          </div>
         </td>
@@ -229,10 +235,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
+          <code onmouseout="hideTip(event, '52', 52)" onmouseover="showTip(event, '52', 52)">
             When(p, fl, fr)
           </code>
-          <div class="tip" id="47">
+          <div class="tip" id="52">
             <strong>Signature:</strong> (p:Func&lt;bool&gt; * fl:Func&lt;&#39;TLeft&gt; * fr:Func&lt;&#39;TRight&gt;) -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
                           <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
         </td>
@@ -245,40 +251,80 @@
 
         </div>
         <div class="span3">
-          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
-            <li><img src="/Wooga.Lambda-CSharp/img/logo.png" alt="F# Project" style="width:150px;margin:10px" /></li>
-            <!-- <li><img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/issue" alt="F# Project" style="width:180px;margin:5px"/></li>
-            <li>
-              <img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/pr" alt="F# Project" style="width:180px;margin:5px"/>
-            </li> -->
-            <li class="nav-header">Wooga.Lambda</li>
-            <li><a href="/Wooga.Lambda-CSharp/index.html">Home page</a></li>
-            <li class="divider"></li>
-            <li><a href="http://nuget.org/packages/Wooga.Lambda">Get Library via NuGet</a></li>
-            <li><a href="http://github.com/wooga/Wooga.Lambda-CSharp">Source Code on GitHub</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/license.html">License</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/release-notes.html">Release Notes</a></li>
+            <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+                <li>
+                    <img src="./img/logo.png" alt="F# Project" style="margin: 10px; width: 150px;"/>
+                </li>
+                <!-- <li>
+                    <img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/issue" alt="F# Project" style="width:180px;margin:5px"/>
+                </li>
+                <li>
+                    <img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/pr" alt="F# Project" style="width:180px;margin:5px"/>
+                </li> -->
+                <li class="nav-header">Wooga.Lambda</li>
+                <li>
+                    <a href="./index.html">Home page</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="http://nuget.org/packages/Wooga.Lambda">Get Library via NuGet</a>
+                </li>
+                <li>
+                    <a href="http://github.com/wooga/Wooga.Lambda-CSharp">Source Code on GitHub</a>
+                </li>
+                <li>
+                    <a href="./license.html">License</a>
+                </li>
+                <li>
+                    <a href="./release-notes.html">Release Notes</a>
+                </li>
 
-            <li class="nav-header">Get Started</li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.maybe.html">Monad.Maybe</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.either.html">Monad.Either</a></li>
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.async.html">Concurrent.Async</a></li>
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.agent.html">Concurrent.Agent</a></li> -->
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.patternmatch.html">Pattern.Match</a></li>
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.logging.agent.html">LoggingAgent</a></li> -->
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.network.httpclient.html">Network.HttpClient</a></li> -->
-            <!-- <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.filesystem.html">FileSystem</a></li> -->
-            <li><a href="/Wooga.Lambda-CSharp/wooga.lambda.parser.html">Parser</a></li>
+                <li class="nav-header">Get Started</li>
+                <li>
+                    <a href="./wooga.lambda.maybe.html">Monad.Maybe</a>
+                </li>
+                <li>
+                    <a href="./wooga.lambda.either.html">Monad.Either</a>
+                </li>
+                <li>
+                    <a href="./wooga.lambda.async.html">Concurrent.Async</a>
+                </li>
+                <!-- <li>
+                    <a href="./wooga.lambda.agent.html">Concurrent.Agent</a>
+                </li> -->
+                <li>
+                    <a href="./wooga.lambda.patternmatch.html">Pattern.Match</a>
+                </li>
+                <!-- <li>
+                    <a href="./wooga.lambda.logging.agent.html">LoggingAgent</a>
+                </li> -->
+                <!-- <li>
+                    <a href="./wooga.lambda.network.httpclient.html">Network.HttpClient</a>
+                </li> -->
+                <!-- <li>
+                    <a href="./wooga.lambda.filesystem.html">FileSystem</a>
+                </li> -->
+                <li>
+                    <a href="./wooga.lambda.parser.html">Parser</a>
+                </li>
 
-            <li class="nav-header">Documentation</li>
-            <li><a href="/Wooga.Lambda-CSharp/reference/index.html">API Reference</a></li>
+                <li class="nav-header">Documentation</li>
+                <li>
+                    <a href="./reference/index.html">API Reference</a>
+                </li>
 
-            <li><img src="https://travis-ci.org/wooga/Wooga.Lambda-CSharp.png" alt="F# Project" style="margin:5px"/></li>
-            <li><img src="http://img.shields.io/nuget/v/Wooga.Lambda.svg?style=flat" alt="F# Project" style="margin:5px"/></li>
-          </ul>
+                <li>
+                    <img src="https://travis-ci.org/wooga/Wooga.Lambda-CSharp.png" alt="F# Project" style="margin: 5px"/>
+                </li>
+                <li>
+                    <img src="http://img.shields.io/nuget/v/Wooga.Lambda.svg?style=flat" alt="F# Project" style="margin: 5px"/>
+                </li>
+            </ul>
         </div>
-      </div>
     </div>
-    <a href="http://github.com/wooga/Wooga.Lambda-CSharp"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
-  </body>
-  </html>
+</div>
+<a href="http://github.com/wooga/Wooga.Lambda-CSharp">
+    <img style="border: 0; position: absolute; right: 0; top: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/>
+</a>
+</body>
+</html>

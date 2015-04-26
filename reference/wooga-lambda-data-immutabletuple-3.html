@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>LoggingAgent - Wooga.Lambda</title>
+    <title>ImmutableTuple<'T1, 'T2, 'T3> - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -41,10 +41,32 @@
 
 
 
-<h1>LoggingAgent</h1>
+<h1>ImmutableTuple<'T1, 'T2, 'T3></h1>
 <div class="xmldoc">
-<p>An agent for logging with customizable handlers</p>
+<p>Represent a value triplet.</p>
 </div>
+  <h3>Constructors</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Constructor</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '100', 100)" onmouseover="showTip(event, '100', 100)">
+            new(item1, item2, item3)
+          </code>
+          <div class="tip" id="100">
+            <strong>Signature:</strong> (item1:&#39;T1 * item2:&#39;T2 * item3:&#39;T3) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
   <h3>Instance members</h3>
   <table class="table table-bordered member-list">
     <thead>
@@ -54,11 +76,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '127', 127)" onmouseover="showTip(event, '127', 127)">
-            AddHandler(handler)
+          <code onmouseout="hideTip(event, '101', 101)" onmouseover="showTip(event, '101', 101)">
+            Equals(obj)
           </code>
-          <div class="tip" id="127">
-            <strong>Signature:</strong> handler:Func&lt;LogMsg,Unit&gt; -&gt; Unit<br />
+          <div class="tip" id="101">
+            <strong>Signature:</strong> obj:obj -&gt; bool<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -68,67 +91,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '128', 128)" onmouseover="showTip(event, '128', 128)">
-            Debug(msg)
+          <code onmouseout="hideTip(event, '102', 102)" onmouseover="showTip(event, '102', 102)">
+            GetHashCode()
           </code>
-          <div class="tip" id="128">
-            <strong>Signature:</strong> msg:string -&gt; Unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '129', 129)" onmouseover="showTip(event, '129', 129)">
-            Error(msg)
-          </code>
-          <div class="tip" id="129">
-            <strong>Signature:</strong> msg:string -&gt; Unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '130', 130)" onmouseover="showTip(event, '130', 130)">
-            Fatal(msg)
-          </code>
-          <div class="tip" id="130">
-            <strong>Signature:</strong> msg:string -&gt; Unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '131', 131)" onmouseover="showTip(event, '131', 131)">
-            Info(msg)
-          </code>
-          <div class="tip" id="131">
-            <strong>Signature:</strong> msg:string -&gt; Unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '132', 132)" onmouseover="showTip(event, '132', 132)">
-            Warn(msg)
-          </code>
-          <div class="tip" id="132">
-            <strong>Signature:</strong> msg:string -&gt; Unit<br />
+          <div class="tip" id="102">
+            <strong>Signature:</strong> unit -&gt; int<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -146,11 +114,25 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '133', 133)" onmouseover="showTip(event, '133', 133)">
-            SharedAgent
+          <code onmouseout="hideTip(event, '103', 103)" onmouseover="showTip(event, '103', 103)">
+            op_Equality(x, y)
           </code>
-          <div class="tip" id="133">
-            <strong>Signature:</strong> LoggingAgent<br />
+          <div class="tip" id="103">
+            <strong>Signature:</strong> (x:ImmutableTuple&lt;&#39;T1,&#39;T2,&#39;T3&gt; * y:ImmutableTuple&lt;&#39;T1,&#39;T2,&#39;T3&gt;) -&gt; bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '104', 104)" onmouseover="showTip(event, '104', 104)">
+            op_Inequality(x, y)
+          </code>
+          <div class="tip" id="104">
+            <strong>Signature:</strong> (x:ImmutableTuple&lt;&#39;T1,&#39;T2,&#39;T3&gt; * y:ImmutableTuple&lt;&#39;T1,&#39;T2,&#39;T3&gt;) -&gt; bool<br />
                       </div>
         </td>
         <td class="xmldoc">

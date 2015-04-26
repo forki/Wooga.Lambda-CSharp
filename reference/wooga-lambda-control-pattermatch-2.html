@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>LoggingAgent - Wooga.Lambda</title>
+    <title>PatterMatch<'TValue, 'TResult> - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -41,10 +41,31 @@
 
 
 
-<h1>LoggingAgent</h1>
+<h1>PatterMatch<'TValue, 'TResult></h1>
 <div class="xmldoc">
-<p>An agent for logging with customizable handlers</p>
 </div>
+  <h3>Constructors</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Constructor</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)">
+            new(object, method)
+          </code>
+          <div class="tip" id="1">
+            <strong>Signature:</strong> (object:obj * method:nativeint) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
   <h3>Instance members</h3>
   <table class="table table-bordered member-list">
     <thead>
@@ -54,11 +75,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '127', 127)" onmouseover="showTip(event, '127', 127)">
-            AddHandler(handler)
+          <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
+            BeginInvoke(callback, object)
           </code>
-          <div class="tip" id="127">
-            <strong>Signature:</strong> handler:Func&lt;LogMsg,Unit&gt; -&gt; Unit<br />
+          <div class="tip" id="2">
+            <strong>Signature:</strong> (callback:AsyncCallback * object:obj) -&gt; IAsyncResult<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -68,11 +90,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '128', 128)" onmouseover="showTip(event, '128', 128)">
-            Debug(msg)
+          <code onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)">
+            EndInvoke(result)
           </code>
-          <div class="tip" id="128">
-            <strong>Signature:</strong> msg:string -&gt; Unit<br />
+          <div class="tip" id="3">
+            <strong>Signature:</strong> result:IAsyncResult -&gt; Either&lt;&#39;TResult,&#39;TValue&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -82,75 +105,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '129', 129)" onmouseover="showTip(event, '129', 129)">
-            Error(msg)
+          <code onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)">
+            Invoke()
           </code>
-          <div class="tip" id="129">
-            <strong>Signature:</strong> msg:string -&gt; Unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '130', 130)" onmouseover="showTip(event, '130', 130)">
-            Fatal(msg)
-          </code>
-          <div class="tip" id="130">
-            <strong>Signature:</strong> msg:string -&gt; Unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '131', 131)" onmouseover="showTip(event, '131', 131)">
-            Info(msg)
-          </code>
-          <div class="tip" id="131">
-            <strong>Signature:</strong> msg:string -&gt; Unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '132', 132)" onmouseover="showTip(event, '132', 132)">
-            Warn(msg)
-          </code>
-          <div class="tip" id="132">
-            <strong>Signature:</strong> msg:string -&gt; Unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <h3>Static members</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Static member</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '133', 133)" onmouseover="showTip(event, '133', 133)">
-            SharedAgent
-          </code>
-          <div class="tip" id="133">
-            <strong>Signature:</strong> LoggingAgent<br />
+          <div class="tip" id="4">
+            <strong>Signature:</strong> unit -&gt; Either&lt;&#39;TResult,&#39;TValue&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">

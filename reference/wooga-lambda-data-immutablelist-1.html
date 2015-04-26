@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>ImmutableList<'T> - Wooga.Lambda</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content="devboy"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="./content/style.css"/>
+    <script type="text/javascript" src="./content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+        <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="container">
+    <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+            <li>
+                <a href="http://wooga.com">wooga.com</a>
+            </li>
+            <li>
+                <a href="http://github.com/wooga/Wooga.Lambda-CSharp">github page</a>
+            </li>
+        </ul>
+        <h3 class="muted">
+            <a href="./index.html">Wooga.Lambda</a>
+        </h3>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="span9" id="main">
+            
+
+
+
+<h1>ImmutableList<'T></h1>
+<div class="xmldoc">
+</div>
+  <h3>Constructors</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Constructor</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '72', 72)" onmouseover="showTip(event, '72', 72)">
+            new()
+          </code>
+          <div class="tip" id="72">
+            <strong>Signature:</strong> unit -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '73', 73)" onmouseover="showTip(event, '73', 73)">
+            new(values)
+          </code>
+          <div class="tip" id="73">
+            <strong>Signature:</strong> values:IEnumerable&lt;&#39;T&gt; -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '74', 74)" onmouseover="showTip(event, '74', 74)">
+            new(optionalValueValidator)
+          </code>
+          <div class="tip" id="74">
+            <strong>Signature:</strong> optionalValueValidator:IValueValidator&lt;&#39;T&gt; -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '75', 75)" onmouseover="showTip(event, '75', 75)">
+            new(values, optionalValueValidator)
+          </code>
+          <div class="tip" id="75">
+            <strong>Signature:</strong> (values:IEnumerable&lt;&#39;T&gt; * optionalValueValidator:IValueValidator&lt;&#39;T&gt;) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '76', 76)" onmouseover="showTip(event, '76', 76)">
+            new(tail, optionalValueValidator)
+          </code>
+          <div class="tip" id="76">
+            <strong>Signature:</strong> (tail:Node&lt;&#39;T&gt; * optionalValueValidator:IValueValidator&lt;&#39;T&gt;) -&gt; unit<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Instance members</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Instance member</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '77', 77)" onmouseover="showTip(event, '77', 77)">
+            Add(value)
+          </code>
+          <div class="tip" id="77">
+            <strong>Signature:</strong> value:&#39;T -&gt; ImmutableList&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '78', 78)" onmouseover="showTip(event, '78', 78)">
+            AddRange(values)
+          </code>
+          <div class="tip" id="78">
+            <strong>Signature:</strong> values:IEnumerable&lt;&#39;T&gt; -&gt; ImmutableList&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '79', 79)" onmouseover="showTip(event, '79', 79)">
+            Contains(value)
+          </code>
+          <div class="tip" id="79">
+            <strong>Signature:</strong> value:&#39;T -&gt; bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '80', 80)" onmouseover="showTip(event, '80', 80)">
+            Contains(value, optionalComparer)
+          </code>
+          <div class="tip" id="80">
+            <strong>Signature:</strong> (value:&#39;T * optionalComparer:IEqualityComparer&lt;&#39;T&gt;) -&gt; bool<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '81', 81)" onmouseover="showTip(event, '81', 81)">
+            Count
+          </code>
+          <div class="tip" id="81">
+            <strong>Signature:</strong> int<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '82', 82)" onmouseover="showTip(event, '82', 82)">
+            GetEnumerator()
+          </code>
+          <div class="tip" id="82">
+            <strong>Signature:</strong> unit -&gt; IEnumerator&lt;&#39;T&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '83', 83)" onmouseover="showTip(event, '83', 83)">
+            Insert(values, insertAtIndex)
+          </code>
+          <div class="tip" id="83">
+            <strong>Signature:</strong> (values:IEnumerable&lt;&#39;T&gt; * insertAtIndex:int) -&gt; ImmutableList&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '84', 84)" onmouseover="showTip(event, '84', 84)">
+            Insert(value, insertAtIndex)
+          </code>
+          <div class="tip" id="84">
+            <strong>Signature:</strong> (value:&#39;T * insertAtIndex:int) -&gt; ImmutableList&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '85', 85)" onmouseover="showTip(event, '85', 85)">
+            [arg1]
+          </code>
+          <div class="tip" id="85">
+            <strong>Signature:</strong> int -&gt; &#39;T<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '86', 86)" onmouseover="showTip(event, '86', 86)">
+            Remove(value)
+          </code>
+          <div class="tip" id="86">
+            <strong>Signature:</strong> value:&#39;T -&gt; ImmutableList&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          <p>Removes the first occurrence of a specific object from the list, if the item is
+not present then this instance will be returned</p>
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '87', 87)" onmouseover="showTip(event, '87', 87)">
+            Remove(value, optionalComparer)
+          </code>
+          <div class="tip" id="87">
+            <strong>Signature:</strong> (value:&#39;T * optionalComparer:IEqualityComparer&lt;&#39;T&gt;) -&gt; ImmutableList&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '88', 88)" onmouseover="showTip(event, '88', 88)">
+            RemoveAt(removeAtIndex)
+          </code>
+          <div class="tip" id="88">
+            <strong>Signature:</strong> removeAtIndex:int -&gt; ImmutableList&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '89', 89)" onmouseover="showTip(event, '89', 89)">
+            RemoveRange(removeAtIndex, count)
+          </code>
+          <div class="tip" id="89">
+            <strong>Signature:</strong> (removeAtIndex:int * count:int) -&gt; ImmutableList&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '90', 90)" onmouseover="showTip(event, '90', 90)">
+            Sort()
+          </code>
+          <div class="tip" id="90">
+            <strong>Signature:</strong> unit -&gt; ImmutableList&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '91', 91)" onmouseover="showTip(event, '91', 91)">
+            Sort(optionalComparison)
+          </code>
+          <div class="tip" id="91">
+            <strong>Signature:</strong> optionalComparison:Comparison&lt;&#39;T&gt; -&gt; ImmutableList&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '92', 92)" onmouseover="showTip(event, '92', 92)">
+            Sort(optionalComparer)
+          </code>
+          <div class="tip" id="92">
+            <strong>Signature:</strong> optionalComparer:IComparer&lt;&#39;T&gt; -&gt; ImmutableList&lt;&#39;T&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+            <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+                <li>
+                    <img src="./img/logo.png" alt="F# Project" style="margin: 10px; width: 150px;"/>
+                </li>
+                <!-- <li>
+                    <img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/issue" alt="F# Project" style="width:180px;margin:5px"/>
+                </li>
+                <li>
+                    <img src="http://issuestats.com/github/wooga/Wooga.Lambda-CSharp/badge/pr" alt="F# Project" style="width:180px;margin:5px"/>
+                </li> -->
+                <li class="nav-header">Wooga.Lambda</li>
+                <li>
+                    <a href="./index.html">Home page</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="http://nuget.org/packages/Wooga.Lambda">Get Library via NuGet</a>
+                </li>
+                <li>
+                    <a href="http://github.com/wooga/Wooga.Lambda-CSharp">Source Code on GitHub</a>
+                </li>
+                <li>
+                    <a href="./license.html">License</a>
+                </li>
+                <li>
+                    <a href="./release-notes.html">Release Notes</a>
+                </li>
+
+                <li class="nav-header">Get Started</li>
+                <li>
+                    <a href="./wooga.lambda.maybe.html">Monad.Maybe</a>
+                </li>
+                <li>
+                    <a href="./wooga.lambda.either.html">Monad.Either</a>
+                </li>
+                <li>
+                    <a href="./wooga.lambda.async.html">Concurrent.Async</a>
+                </li>
+                <!-- <li>
+                    <a href="./wooga.lambda.agent.html">Concurrent.Agent</a>
+                </li> -->
+                <li>
+                    <a href="./wooga.lambda.patternmatch.html">Pattern.Match</a>
+                </li>
+                <!-- <li>
+                    <a href="./wooga.lambda.logging.agent.html">LoggingAgent</a>
+                </li> -->
+                <!-- <li>
+                    <a href="./wooga.lambda.network.httpclient.html">Network.HttpClient</a>
+                </li> -->
+                <!-- <li>
+                    <a href="./wooga.lambda.filesystem.html">FileSystem</a>
+                </li> -->
+                <li>
+                    <a href="./wooga.lambda.parser.html">Parser</a>
+                </li>
+
+                <li class="nav-header">Documentation</li>
+                <li>
+                    <a href="./reference/index.html">API Reference</a>
+                </li>
+
+                <li>
+                    <img src="https://travis-ci.org/wooga/Wooga.Lambda-CSharp.png" alt="F# Project" style="margin: 5px"/>
+                </li>
+                <li>
+                    <img src="http://img.shields.io/nuget/v/Wooga.Lambda.svg?style=flat" alt="F# Project" style="margin: 5px"/>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<a href="http://github.com/wooga/Wooga.Lambda-CSharp">
+    <img style="border: 0; position: absolute; right: 0; top: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/>
+</a>
+</body>
+</html>
