@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using Wooga.Lambda.Control.Concurrent;
@@ -23,8 +24,8 @@ namespace Wooga.Lambda.Network.Transport
             {
                 using (var postStream = webRequest.GetRequestStream())
                 {
-                    var body = httpRequest.Body.FromJustOrDefault(new byte[0], _ => _);
-                    postStream.Write(body, 0, body.Length);
+                    var body = httpRequest.Body.FromJustOrDefault(new ImmutableList<byte>(), _ => _);
+                    postStream.Write(body.ToArray(), 0, body.Count);
                     postStream.Close();
                 }
             }
@@ -58,13 +59,13 @@ namespace Wooga.Lambda.Network.Transport
                 var headers = OfWebHeaders(response.Headers);
                 var body = ReadEntireStream(response.GetResponseStream()).RunSynchronously();
                 return new HttpResponse(httpRequest, headers, response.StatusCode,
-                    body.Length > 0 ? Maybe.Just(body) : Maybe.Nothing<byte[]>());
+                    body.Count > 0 ? Maybe.Just(body) : Maybe.Nothing<ImmutableList<byte>>());
             };
         }
 
-        private static Async<byte[]> ReadEntireStream(Stream stream)
+        private static Async<ImmutableList<byte>> ReadEntireStream(Stream stream)
         {
-            return () => Encoding.UTF8.GetBytes(new StreamReader(stream).ReadToEnd());
+            return () => Encoding.UTF8.GetBytes(new StreamReader(stream).ReadToEnd()).ToImmutableList();
         }
 
         private static WebHeaderCollection ToWebHeaders(this HttpHeaders self)
@@ -88,7 +89,7 @@ namespace Wooga.Lambda.Network.Transport
 
         private static HttpHeaders OfWebHeaders(WebHeaderCollection webHeaders)
         {
-            return new ImmutableList<string>(webHeaders.AllKeys).Fold((headers, key) => headers.Append(key, webHeaders.Get(key)), HttpHeaders.Create());
+            return webHeaders.AllKeys.ToImmutableList().Fold((headers, key) => headers.Append(key, webHeaders.Get(key)), HttpHeaders.Create());
         }
     }
 }

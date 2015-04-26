@@ -63,7 +63,7 @@ namespace Wooga.Lambda.Parser
             if (BufferChars(CharsNeeded(count, Position)))
             {
                 memory.Seek(Position.Index, SeekOrigin.Begin);
-                readChars = new ImmutableList<char>(memoryReader.ReadChars((int) count));
+                readChars = memoryReader.ReadChars((int) count).ToImmutableList();
             }
             if (readChars.Count < count)
             {

@@ -8,6 +8,7 @@ using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 using Wooga.Lambda.Network;
 using Wooga.Lambda.Network.Transport;
+using System.Linq;
 
 namespace AsyncDownloader
 {
@@ -15,18 +16,18 @@ namespace AsyncDownloader
     {
         private static readonly Encoding Enc = Encoding.UTF8;
 
-        public static Async<ImmutableTuple<Uri, string>> GetHtmlAsync(this HttpClient http, string uri)
-        {
-            return () =>
-            {
-                var body = http
-                    .GetAsync(uri)
-                    .RunSynchronously()
-                    .Body
-                    .FromJustOrDefault("", Enc.GetString);
-                return new ImmutableTuple<Uri, string>(new Uri(uri), body);
-            };
-        }
+//        public static Async<ImmutableTuple<Uri, string>> GetHtmlAsync(this HttpClient http, string uri)
+//        {
+//            return () =>
+//            {
+////                var body = http
+////                    .GetAsync(uri)
+////                    .RunSynchronously()
+////                    .Body
+////                    .FromJustOrDefault("", xs => Enc.GetString(xs));
+//                return new ImmutableTuple<Uri, string>(new Uri(uri), body);
+//            };
+//        }
 
         public static void Run()
         {

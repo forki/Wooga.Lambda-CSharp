@@ -1,5 +1,6 @@
 ﻿using System;
 using Wooga.Lambda.Control.Concurrent;
+using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Network
 {
@@ -12,12 +13,12 @@ namespace Wooga.Lambda.Network
             TransportAsync = r => () => transport(this, r);
         }
 
-        public HttpResponse Post(string endpoint, byte[] body)
+        public HttpResponse Post(string endpoint, ImmutableList<byte> body)
         {
             return PostAsync(endpoint, body).RunSynchronously();
         }
 
-        public Async<HttpResponse> PostAsync(string endpoint, byte[] body)
+        public Async<HttpResponse> PostAsync(string endpoint, ImmutableList<byte> body)
         {
             return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Post).WithBody(body));
         }
@@ -42,12 +43,12 @@ namespace Wooga.Lambda.Network
             return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Head));
         }
 
-        public HttpResponse Put(string endpoint, byte[] body)
+        public HttpResponse Put(string endpoint, ImmutableList<byte> body)
         {
             return PutAsync(endpoint, body).RunSynchronously();
         }
 
-        public Async<HttpResponse> PutAsync(string endpoint, byte[] body)
+        public Async<HttpResponse> PutAsync(string endpoint, ImmutableList<byte> body)
         {
             return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Put).WithBody(body));
         }

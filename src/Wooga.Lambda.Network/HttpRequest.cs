@@ -1,16 +1,17 @@
 ﻿using System;
 using Wooga.Lambda.Control.Monad;
+using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Network
 {
     public struct HttpRequest
     {
-        public readonly Maybe<byte[]> Body;
+        public readonly Maybe<ImmutableList<byte>> Body;
         public readonly Uri Endpoint;
         public readonly HttpHeaders HttpHeaders;
         public readonly HttpMethod HttpMethod;
 
-        public HttpRequest(Uri endpoint, HttpMethod httpMethod, HttpHeaders httpHeaders, Maybe<byte[]> body)
+        public HttpRequest(Uri endpoint, HttpMethod httpMethod, HttpHeaders httpHeaders, Maybe<ImmutableList<byte>> body)
         {
             Endpoint = endpoint;
             HttpMethod = httpMethod;
@@ -20,7 +21,7 @@ namespace Wooga.Lambda.Network
 
         public static HttpRequest Basic(string url, HttpMethod httpMethod)
         {
-            return new HttpRequest(new Uri(url), httpMethod, HttpHeaders.Create(), Maybe.Nothing<byte[]>());
+            return new HttpRequest(new Uri(url), httpMethod, HttpHeaders.Create(), Maybe.Nothing<ImmutableList<byte>>());
         }
     }
 
@@ -33,7 +34,7 @@ namespace Wooga.Lambda.Network
                 httpRequest.Body);
         }
 
-        public static HttpRequest WithBody(this HttpRequest httpRequest, byte[] body)
+        public static HttpRequest WithBody(this HttpRequest httpRequest, ImmutableList<byte> body)
         {
             return new HttpRequest(httpRequest.Endpoint, httpRequest.HttpMethod, httpRequest.HttpHeaders,
                 Maybe.Return(() => body));

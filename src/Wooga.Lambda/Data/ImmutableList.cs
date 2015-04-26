@@ -14,12 +14,33 @@ namespace Wooga.Lambda.Data
 
         public static ImmutableList<TReturn> Map<T, TReturn>(this ImmutableList<T> xs, Func<T, TReturn> f)
         {
-            return xs.Aggregate(new ImmutableList<TReturn>(), (current, x) => current.Add(f(x)));
+            return xs.Aggregate(ImmutableList.Empty<TReturn>(), (current, x) => current.Add(f(x)));
         }
 
         public static T2 Fold<T1, T2>(this ImmutableList<T1> xs, Func<T2, T1, T2> f, T2 a)
         {
             return xs.Aggregate(a, f);
+        }
+
+        public static T[] ToArray<T>(this ImmutableList<T> xs)
+        {
+            var ys = new T[xs.Count];
+            for (int i = 0; i < xs.Count; i++)
+                ys[i] = xs[i];
+            return ys;
+        }
+
+        public static ImmutableList<T> ToImmutableList<T>(this T[] xs)
+        {
+            return new ImmutableList<T>(xs);
+        }
+    }
+
+    public static class ImmutableList
+    {
+        public static ImmutableList<T> Empty<T>()
+        {
+            return new ImmutableList<T>();
         }
     }
 
