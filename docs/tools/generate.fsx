@@ -5,9 +5,9 @@
 
 // Web site location for the generated documentation
 //#if debug
-let website = "."//"/Wooga.Lambda-CSharp"
+//let website = "."//"/Wooga.Lambda-CSharp"
 //#else
-//let website = "/Wooga.Lambda-CSharp"
+let website = "/Wooga.Lambda-CSharp"
 //#endif
 
 let githubLink = "http://github.com/wooga/Wooga.Lambda-CSharp"

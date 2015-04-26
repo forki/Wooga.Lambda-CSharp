@@ -1,0 +1,24 @@
+type file
+id Wooga.Lambda.Storage.Unity3D.Source
+owners wooga
+authors devboy
+projectUrl
+    http://github.com/wooga/Wooga.Lambda-CSharp
+iconUrl
+    https://raw.githubusercontent.com/wooga/Wooga.Lambda/master/docs/files/img/logo.png
+licenseUrl
+    http://github.com/wooga/Wooga.Lambda-CSharp/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+copyright
+    Copyright 2015
+tags
+    wooga f# c# functional haskell data-structures
+summary
+    Functional utilities for C#
+description
+    Functional utilites for C# - inspired by csharp-monads, Haskell & F# - compatible with Unity3D
+files
+	../Wooga.Lambda.FileSystem/*.cs ==> content/Wooga.Lambda.FileSystem
+dependencies
+	Wooga.Lambda.Unity3D.Source

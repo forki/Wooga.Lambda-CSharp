@@ -1,20 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B8A3D038-D20A-4432-A707-923649B4AD81}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AsyncDownloader</RootNamespace>
-    <AssemblyName>AsyncDownloader</AssemblyName>
+    <RootNamespace>Wooga.Lambda.Storage</RootNamespace>
+    <AssemblyName>Wooga.Lambda.Storage</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,45 +20,32 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\Wooga.Lambda.Storage.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncBlockSimple.cs" />
-    <Compile Include="AsyncParallelSimple.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="FileSystem.cs" />
+    <Compile Include="LocalFileSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Wooga.Lambda.Network\Wooga.Lambda.Network.csproj">
-      <Project>{2247283e-0466-40ac-9d05-b8972c8451bf}</Project>
-      <Name>Wooga.Lambda.Network</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Wooga.Lambda.Storage\Wooga.Lambda.Storage.csproj">
-      <Project>{3abb3a90-7f62-42ec-9068-c2f14ffcbfa7}</Project>
-      <Name>Wooga.Lambda.Storage</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Wooga.Lambda\Wooga.Lambda.csproj">
-      <Project>{03231ac8-dca3-49e4-89cd-e68be439c2a4}</Project>
+    <ProjectReference Include="..\Wooga.Lambda\Wooga.Lambda.csproj">
+      <Project>{03231AC8-DCA3-49E4-89CD-E68BE439C2A4}</Project>
       <Name>Wooga.Lambda</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="paket.references" />
+    <None Include="paket.template" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

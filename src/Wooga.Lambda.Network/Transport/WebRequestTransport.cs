@@ -7,8 +7,13 @@ using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Network.Transport
 {
+    /// <summary>   A web request transport. </summary>
     public static class WebRequestTransport
     {
+        /// <summary>   Creates HTTP client. </summary>
+        ///
+        /// <returns>   The new HTTP client. </returns>
+
         public static HttpClient CreateHttpClient()
         {
             return new HttpClient((c, r) => r.RequestHttpResponse().RunSynchronously());

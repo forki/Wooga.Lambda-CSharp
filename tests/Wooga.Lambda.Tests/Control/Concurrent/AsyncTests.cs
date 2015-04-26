@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using Wooga.Lambda.Control.Concurrent;
+using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Tests.Control.Concurrent
@@ -23,7 +24,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
                 .Catch()
                 .RunSynchronously();
             Assert.IsTrue(ch.IsLeft());
-            Assert.AreEqual("exception", ch.LeftValue().Message);
+            Assert.AreEqual("exception", ch.FromLeft().Message);
         }
 
         [Test]
@@ -34,7 +35,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
                 .Catch()
                 .RunSynchronously();
             Assert.IsTrue(ch.IsRight());
-            Assert.AreEqual("no exception", ch.RightValue());
+            Assert.AreEqual("no exception", ch.FromRight());
         }
 
         [Test]

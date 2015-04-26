@@ -1,5 +1,9 @@
-﻿using Wooga.Lambda.Control;
+﻿using System.Text;
+using Wooga.Lambda.Control;
+using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
+using Wooga.Lambda.Data;
+using Wooga.Lambda.Storage;
 
 namespace AsyncDownloader
 {
@@ -7,20 +11,20 @@ namespace AsyncDownloader
     {
         private static void Main(string[] args)
         {
-            var just = Maybe.Just("hans")();
-            var not = Maybe.Nothing<string>()();
+            var fs = LocalFileSystem.Create();
+//            var baseDir = ImmutableList.Create(new[] { "." });
+//            var txtFile = ImmutableTuple.Create(baseDir, "logo-cc.txt");
+//            var w = fs.WriteFileAsync(txtFile, Encoding.UTF8.GetBytes("Hello Hello").ToImmutableList())
+//                    .Then(fs.AppendFileAsync(txtFile, Encoding.UTF8.GetBytes("\nAPEPEPNDDDD").ToImmutableList()))
+//                    .Then(fs.NewDirAsync(baseDir.Add("newDIR")))
+//                    .Then(fs.MvFileAsync(txtFile, ImmutableTuple.Create(baseDir.Add("newDIR"), "logo-cc.txt")))
+//                    .Then(fs.CpDirAsync(baseDir.Add("newDIR"),baseDir.Add("CPDir")))
+//                    .RunSynchronously();
 
-            var s1 = Pattern<string>
-                    .Match(just)
-                    .Case<Maybe.Result<string>.Just>(x => "just")
-                    .Case<Maybe.Result<string>.Nothing>(x => "not")
-                    .Run(); // "just"
-
-            var s2 = Pattern<string>
-                    .Match(not)
-                    .Case<Maybe.Result<string>.Just>(x => "just")
-                    .Case<Maybe.Result<string>.Nothing>(x => "not")
-                    .Run(); // "not"
+            
+//            var es = fs.GetDirAsync(baseDir)
+//                    .RunSynchronously();
+            var x = 1;
         }
     }
 }
