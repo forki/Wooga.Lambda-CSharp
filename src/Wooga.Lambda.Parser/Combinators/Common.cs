@@ -36,7 +36,7 @@ namespace Wooga.Lambda.Parser.Combinators
         /// <returns>   A Parser&lt;R2&gt; </returns>
         public static Parser<R2> Bind<R, R2>(this Parser<R> p, Func<R, Parser<R2>> f)
         {
-//            return s => p(s).MatchResult(x => f(x.Value)(s.AtPosition(x.Peek)), y => Result.Fail<R2>(y.Message, y.Peek));
+//            return s => p(s).MatchResult(x => f(x.Value)(s.AtPosition(x.Peek)), y => Resu lt.Fail<R2>(y.Message, y.Peek));
             return s => Pattern<Result<R2>>
                 .Match(p(s))
                 .Case<Result<R>.Success>(x => f(x.Value)(s.AtPosition(x.Peek)))
@@ -48,11 +48,10 @@ namespace Wooga.Lambda.Parser.Combinators
         /// <typeparam name="R">    Type of the r. </typeparam>
         /// <typeparam name="R2">   Type of the r 2. </typeparam>
         /// <param name="p">        The p to act on. </param>
-        /// <param name="value">    The value. </param>
+        /// <param name="value">    The r. </param>
         /// <returns>   A Parser&lt;R2&gt; </returns>
         public static Parser<R2> Then<R, R2>(this Parser<R> p, R2 value)
         {
-//            return s => p(s).MatchResult(x => Result.Succeed(value, x.Peek), y => Result.Fail<R2>(y.Message, y.Peek));
             return s => Pattern<Result<R2>>
                 .Match(p(s))
                 .Case<Result<R>.Success>(x => Result.Succeed(value, x.Peek))
@@ -60,20 +59,28 @@ namespace Wooga.Lambda.Parser.Combinators
                 .Run();
         }
 
-//        public static Parser<R2, US> TakeRight<R, R2, US>(this Parser<R, US> l, Parser<R2, US> value)
-//        {
-//            return l.Bind(_ => value);
-//        }
-//
-//        public static Parser<R, US> TakeLeft<R, R2, US>(this Parser<R, US> l, Parser<R2, US> value)
-//        {
-//            return l.Bind(value.Then);
-//        }
-//
-//        public static Parser<R3, US> Pipe2<R, R2, R3, US>(this Parser<R,US> p, Parser<R2,US> p2, Func<R,R2,R3> f)
-//        {
-//            return p.Bind(a => p2.Bind(b => Return<R3,US>(f(a,b))));
-//        }
+        public static Parser<R2> TakeRight<R, R2>(this Parser<R> l, Parser<R2> r)
+        {
+            return l.Bind(_ => r);
+        }
+
+        public static Parser<R> TakeLeft<R, R2>(this Parser<R> l, Parser<R2> r)
+        {
+            return l.Bind(r.Then);
+        }
+
+        public static Parser<ImmutableTuple<R, R2>> TakeBoth<R, R2>(this Parser<R> l, Parser<R2> r)
+        {
+            return l.Bind(lv => r.Bind<R2, ImmutableTuple<R, R2>>(rv => c => Result.Succeed(ImmutableTuple.Create(lv, rv),c.Position)));
+        }
+
+        public static Parser<R> Or<R>(this Parser<R> l, Parser<R> r)
+        {
+            return c => Pattern<Result<R>>.Match(l(c))
+                .Case<Result<R>.Success>(x => x)
+                .Case<Result<R>.Failure>(x => r(c))
+                .Run();
+        }
 
         private static Parser<ImmutableList<R>> _Many<R>(this Parser<R> p, ImmutableList<R> rs, int min = 0,
             int max = int.MaxValue)
@@ -83,8 +90,7 @@ namespace Wooga.Lambda.Parser.Combinators
                 var f = p.Bind(value => _Many(p, rs.Add(value), min, max))(chars);
                 return Pattern<Result<ImmutableList<R>>>.Match(f)
                     .Case<Result<ImmutableList<R>>.Success>(_ => rs.Count <= max, v => Result.Succeed(v.Value, v.Peek))
-                    .Case<Result<ImmutableList<R>>.Failure>(_ => !(rs.Count > max || rs.Count < min),
-                        v => Result.Succeed(rs, chars.Position))
+                    .Case<Result<ImmutableList<R>>.Failure>(_ => rs.Count <= max && rs.Count >= min, v => Result.Succeed(rs, chars.Position))
                     .Default(v => Result.Fail<ImmutableList<R>>("", v.Peek))
                     .Run();
             };

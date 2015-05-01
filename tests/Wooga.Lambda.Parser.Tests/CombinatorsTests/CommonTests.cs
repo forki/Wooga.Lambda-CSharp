@@ -89,6 +89,54 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         }
 
         [Test]
+        public void TakeLeftUsesLeftParserResult()
+        {
+            var p = Common.Return(20).TakeLeft(Common.Return(30));
+            var r = ((Result<int>.Success)p((new CharStream("a"))));
+            Assert.AreEqual(20, r.Value);
+        }
+
+        [Test]
+        public void TakeRightUsesRightParserResult()
+        {
+            var p = Common.Return(20).TakeRight(Common.Return(30));
+            var r = ((Result<int>.Success)p((new CharStream("a"))));
+            Assert.AreEqual(30, r.Value);
+        }
+
+        [Test]
+        public void TakeBothUsesBothParserResults()
+        {
+            var p = Common.Return(20).TakeBoth(Common.Return(30));
+            var r = ((Result<ImmutableTuple<int,int>>.Success)p((new CharStream("a"))));
+            Assert.AreEqual(ImmutableTuple.Create(20,30), r.Value);
+        }
+
+        [Test]
+        public void OrShouldUseLeftWhenLeftSucceeds()
+        {
+            var p = Common.Return(20).Or(Common.Return(30));
+            var r = ((Result<int>.Success)p((new CharStream("a"))));
+            Assert.AreEqual(20, r.Value);
+        }
+
+        [Test]
+        public void OrShouldUseRightWhenLeftFailsAndRightSucceeds()
+        {
+            var p = Common.Zero<int>().Or(Common.Return(30));
+            var r = ((Result<int>.Success)p((new CharStream("a"))));
+            Assert.AreEqual(30, r.Value);
+        }
+
+        [Test]
+        public void OrShouldFailWhenBothFail()
+        {
+            var p = Common.Zero<int>().Or(Common.Zero<int>());
+            var r = ((Result<int>.Failure)p((new CharStream("a"))));
+            Assert.AreEqual(0, r.Peek.Index);
+        }
+
+        [Test]
         public void ZeroShouldProduceAlwaysFailureParser()
         {
             var p = Common.Zero<int>();
