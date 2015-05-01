@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Wooga.Lambda.Parser
+﻿namespace Wooga.Lambda.Parser
 {
     /// <summary>   A result. </summary>
     /// <typeparam name="T">    Generic type parameter. </typeparam>
@@ -48,19 +46,6 @@ namespace Wooga.Lambda.Parser
         public static Result<R> Fail<R>(string msg, CharStreamPosition peek)
         {
             return new Result<R>.Failure {Message = msg, Peek = peek};
-        }
-
-        /// <summary>   A Result&lt;R&gt; extension method that match result. </summary>
-        /// <typeparam name="R">    Type of the r. </typeparam>
-        /// <typeparam name="T">    Generic type parameter. </typeparam>
-        /// <param name="r">        The r to act on. </param>
-        /// <param name="Success">  The success. </param>
-        /// <param name="Failure">  The failure. </param>
-        /// <returns>   A T. </returns>
-        public static T MatchResult<R, T>(this Result<R> r, Func<Result<R>.Success, T> Success,
-            Func<Result<R>.Failure, T> Failure)
-        {
-            return (r is Result<R>.Success) ? Success(((Result<R>.Success) r)) : Failure(((Result<R>.Failure) r));
         }
     }
 }

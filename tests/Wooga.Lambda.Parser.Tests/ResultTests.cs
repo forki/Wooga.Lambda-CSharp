@@ -23,21 +23,21 @@ namespace Wooga.Lambda.Parser.Tests
             Assert.AreEqual("aaa", rs.Message);
         }
 
-        [Test]
-        public void MatchShouldCallFailOnFailureValue()
-        {
-            var r = Result.Fail<int>("xxx", new CharStreamPosition());
-            var t = r.MatchResult(s => "s", f => "f");
-            Assert.AreEqual(t, "f");
-        }
-
-        [Test]
-        public void MatchShouldCallSuccessOnSuccessValue()
-        {
-            var r = Result.Succeed(100, new CharStreamPosition());
-            var t = r.MatchResult(s => "s", f => "f");
-            Assert.AreEqual(t, "s");
-        }
+//        [Test]
+//        public void MatchShouldCallFailOnFailureValue()
+//        {
+//            var r = Result.Fail<int>("xxx", new CharStreamPosition());
+//            var t = r.MatchResult(s => "s", f => "f");
+//            Assert.AreEqual(t, "f");
+//        }
+//
+//        [Test]
+//        public void MatchShouldCallSuccessOnSuccessValue()
+//        {
+//            var r = Result.Succeed(100, new CharStreamPosition());
+//            var t = r.MatchResult(s => "s", f => "f");
+//            Assert.AreEqual(t, "s");
+//        }
 
         [Test]
         public void SucceedShouldProduceSuccessResultWithCharPosition()

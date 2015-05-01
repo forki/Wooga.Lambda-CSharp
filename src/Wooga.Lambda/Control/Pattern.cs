@@ -36,6 +36,11 @@ namespace Wooga.Lambda.Control
                 return Case(v => v is TValueType, x => f((TValueType) x));
             }
 
+            public MatchCase<TValue> Case<TValueType>(Func<TValueType, bool> t, Func<TValueType, TResult> f) where TValueType : TValue
+            {
+                return Case(v => v is TValueType && t((TValueType) v), x => f((TValueType)x));
+            }
+
             public MatchCase<TValue> Default(Func<TValue, TResult> f)
             {
                 return Case(_ => true, f);

@@ -3,6 +3,7 @@
 // summary:	Implements the common class
 
 using System;
+using Wooga.Lambda.Control;
 using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Parser.Combinators
@@ -35,7 +36,12 @@ namespace Wooga.Lambda.Parser.Combinators
         /// <returns>   A Parser&lt;R2&gt; </returns>
         public static Parser<R2> Bind<R, R2>(this Parser<R> p, Func<R, Parser<R2>> f)
         {
-            return s => p(s).MatchResult(x => f(x.Value)(s.AtPosition(x.Peek)), y => Result.Fail<R2>(y.Message, y.Peek));
+//            return s => p(s).MatchResult(x => f(x.Value)(s.AtPosition(x.Peek)), y => Result.Fail<R2>(y.Message, y.Peek));
+            return s => Pattern<Result<R2>>
+                .Match(p(s))
+                .Case<Result<R>.Success>(x => f(x.Value)(s.AtPosition(x.Peek)))
+                .Case<Result<R>.Failure>(y => Result.Fail<R2>(y.Message, y.Peek))
+                .Run();
         }
 
         /// <summary>   A Parser&lt;R&gt; extension method that thens. </summary>
@@ -46,7 +52,12 @@ namespace Wooga.Lambda.Parser.Combinators
         /// <returns>   A Parser&lt;R2&gt; </returns>
         public static Parser<R2> Then<R, R2>(this Parser<R> p, R2 value)
         {
-            return s => p(s).MatchResult(x => Result.Succeed(value, x.Peek), y => Result.Fail<R2>(y.Message, y.Peek));
+//            return s => p(s).MatchResult(x => Result.Succeed(value, x.Peek), y => Result.Fail<R2>(y.Message, y.Peek));
+            return s => Pattern<Result<R2>>
+                .Match(p(s))
+                .Case<Result<R>.Success>(x => Result.Succeed(value, x.Peek))
+                .Case<Result<R>.Failure>(y => Result.Fail<R2>(y.Message, y.Peek))
+                .Run();
         }
 
 //        public static Parser<R2, US> TakeRight<R, R2, US>(this Parser<R, US> l, Parser<R2, US> value)
@@ -70,16 +81,12 @@ namespace Wooga.Lambda.Parser.Combinators
             return chars =>
             {
                 var f = p.Bind(value => _Many(p, rs.Add(value), min, max))(chars);
-                return
-                    f.MatchResult(
-                        value =>
-                            rs.Count > max
-                                ? Result.Fail<ImmutableList<R>>("", value.Peek)
-                                : Result.Succeed(value.Value, value.Peek),
-                        value =>
-                            rs.Count > max || rs.Count < min
-                                ? Result.Fail<ImmutableList<R>>("", value.Peek)
-                                : Result.Succeed(rs, chars.Position));
+                return Pattern<Result<ImmutableList<R>>>.Match(f)
+                    .Case<Result<ImmutableList<R>>.Success>(_ => rs.Count <= max, v => Result.Succeed(v.Value, v.Peek))
+                    .Case<Result<ImmutableList<R>>.Failure>(_ => !(rs.Count > max || rs.Count < min),
+                        v => Result.Succeed(rs, chars.Position))
+                    .Default(v => Result.Fail<ImmutableList<R>>("", v.Peek))
+                    .Run();
             };
         }
 
