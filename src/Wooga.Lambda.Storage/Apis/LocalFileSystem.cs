@@ -18,10 +18,10 @@ namespace Wooga.Lambda.Storage.Apis
         ///     The ImmutableTuple&lt;ImmutableList&lt;string&gt;,string&gt; to process.
         /// </param>
         /// <returns>   The file asynchronous. </returns>
-        public Async<Maybe<FileSystem.File>> GetFileAsync(ImmutableTuple<ImmutableList<string>, string> p)
+        public Async<Maybe<FileSystem.File>> GetFileAsync(FileSystem.FilePath p)
         {
             return () => Async
-                .Return(() => File.ReadAllBytes(DirListWithFileAsString(p.Item1, p.Item2)).ToImmutableList())
+                .Return(() => File.ReadAllBytes(FilePathAsString(p)).ToImmutableList())
                 .Catch()
                 .RunSynchronously()
                 .FromEither(e => Maybe.Nothing<FileSystem.File>(),
@@ -34,12 +34,12 @@ namespace Wooga.Lambda.Storage.Apis
         /// </param>
         /// <param name="c">    The ImmutableList&lt;byte&gt; to process. </param>
         /// <returns>   An Async&lt;bool&gt; </returns>
-        public Async<bool> WriteFileAsync(ImmutableTuple<ImmutableList<string>, string> p, ImmutableList<byte> c)
+        public Async<bool> WriteFileAsync(FileSystem.FilePath p, ImmutableList<byte> c)
         {
             return () => Async
                 .Return(() =>
                 {
-                    File.WriteAllBytes(DirListWithFileAsString(p.Item1, p.Item2), c.ToArray());
+                    File.WriteAllBytes(FilePathAsString(p), c.ToArray());
                     return Unit.Default;
                 })
                 .Catch()
@@ -53,12 +53,12 @@ namespace Wooga.Lambda.Storage.Apis
         /// </param>
         /// <param name="c">    The ImmutableList&lt;byte&gt; to process. </param>
         /// <returns>   An Async&lt;bool&gt; </returns>
-        public Async<bool> AppendFileAsync(ImmutableTuple<ImmutableList<string>, string> p, ImmutableList<byte> c)
+        public Async<bool> AppendFileAsync(FileSystem.FilePath p, ImmutableList<byte> c)
         {
             return () => Async
                 .Return(() =>
                 {
-                    AppendAllBytes(DirListWithFileAsString(p.Item1, p.Item2), c.ToArray());
+                    AppendAllBytes(FilePathAsString(p), c.ToArray());
                     return Unit.Default;
                 })
                 .Catch()
@@ -71,15 +71,15 @@ namespace Wooga.Lambda.Storage.Apis
         ///     The ImmutableTuple&lt;ImmutableList&lt;string&gt;,string&gt; to process.
         /// </param>
         /// <returns>   The dir asynchronous. </returns>
-        public Async<Maybe<FileSystem.Dir>> GetDirAsync(ImmutableList<string> p)
+        public Async<Maybe<FileSystem.Dir>> GetDirAsync(FileSystem.DirPath p)
         {
             return () =>
             {
                 Func<string[], ImmutableList<string>> trim =
                     xs => xs.ToImmutableList().Map(f => new FileInfo(f).Name);
 
-                var fs = trim(Directory.GetFiles(DirListAsString(p)));
-                var ds = trim(Directory.GetDirectories(DirListAsString(p)));
+                var fs = trim(Directory.GetFiles(DirPathAsString(p)));
+                var ds = trim(Directory.GetDirectories(DirPathAsString(p)));
                 return Maybe.Just(new FileSystem.Dir(p, ds, fs));
             };
         }
@@ -89,9 +89,9 @@ namespace Wooga.Lambda.Storage.Apis
         ///     The ImmutableTuple&lt;ImmutableList&lt;string&gt;,string&gt; to process.
         /// </param>
         /// <returns>   An Async&lt;bool&gt; </returns>
-        public Async<bool> HasFileAsync(ImmutableTuple<ImmutableList<string>, string> p)
+        public Async<bool> HasFileAsync(FileSystem.FilePath p)
         {
-            return () => File.Exists(DirListWithFileAsString(p.Item1, p.Item2));
+            return () => File.Exists(FilePathAsString(p));
         }
 
         /// <summary>   Has dir asynchronous. </summary>
@@ -99,9 +99,9 @@ namespace Wooga.Lambda.Storage.Apis
         ///     The ImmutableTuple&lt;ImmutableList&lt;string&gt;,string&gt; to process.
         /// </param>
         /// <returns>   An Async&lt;bool&gt; </returns>
-        public Async<bool> HasDirAsync(ImmutableList<string> p)
+        public Async<bool> HasDirAsync(FileSystem.DirPath p)
         {
-            return () => Directory.Exists(DirListAsString(p));
+            return () => Directory.Exists(DirPathAsString(p));
         }
 
         /// <summary>   Creates a new dir asynchronous. </summary>
@@ -109,11 +109,11 @@ namespace Wooga.Lambda.Storage.Apis
         ///     The ImmutableTuple&lt;ImmutableList&lt;string&gt;,string&gt; to process.
         /// </param>
         /// <returns>   An Async&lt;Unit&gt; </returns>
-        public Async<Unit> NewDirAsync(ImmutableList<string> p)
+        public Async<Unit> NewDirAsync(FileSystem.DirPath p)
         {
             return Async.Return(() =>
             {
-                Directory.CreateDirectory(DirListAsString(p));
+                Directory.CreateDirectory(DirPathAsString(p));
                 return Unit.Default;
             })
                 .Catch()
@@ -125,11 +125,11 @@ namespace Wooga.Lambda.Storage.Apis
         ///     The ImmutableTuple&lt;ImmutableList&lt;string&gt;,string&gt; to process.
         /// </param>
         /// <returns>   An Async&lt;Unit&gt; </returns>
-        public Async<Unit> RmDirAsync(ImmutableList<string> p)
+        public Async<Unit> RmDirAsync(FileSystem.DirPath p)
         {
             return Async.Return(() =>
             {
-                Directory.Delete(DirListAsString(p));
+                Directory.Delete(DirPathAsString(p));
                 return Unit.Default;
             })
                 .Catch()
@@ -141,11 +141,11 @@ namespace Wooga.Lambda.Storage.Apis
         ///     The ImmutableTuple&lt;ImmutableList&lt;string&gt;,string&gt; to process.
         /// </param>
         /// <returns>   An Async&lt;Unit&gt; </returns>
-        public Async<Unit> RmFileAsync(ImmutableTuple<ImmutableList<string>, string> p)
+        public Async<Unit> RmFileAsync(FileSystem.FilePath p)
         {
             return Async.Return(() =>
             {
-                File.Delete(DirListWithFileAsString(p.Item1, p.Item2));
+                File.Delete(FilePathAsString(p));
                 return Unit.Default;
             })
                 .Catch()
@@ -156,11 +156,11 @@ namespace Wooga.Lambda.Storage.Apis
         /// <param name="ps">   The ps. </param>
         /// <param name="pt">   The point. </param>
         /// <returns>   An Async&lt;bool&gt; </returns>
-        public Async<bool> MvDirAsync(ImmutableList<string> ps, ImmutableList<string> pt)
+        public Async<bool> MvDirAsync(FileSystem.DirPath ps, FileSystem.DirPath pt)
         {
             return Async.Return(() =>
             {
-                Directory.Move(DirListAsString(ps), DirListAsString(pt));
+                Directory.Move(DirPathAsString(ps), DirPathAsString(pt));
                 return Unit.Default;
             })
                 .Catch()
@@ -171,12 +171,11 @@ namespace Wooga.Lambda.Storage.Apis
         /// <param name="ps">   The ps. </param>
         /// <param name="pt">   The point. </param>
         /// <returns>   An Async&lt;bool&gt; </returns>
-        public Async<bool> MvFileAsync(ImmutableTuple<ImmutableList<string>, string> ps,
-            ImmutableTuple<ImmutableList<string>, string> pt)
+        public Async<bool> MvFileAsync(FileSystem.FilePath ps, FileSystem.FilePath pt)
         {
             return Async.Return(() =>
             {
-                File.Move(DirListWithFileAsString(ps.Item1, ps.Item2), DirListWithFileAsString(pt.Item1, pt.Item2));
+                File.Move(FilePathAsString(ps), FilePathAsString(pt));
                 return Unit.Default;
             })
                 .Catch()
@@ -187,7 +186,7 @@ namespace Wooga.Lambda.Storage.Apis
         /// <param name="ps">   The ps. </param>
         /// <param name="pt">   The point. </param>
         /// <returns>   An Async&lt;bool&gt; </returns>
-        public Async<bool> CpDirAsync(ImmutableList<string> ps, ImmutableList<string> pt)
+        public Async<bool> CpDirAsync(FileSystem.DirPath ps, FileSystem.DirPath pt)
         {
             return Async.Return(() =>
             {
@@ -197,8 +196,8 @@ namespace Wooga.Lambda.Storage.Apis
                     .Then(
                         d.Files.Fold(
                             (a, f) =>
-                                a.Then(CpFileAsync(ImmutableTuple.Create(d.Path, f), ImmutableTuple.Create(pt, f))), Y))
-                    .Then(d.Dirs.Fold((a, f) => a.Then(CpDirAsync(ps.Add(f), pt.Add(f))), Y))
+                                a.Then(CpFileAsync(new FileSystem.FilePath(d.Path, f), new FileSystem.FilePath(pt, f))), Y))
+                    .Then(d.Dirs.Fold((a, f) => a.Then(CpDirAsync(new FileSystem.DirPath(ps.PathElements.Add(f)), new FileSystem.DirPath(pt.PathElements.Add(f)))), Y))
                     .RunSynchronously();
             });
         }
@@ -207,12 +206,12 @@ namespace Wooga.Lambda.Storage.Apis
         /// <param name="ps">   The ps. </param>
         /// <param name="pt">   The point. </param>
         /// <returns>   An Async&lt;bool&gt; </returns>
-        public Async<bool> CpFileAsync(ImmutableTuple<ImmutableList<string>, string> ps,
-            ImmutableTuple<ImmutableList<string>, string> pt)
+        public Async<bool> CpFileAsync(FileSystem.FilePath ps,
+            FileSystem.FilePath pt)
         {
             return Async.Return(() =>
             {
-                File.Copy(DirListWithFileAsString(ps.Item1, ps.Item2), DirListWithFileAsString(pt.Item1, pt.Item2));
+                File.Copy(FilePathAsString(ps), FilePathAsString(pt));
                 return Unit.Default;
             })
                 .Catch()
@@ -224,6 +223,16 @@ namespace Wooga.Lambda.Storage.Apis
         public static FileSystem.Api Create()
         {
             return new LocalFileSystem();
+        }
+
+        private static string DirPathAsString(FileSystem.DirPath p)
+        {
+            return p.PathElements.Fold(Path.Combine, "");
+        }
+
+        private static string FilePathAsString(FileSystem.FilePath p)
+        {
+            return Path.Combine(DirPathAsString(p.Path), p.Name);
         }
 
         private static string DirListAsString(ImmutableList<string> xs)

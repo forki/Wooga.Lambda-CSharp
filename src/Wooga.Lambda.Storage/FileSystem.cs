@@ -1,10 +1,6 @@
 ﻿using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
-using DirPath = Wooga.Lambda.Data.ImmutableList<string>;
-using FilePath = Wooga.Lambda.Data.ImmutableTuple<Wooga.Lambda.Data.ImmutableList<string>, string>;
-using Name = System.String;
-using Names = Wooga.Lambda.Data.ImmutableList<string>;
 using Bytes = Wooga.Lambda.Data.ImmutableList<byte>;
 
 namespace Wooga.Lambda.Storage
@@ -30,6 +26,18 @@ namespace Wooga.Lambda.Storage
             Async<bool> CpFileAsync(FilePath ps, FilePath pt);
         }
 
+        public struct FilePath
+        {
+            public readonly DirPath Path;
+            public readonly string Name;
+
+            public FilePath(DirPath path, string name)
+            {
+                Path = path;
+                Name = name;
+            }
+        }
+
         /// <summary>   A file. </summary>
         public struct File
         {
@@ -46,19 +54,29 @@ namespace Wooga.Lambda.Storage
             }
         }
 
+        public struct DirPath
+        {
+            public readonly ImmutableList<string> PathElements;
+
+            public DirPath(ImmutableList<string> elements)
+            {
+                PathElements = elements;
+            }
+        }
+
         /// <summary>   A dir. </summary>
         public struct Dir
         {
             /// <summary>   The dirs. </summary>
-            public readonly Names Dirs;
+            public readonly ImmutableList<string> Dirs; 
 
             /// <summary>   The files. </summary>
-            public readonly Names Files;
+            public readonly ImmutableList<string> Files;
 
             /// <summary>   Full pathname of the dir. </summary>
             public readonly DirPath Path;
 
-            internal Dir(DirPath path, Names dirs, Names files)
+            internal Dir(DirPath path, ImmutableList<string> dirs, ImmutableList<string> files)
             {
                 Path = path;
                 Dirs = dirs;
