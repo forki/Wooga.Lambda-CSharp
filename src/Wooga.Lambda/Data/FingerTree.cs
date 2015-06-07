@@ -364,8 +364,7 @@ namespace Wooga.Lambda.Data
             {
                 throw new Exception("Affix must have two elements to produce Init");    
             }
-        }
-
+        } 
     }
 
     public abstract class Node<T>
