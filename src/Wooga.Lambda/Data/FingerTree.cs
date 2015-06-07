@@ -1,5 +1,4 @@
 ﻿using System;
-using Wooga.Lambda.Control;
 
 // http://andrew.gibiansky.com/blog/haskell/finger-trees/
 
@@ -7,8 +6,27 @@ namespace Wooga.Lambda.Data
 {
     public abstract class FingerTree<T>
     {
+        public virtual bool IsEmpty()
+        {
+            return false;
+        }
+
+        public virtual bool IsSingle()
+        {
+            return false;
+        }
+
+        public virtual bool IsDeep()
+        {
+            return false;
+        }
+
         public sealed class Empty : FingerTree<T>
         {
+            public override bool IsEmpty()
+            {
+                return true;
+            }
         } 
 
         public sealed class Single : FingerTree<T>
@@ -18,6 +36,11 @@ namespace Wooga.Lambda.Data
             public Single(T a)
             {
                 A = a;
+            }
+
+            public override bool IsSingle()
+            {
+                return true;
             }
         }
 
@@ -32,6 +55,11 @@ namespace Wooga.Lambda.Data
                 Prefix = prefix;
                 Tree = tree;
                 Suffix = suffix;
+            }
+
+            public override bool IsDeep()
+            {
+                return true;
             }
         }
     }
@@ -55,102 +83,108 @@ namespace Wooga.Lambda.Data
 
         public static FingerTree<T> Prepend<T>(this FingerTree<T> t, T x)
         {
-            return Pattern<FingerTree<T>>
-                .Match(t)
-                .Case<FingerTree<T>.Empty>(_ => Single(x))
-                .Case<FingerTree<T>.Single>(s => Deep(Affix.One(x), Empty<Node<T>>(), Affix.One(s.A)))
-                .Case<FingerTree<T>.Deep>(s => PrependDeep(s, x))
-                .Run();
+            if (t.IsEmpty())
+            {
+                return Single(x);
+            }
+            else if (t.IsSingle())
+            {
+                return Deep(Affix.One(x), Empty<Node<T>>(), Affix.One(((FingerTree<T>.Single)t).A));
+            }
+            else //if (t.IsDeep())
+            {
+                return PrependDeep((FingerTree<T>.Deep) t, x);
+            }
         }
 
         private static FingerTree<T> PrependDeep<T>(this FingerTree<T>.Deep t, T x)
         {
-            return Pattern<FingerTree<T>>
-                .Match(t.Prefix)
-                .Case<Affix<T>.Four>(a => Deep(Affix.Two(x, a.A), t.Tree.Prepend(Node.Trio(a.B, a.C, a.D)),t.Suffix))
-                .Default(a => Deep(a.Prepend(x), t.Tree,t.Suffix))
-                .Run();
+            var a = t.Prefix as Affix<T>.Four;
+            return a != null 
+                ? Deep(Affix.Two(x, a.A), t.Tree.Prepend(Node.Trio(a.B, a.C, a.D)), t.Suffix) 
+                : Deep(t.Prefix.Prepend(x), t.Tree, t.Suffix);
         }
 
         public static FingerTree<T> Append<T>(this FingerTree<T> t, T x)
         {
-            return Pattern<FingerTree<T>>
-                .Match(t)
-                .Case<FingerTree<T>.Empty>(_ => Single(x))
-                .Case<FingerTree<T>.Single>(s => Deep(Affix.One(s.A), Empty<Node<T>>(), Affix.One(x)))
-                .Case<FingerTree<T>.Deep>(s => AppendDeep(s, x))
-                .Run();
+            if (t.IsEmpty())
+            {
+                return Single(x);
+            }
+            else if (t.IsSingle())
+            {
+                return Deep(Affix.One(((FingerTree<T>.Single)t).A), Empty<Node<T>>(), Affix.One(x));
+            }
+            else //if (t.IsDeep())
+            {
+                return AppendDeep((FingerTree<T>.Deep)t, x);
+            }
         }
 
         private static FingerTree<T> AppendDeep<T>(this FingerTree<T>.Deep t, T x)
         {
-            return Pattern<FingerTree<T>>
-                .Match(t.Suffix)
-                .Case<Affix<T>.Four>(a => Deep(t.Prefix, t.Tree.Append(Node.Trio(a.A, a.B, a.C)), Affix.Two(a.D,x)))
-                .Default(a => Deep(t.Prefix, t.Tree, a.Append(x)))
-                .Run();
+            var a = t.Suffix as Affix<T>.Four;
+            return a != null
+                ? Deep(t.Prefix, t.Tree.Append(Node.Trio(a.A, a.B, a.C)), Affix.Two(a.D, x))
+                : Deep(t.Prefix, t.Tree, t.Suffix.Append(x));
         }
 
         public static T Head<T>(this FingerTree<T> t)
         {
-            return Pattern<T>
-                .Match(t.ViewL())
-                .Case<View<T>.Some>(s => s.Element)
-                .Default(_ =>
-                {
-                    throw new Exception("Tree is empty.");
-                })
-                .Run();
+            var view = t.ViewL();
+            if(view.IsNone()) throw new Exception("Tree is empty.");
+            return ((View<T>.Some)view).Element;
         }
 
         public static FingerTree<T> Tail<T>(this FingerTree<T> t)
         {
-            return Pattern<FingerTree<T>>
-                .Match(t.ViewL())
-                .Case<View<T>.Some>(s => s.Tree)
-                .Default(_ =>
-                {
-                    throw new Exception("Tree is empty.");
-                })
-                .Run();
+            var view = t.ViewL();
+            if (view.IsNone()) throw new Exception("Tree is empty.");
+            return ((View<T>.Some)view).Tree;
         }
 
         public static T Last<T>(this FingerTree<T> t)
         {
-            return Pattern<T>
-                .Match(t.ViewR())
-                .Case<View<T>.Some>(s => s.Element)
-                .Default(_ =>
-                {
-                    throw new Exception("Tree is empty.");
-                })
-                .Run();
+            var view = t.ViewR();
+            if (view.IsNone()) throw new Exception("Tree is empty.");
+            return ((View<T>.Some)view).Element;
         }
 
         public static FingerTree<T> Init<T>(this FingerTree<T> t)
         {
-            return Pattern<FingerTree<T>>
-                .Match(t.ViewR())
-                .Case<View<T>.Some>(s => s.Tree)
-                .Default(_ =>
-                {
-                    throw new Exception("Tree is empty.");
-                })
-                .Run();
+            var view = t.ViewR();
+            if (view.IsNone()) throw new Exception("Tree is empty.");
+            return ((View<T>.Some)view).Tree;
         }
 
         public static bool IsEmpty<T>(this FingerTree<T> t)
         {
-            return Pattern<bool>
-                .Match(t.ViewR())
-                .Case<View<T>.Some>(_=>false)
-                .Default(_=>true)
-                .Run();
+            return t.ViewR().IsNone();
         }
     }
 
     public abstract class Affix<T>
     {
+        public virtual bool IsOne()
+        {
+            return false;
+        }
+
+        public virtual bool IsTwo()
+        {
+            return false;
+        }
+
+        public virtual bool IsThree()
+        {
+            return false;
+        }
+
+        public virtual bool IsFour()
+        {
+            return false;
+        }
+        
         public sealed class One : Affix<T>
         {
             public readonly T A;
@@ -158,6 +192,11 @@ namespace Wooga.Lambda.Data
             public One(T a)
             {
                 A = a;
+            }
+
+            public override bool IsOne()
+            {
+                return true;
             }
         }
 
@@ -170,6 +209,11 @@ namespace Wooga.Lambda.Data
             {
                 A = a;
                 B = b;
+            }
+
+            public override bool IsTwo()
+            {
+                return true;
             }
         }
 
@@ -184,6 +228,11 @@ namespace Wooga.Lambda.Data
                 A = a;
                 B = b;
                 C = c;
+            }
+
+            public override bool IsThree()
+            {
+                return true;
             }
         }
 
@@ -200,6 +249,11 @@ namespace Wooga.Lambda.Data
                 B = b;
                 C = c;
                 D = d;
+            }
+
+            public override bool IsFour()
+            {
+                return true;
             }
         }
     }
@@ -228,61 +282,104 @@ namespace Wooga.Lambda.Data
 
         public static Affix<T> Prepend<T>(this Affix<T> a, T x)
         {
-            return Pattern<Affix<T>>
-                .Match(a)
-                .Case<Affix<T>.One>(y => Two(x, y.A))
-                .Case<Affix<T>.Two>(y => Three(x, y.A, y.B))
-                .Case<Affix<T>.Three>(y => Four(x, y.A, y.B, y.C))
-                .Default(_ =>
-                {
-                    throw new Exception("Affix must have one to four elements");
-                })
-                .Run();
+            if (a.IsOne())
+            {
+                return Two(x,((Affix<T>.One)a).A);
+            }
+            else if (a.IsTwo())
+            {
+                var two = (Affix<T>.Two)a;
+                return Three(x, two.A, two.B);
+            }
+            else if (a.IsThree())
+            {
+                var three = (Affix<T>.Three)a;
+                return Four(x, three.A, three.B, three.C);
+            }
+            else
+            {
+                throw new Exception("Affix must have one to four elements");
+            }
         }
 
         public static Affix<T> Append<T>(this Affix<T> a, T x)
         {
-            return Pattern<Affix<T>>
-                .Match(a)
-                .Case<Affix<T>.One>(y => Two(y.A, x))
-                .Case<Affix<T>.Two>(y => Three(y.A, y.B, x))
-                .Case<Affix<T>.Three>(y => Four(y.A, y.B, y.C, x))
-                .Default(_ =>
-                {
-                    throw new Exception("Affix must have one to four elements");
-                })
-                .Run();
+            if (a.IsOne())
+            {
+                return Two(((Affix<T>.One)a).A, x);
+            }
+            else if (a.IsTwo())
+            {
+                var two = (Affix<T>.Two)a;
+                return Three(two.A, two.B, x);
+            }
+            else if (a.IsThree())
+            {
+                var three = (Affix<T>.Three)a;
+                return Four(three.A, three.B, three.C, x);
+            }
+            else
+            {
+                throw new Exception("Affix must have one to four elements");
+            }
         }
 
         public static T Last<T>(this Affix<T> a)
         {
-            return Pattern<T>
-                .Match(a)
-                .Case<Affix<T>.One>(y => y.A)
-                .Case<Affix<T>.Two>(y => y.B)
-                .Case<Affix<T>.Three>(y => y.C)
-                .Case<Affix<T>.Four>(y => y.D)
-                .Run();
+            if (a.IsOne())
+            {
+                return ((Affix<T>.One)a).A;
+            }
+            else if (a.IsTwo())
+            {
+                return ((Affix<T>.Two)a).B;
+            }
+            else if (a.IsThree())
+            {
+                return ((Affix<T>.Three)a).C;
+            }
+            else
+            {
+                return ((Affix<T>.Four)a).D;
+            }
         }
 
         public static Affix<T> Init<T>(this Affix<T> a)
         {
-            return Pattern<Affix<T>>
-                .Match(a)
-                .Case<Affix<T>.Two>(y => One(y.A))
-                .Case<Affix<T>.Three>(y => Two(y.A,y.B))
-                .Case<Affix<T>.Four>(y => Three(y.A,y.B,y.C))
-                .Default(_ =>
-                {
-                    throw new Exception("Affix must have one to four elements");
-                })
-                .Run();
+            if (a.IsTwo())
+            {
+                return One(((Affix<T>.Two)a).A);
+            }
+            else if (a.IsThree())
+            {
+                var three = (Affix<T>.Three)a;
+                return Two(three.A, three.B);
+            }
+            else if (a.IsFour())
+            {
+                var four = (Affix<T>.Four)a;
+                return Three(four.A, four.B, four.C);
+            }
+            else
+            {
+                throw new Exception("Affix must have two elements to produce Init");    
+            }
         }
 
     }
 
     public abstract class Node<T>
     {
+        public virtual bool IsDuo()
+        {
+            return false;
+        }
+
+        public virtual bool IsTrio()
+        {
+            return false;
+        }
+
         public sealed class Duo : Node<T>
         {
             public readonly T A;
@@ -292,6 +389,11 @@ namespace Wooga.Lambda.Data
             {
                 A = a;
                 B = b;
+            }
+
+            public override bool IsDuo()
+            {
+                return true;
             }
         }
 
@@ -306,6 +408,11 @@ namespace Wooga.Lambda.Data
                 A = a;
                 B = b;
                 C = c;
+            }
+
+            public override bool IsTrio()
+            {
+                return true;
             }
         }
     }
@@ -324,18 +431,37 @@ namespace Wooga.Lambda.Data
 
         public static Affix<T> ToAffix<T>(this Node<T> n)
         {
-            return Pattern<Affix<T>>
-                .Match(n)
-                .Case<Node<T>.Duo>(d => Affix.Two(d.A, d.B))
-                .Case<Node<T>.Trio>(d => Affix.Three(d.A, d.B, d.C))
-                .Run();
+            if (n.IsDuo())
+            {
+                var duo = (Node<T>.Duo) n;
+                return Affix.Two(duo.A, duo.B);
+            }
+            else
+            {
+                var trio = (Node<T>.Trio)n;
+                return Affix.Three(trio.A, trio.B, trio.C);
+            }
         }
     }
 
     public abstract class View<T>
     {
+        public virtual bool IsNone()
+        {
+            return false;
+        }
+
+        public virtual bool IsSome()
+        {
+            return false;
+        }
+
         public sealed class None : View<T>
         {
+            public override bool IsNone()
+            {
+                return true;
+            }
         }
 
         public sealed class Some : View<T>
@@ -347,6 +473,11 @@ namespace Wooga.Lambda.Data
             {
                 Element = e;
                 Tree = t;
+            }
+
+            public override bool IsSome()
+            {
+                return true;
             }
         }
     }
@@ -365,78 +496,126 @@ namespace Wooga.Lambda.Data
 
         public static View<T> ViewL<T>(this FingerTree<T> t)
         {
-            return Pattern<View<T>>
-                .Match(t)
-                .Case<FingerTree<T>.Empty>(_ => None<T>())
-                .Case<FingerTree<T>.Single>(s => Some(s.A,FingerTree.Empty<T>()))
-                .Case<FingerTree<T>.Deep>(ViewLDeep)
-                .Run();
+            if (t.IsEmpty())
+            {
+                return None<T>();
+            }
+            else if (t.IsSingle())
+            {
+                return Some(((FingerTree<T>.Single) t).A, FingerTree.Empty<T>());
+            }
+            else //if (t.IsDeep())
+            {
+                return ViewLDeep((FingerTree<T>.Deep) t);
+            }
         }
 
         private static View<T> ViewLDeep<T>(this FingerTree<T>.Deep t)
         {
-            return Pattern<View<T>>
-                .Match(t.Prefix)
-                .Case<Affix<T>.One>(a   => Some(a.A, t.Tree.ViewL().ViewLRemainder(t)))
-                .Case<Affix<T>.Two>(a   => Some(a.A, FingerTree.Deep(Affix.One(a.B),t.Tree,t.Suffix)))
-                .Case<Affix<T>.Three>(a => Some(a.A, FingerTree.Deep(Affix.Two(a.B,a.C), t.Tree, t.Suffix)))
-                .Case<Affix<T>.Four>(a  => Some(a.A, FingerTree.Deep(Affix.Three(a.B, a.C, a.D), t.Tree, t.Suffix)))
-                .Run();
+            if (t.Prefix.IsOne())
+            {
+                return Some(((Affix<T>.One)t.Prefix).A, t.Tree.ViewL().ViewLRemainder(t));
+            }
+            else if (t.Prefix.IsTwo())
+            {
+                var two = ((Affix<T>.Two)t.Prefix);
+                return Some(two.A, FingerTree.Deep(Affix.One(two.B), t.Tree, t.Suffix));
+            }
+            else if (t.Prefix.IsThree())
+            {
+                var three = ((Affix<T>.Three)t.Prefix);
+                return Some(three.A, FingerTree.Deep(Affix.Two(three.B, three.C), t.Tree, t.Suffix));
+            }
+            else //if (t.Prefix.IsFour())
+            {
+                var four = ((Affix<T>.Four)t.Prefix);
+                return Some(four.A, FingerTree.Deep(Affix.Three(four.B, four.C, four.D), t.Tree, t.Suffix));
+            }
         }
 
         private static FingerTree<T> ViewLRemainder<T>(this View<Node<T>> v, FingerTree<T>.Deep t)
         {
-            return Pattern<FingerTree<T>>
-                .Match(v)
-                .Case<View<Node<T>>.Some>(a => FingerTree.Deep(a.Element.ToAffix(),a.Tree,t.Suffix))
-                .Case<View<Node<T>>.None>(_ =>
-                {
-                    return Pattern<FingerTree<T>>
-                        .Match(t.Suffix)
-                        .Case<Affix<T>.One>(a => FingerTree.Single(a.A))
-                        .Case<Affix<T>.Two>(a => FingerTree.Deep(Affix.One(a.A), FingerTree.Empty<Node<T>>(), Affix.One(a.B)))
-                        .Case<Affix<T>.Three>(a => FingerTree.Deep(Affix.Two(a.A,a.B), FingerTree.Empty<Node<T>>(), Affix.One(a.C)))
-                        .Case<Affix<T>.Four>(a => FingerTree.Deep(Affix.Three(a.A, a.B, a.C), FingerTree.Empty<Node<T>>(), Affix.One(a.D)))
-                        .Run();
-                })
-                .Run();
+            if (v.IsSome())
+            {
+                var some = ((View<Node<T>>.Some)v);
+                return FingerTree.Deep(some.Element.ToAffix(), some.Tree, t.Suffix);
+            }
+            else if(t.Suffix.IsOne())
+            {
+                return FingerTree.Single(((Affix<T>.One)t.Suffix).A);
+            }
+            else if (t.Suffix.IsTwo())
+            {
+                var suffix = (Affix<T>.Two)t.Suffix;
+                return FingerTree.Deep(Affix.One(suffix.A), FingerTree.Empty<Node<T>>(), Affix.One(suffix.B));
+            }
+            else if (t.Suffix.IsThree())
+            {
+                var suffix = (Affix<T>.Three)t.Suffix;
+                return FingerTree.Deep(Affix.Two(suffix.A, suffix.B), FingerTree.Empty<Node<T>>(), Affix.One(suffix.C));
+            }
+            else //if (t.Suffix.IsFour()) 
+            {
+                var four = ((Affix<T>.Four)t.Suffix);
+                return FingerTree.Deep(Affix.Three(four.A, four.B, four.C), FingerTree.Empty<Node<T>>(), Affix.One(four.D));
+            }
         }
 
         public static View<T> ViewR<T>(this FingerTree<T> t)
         {
-            return Pattern<View<T>>
-                .Match(t)
-                .Case<FingerTree<T>.Empty>(_ => None<T>())
-                .Case<FingerTree<T>.Single>(s => Some(s.A, FingerTree.Empty<T>()))
-                .Case<FingerTree<T>.Deep>(ViewRDeep)
-                .Run();
+            if (t.IsEmpty())
+            {
+                return None<T>();
+            }
+            else if (t.IsSingle())
+            {
+                return Some(((FingerTree<T>.Single)t).A, FingerTree.Empty<T>());
+            }
+            else //if (t.IsDeep())
+            {
+                return ViewRDeep((FingerTree<T>.Deep)t);
+            }
         }
 
         private static View<T> ViewRDeep<T>(this FingerTree<T>.Deep t)
         {
-            return Pattern<View<T>>
-                .Match(t.Suffix)
-                .Case<Affix<T>.One>(a => Some(a.A, t.Tree.ViewR().ViewRRemainder(t)))
-                .Default(a => Some(a.Last(), FingerTree.Deep(t.Prefix, t.Tree, t.Suffix.Init())))
-                .Run();
+            if (t.Suffix.IsOne())
+            {
+                return Some(((Affix<T>.One) t.Suffix).A, t.Tree.ViewR().ViewRRemainder(t));
+            }
+            else
+            {
+                return Some(t.Suffix.Last(), FingerTree.Deep(t.Prefix, t.Tree, t.Suffix.Init()));
+            }
         }
 
         private static FingerTree<T> ViewRRemainder<T>(this View<Node<T>> v, FingerTree<T>.Deep t)
         {
-            return Pattern<FingerTree<T>>
-                .Match(v)
-                .Case<View<Node<T>>.Some>(a => FingerTree.Deep(t.Prefix, a.Tree, a.Element.ToAffix()))
-                .Case<View<Node<T>>.None>(_ =>
-                {
-                    return Pattern<FingerTree<T>>
-                        .Match(t.Prefix)
-                        .Case<Affix<T>.One>(a => FingerTree.Single(a.A))
-                        .Case<Affix<T>.Two>(a => FingerTree.Deep(Affix.One(a.A), FingerTree.Empty<Node<T>>(), Affix.One(a.B)))
-                        .Case<Affix<T>.Three>(a => FingerTree.Deep(Affix.One(a.A), FingerTree.Empty<Node<T>>(), Affix.Two(a.B,a.C)))
-                        .Case<Affix<T>.Four>(a => FingerTree.Deep(Affix.One(a.A), FingerTree.Empty<Node<T>>(), Affix.Three(a.B,a.C,a.D)))
-                        .Run();
-                })
-                .Run();
+            if (v.IsSome())
+            {
+                var some = (View<Node<T>>.Some) v;
+                return FingerTree.Deep(t.Prefix, some.Tree,
+                    some.Element.ToAffix());
+            }
+            else if (t.Prefix.IsOne())
+            {
+                return FingerTree.Single(((Affix<T>.One)t.Prefix).A);
+            }
+            else if (t.Prefix.IsTwo())
+            {
+                var two = ((Affix<T>.Two)t.Prefix);
+                return FingerTree.Deep(Affix.One(two.A), FingerTree.Empty<Node<T>>(), Affix.One(two.B));
+            }
+            else if (t.Prefix.IsThree())
+            {
+                var prefix = (Affix<T>.Three)t.Prefix;
+                return FingerTree.Deep(Affix.One(prefix.A), FingerTree.Empty<Node<T>>(), Affix.Two(prefix.B,prefix.C));
+            }
+            else //if (t.Suffix.IsFour())
+            {
+                var prefix = (Affix<T>.Four)t.Prefix;
+                return FingerTree.Deep(Affix.One(prefix.A), FingerTree.Empty<Node<T>>(), Affix.Three(prefix.B,prefix.C,prefix.D));
+            }
         }
     }
 }
