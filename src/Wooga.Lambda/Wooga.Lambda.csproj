@@ -41,11 +41,9 @@
     <Compile Include="Control\Pattern.cs" />
     <Compile Include="Control\Monad\Either.cs" />
     <Compile Include="Control\Monad\Maybe.cs" />
-    <Compile Include="Data\FingerTree\Affix.cs" />
-    <Compile Include="Data\FingerTree\FingerTree.cs" />
+    <Compile Include="Data\FingerTree.cs" />
     <Compile Include="Data\ImmutableList.cs" />
     <Compile Include="Data\ImmutableTuple.cs" />
-    <Compile Include="Data\FingerTree\Node.cs" />
     <Compile Include="Data\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

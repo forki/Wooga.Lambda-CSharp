@@ -25,6 +25,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{BF60BC93-E09B-4E5F-9D85-95A519479D54}"
 	ProjectSection(SolutionItems) = preProject
 		build.fsx = build.fsx
+		Data.FingerTrees.Perf.fsx = Data.FingerTrees.Perf.fsx
 		README.md = README.md
 		RELEASE_NOTES.md = RELEASE_NOTES.md
 	EndProjectSection
@@ -66,6 +67,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Logging", "src\Wooga.Lambda.Logging\Wooga.Lambda.Logging.csproj", "{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Storage", "src\Wooga.Lambda.Storage\Wooga.Lambda.Storage.csproj", "{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "perf", "perf", "{508E3AF0-276C-48E9-9413-637AC451D5C4}"
+	ProjectSection(SolutionItems) = preProject
+		tests\perf\Data.FingerTrees.Perf.fsx = tests\perf\Data.FingerTrees.Perf.fsx
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -114,5 +120,6 @@ Global
 		{75137CDF-FBDA-45E6-835C-4F4F38AE395A} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
 		{DD381F18-597A-486B-9D44-CCA1E9FBE6C1} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
 		{40C3D7A7-A94A-4925-BA28-6739F0E6F339} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
+		{508E3AF0-276C-48E9-9413-637AC451D5C4} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
 	EndGlobalSection
 EndGlobal
