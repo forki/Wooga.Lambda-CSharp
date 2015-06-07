@@ -73,6 +73,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "perf", "perf", "{508E3AF0-2
 		tests\perf\Data.FingerTrees.Perf.fsx = tests\perf\Data.FingerTrees.Perf.fsx
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "play", "play", "{D21E4C55-057D-4110-9B47-2E12CDB62FEB}"
+	ProjectSection(SolutionItems) = preProject
+		tests\play\Data.FingerTrees.Play.fsx = tests\play\Data.FingerTrees.Play.fsx
+	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Performance", "tests\perf\Performance\Performance.fsproj", "{D81F1B5A-A371-454D-8082-8905472CD4A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DAF0B638-BE79-49B4-86F2-CFBF09F9705F}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +119,10 @@ Global
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D81F1B5A-A371-454D-8082-8905472CD4A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D81F1B5A-A371-454D-8082-8905472CD4A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D81F1B5A-A371-454D-8082-8905472CD4A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D81F1B5A-A371-454D-8082-8905472CD4A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -121,5 +137,10 @@ Global
 		{DD381F18-597A-486B-9D44-CCA1E9FBE6C1} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
 		{40C3D7A7-A94A-4925-BA28-6739F0E6F339} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
 		{508E3AF0-276C-48E9-9413-637AC451D5C4} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
+		{D21E4C55-057D-4110-9B47-2E12CDB62FEB} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
+		{D81F1B5A-A371-454D-8082-8905472CD4A8} = {508E3AF0-276C-48E9-9413-637AC451D5C4}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
