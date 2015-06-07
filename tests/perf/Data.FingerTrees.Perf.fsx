@@ -1,104 +1,147 @@
-#r "../../src/Wooga.Lambda/bin/Debug/Wooga.Lambda.dll"
 #r "../../packages/PerfUtil/lib/net40/PerfUtil.dll"
+#r "../../src/Wooga.Lambda/bin/Debug/Wooga.Lambda.dll"
 
 open System
-open Wooga.Lambda.Data
 open PerfUtil
-open System.Collections.Generic
+open Wooga.Lambda.Data
 
-type IOperation<'t> =
+module Utils =
+    let Epoch () = DateTime.Now.Subtract(DateTime(1970,1,1,0,0,0,0,System.DateTimeKind.Utc)).Seconds.ToString() 
+
+type Impl = 
     inherit ITestable
-    abstract Run : Op<char> -> unit
-and Op<'t> = Append of char list | Prepend of char list | Tail of int //| Head // | Tail | Last | Init
+    abstract Fill : unit -> unit
+    abstract Append : IV -> unit
+    abstract Prepend : IV -> unit
+    abstract Tail : unit -> unit
+    abstract Initial : unit -> unit
+    abstract Head : unit -> unit
+    abstract Last : unit -> unit
+and IV = int
 
-let chars = [0..5000] |> List.map char |> List.sortBy (fun x -> System.DateTime.Now.Ticks)
+let [<Literal>] countFull = 500
 
-type FingerTreeOps() =
-    let empty = (FingerTree.Empty<char>() :> FingerTree<char>)
-    let full  = List.fold (fun s x -> FingerTree.Append(s,x)) empty chars
-    interface IOperation<char> with
-        override __.Run op =
-            match op with
-            | Append xs -> List.fold (fun s x -> FingerTree.Append(s,x)) empty  xs
-                           |> ignore 
-            | Prepend xs -> List.fold (fun s x -> FingerTree.Prepend(s,x)) empty  xs
-                            |> ignore
-            | Tail n -> let mutable tail = full in for i in 1..n do tail <- tail.Tail()
-                        |> ignore  
-        member __.Init () = ()
-        member __.Fini () = ()
+type FingerTreeImpl() = 
+    let empty = FingerTree.Empty() :> FingerTree<IV>
+    let full = List.fold (fun (s:FingerTree<IV>) x -> s.Append(x)) empty [1..countFull] 
+    let mutable c = empty
+    interface Impl with
         member __.Name = "FingerTree"
+        member __.Init() = ()
+        member __.Fini() = c <- empty
+        member __.Fill() = c <- full
+        member __.Append v = c <- c.Append v
+        member __.Prepend v = c <- c.Prepend v
+        member __.Tail () = c <- c.Tail()
+        member __.Initial () = c <- c.Init()
+        member __.Head () = c.Head() |> ignore
+        member __.Last () = c.Last() |> ignore
 
-type FSharpListOps() =
-    let empty = List.empty
-    let full = List.fold (fun s x -> List.append s [x]) empty chars
-    interface IOperation<char> with
-        override __.Run op =
-            match op with
-            | Append xs -> List.fold (fun s x -> List.append s [x]) empty xs
-                           |> ignore
-            | Prepend xs -> List.fold (fun s x -> x::s) empty xs
-                            |> ignore
-            | Tail n -> let mutable tail = full in for i in 1..n do tail <- tail.Tail
-                        |> ignore
-        member __.Init () = ()
-        member __.Fini () = ()
-        member __.Name = "FSharpList"
+type FListImpl() = 
+    let empty = List<IV>.Empty
+    let full = [1..countFull]
+    let mutable c = empty
+    interface Impl with
+        member __.Name = "FSharp.List"
+        member __.Init() = ()
+        member __.Fini() = c <- empty
+        member __.Fill() = c <- full
+        member __.Append v = c <- c@[v]
+        member __.Prepend v = c <- v::c
+        member __.Tail () = c <- c.Tail
+        member __.Initial () = c <- c |> (List.rev >> List.tail)
+        member __.Head () = c.Head |> ignore
+        member __.Last () = c |> (List.rev >> List.head) |> ignore
 
-type FSharpArrayOps() =
-    let empty = Array.empty
-    let full = List.fold (fun s x -> Array.append s [|x|]) empty chars 
-    interface IOperation<char> with
-        override __.Run op =
-            match op with
-            | Append xs -> List.fold (fun s x -> Array.append s [|x|]) empty xs
-                           |> ignore
-            | Prepend xs -> List.fold (fun s x -> Array.append [|x|] s) empty xs
-                            |> ignore
-            | Tail n -> let mutable tail = full in for i in 1..n do tail <- Array.sub full 1 (full.Length-1)  
-                        |> ignore
-        member __.Init () = ()
-        member __.Fini () = ()
-        member __.Name = "FSharpArray"
+type CListImpl() = 
+    let empty = System.Collections.Generic.List<IV>()
+    let full = List.fold (fun (s:System.Collections.Generic.List<IV>) x -> let _ = s.Add(x) in s) empty [1..countFull]
+    let mutable c = empty
+    interface Impl with
+        member __.Name = "CSharp.List"
+        member __.Init() = ()
+        member __.Fini() = c <- System.Collections.Generic.List<IV>()
+        member __.Fill() = c <- List.fold (fun (s:System.Collections.Generic.List<IV>) x -> let _ = s.Add(x) in s) empty [1..countFull]
+        member __.Append v = c.Add(v)
+        member __.Prepend v = c.Insert(0,v)
+        member __.Tail () = c.RemoveAt(0)
+        member __.Initial () = c.RemoveAt(c.Count-1)
+        member __.Head () = c.Item(0) |> ignore
+        member __.Last () = c.Item(c.Count-1) |> ignore
 
-type CSharpListOps() =
-    let empty () = new List<char>()
-    let _full() = List.fold (fun (s:List<char>) x -> s.Add(x)
-                                                     s) (empty()) chars
-    let mutable full = _full()
-    interface IOperation<char> with
-        override __.Run op =
-            match op with
-            | Append xs -> List.fold (fun (s:List<char>) x -> s.Add(x)
-                                                              s) (empty()) xs
-                           |> ignore
-            | Prepend xs -> List.fold (fun (s:List<char>) x -> s.Insert(0,x)
-                                                               s) (empty()) xs
-                           |> ignore
-            | Tail n -> let mutable tail = full
-                        for i in 1..n do tail <- tail.GetRange(1,tail.Count-1)
-        member __.Init () = full <- _full()
-        member __.Fini () = ()
-        member __.Name = "CSharpList"
+module Tests = 
+    type Marker = 
+        class
+        end
+    
+    let intlist1 = [ 1..countFull/2 ]
+    let intlist2 = [ 1..countFull ]
 
-[<AutoOpen>]
-module PerfTests =
+    [<PerfTest(100)>]
+    let ``Append 250`` (s : Impl) = List.iter s.Append intlist1
 
-    type Marker = class end
+    [<PerfTest(100)>]
+    let ``Append 500`` (s : Impl) = List.iter s.Append intlist2
 
-    [<PerfTest(500)>]
-    let ``Append`` (s : IOperation<char>) = s.Run(Append(chars))
+    [<PerfTest(100)>]
+    let ``Prepend 250`` (s : Impl) = List.iter s.Prepend intlist1
 
-    [<PerfTest(500)>]
-    let ``Prepend`` (s : IOperation<char>) = s.Run(Prepend(chars))
+    [<PerfTest(100)>]
+    let ``Prepend 500`` (s : Impl) = List.iter s.Prepend intlist2
 
-    [<PerfTest(500)>]
-    let ``Tail`` (s : IOperation<char>) = s.Run(Tail(500))
+    [<PerfTest(100)>]
+    let ``Tail 250`` (s : Impl) =    
+        s.Fill()  
+        List.iter (fun _ -> s.Tail()) intlist1 
 
-let tester () = new ImplementationComparer<IOperation<char>>(
-                    new FingerTreeOps(),
-                    [new FSharpListOps();new FSharpArrayOps();new CSharpListOps()],
-                    warmup = true) :> PerformanceTester<IOperation<char>>
+    [<PerfTest(100)>]
+    let ``Tail 500`` (s : Impl) =
+        s.Fill()  
+        List.iter (fun _ -> s.Tail()) intlist2
 
-let test = PerfTest<IOperation<char>>.OfModuleMarker<PerfTests.Marker>()
-let result = PerfTest.run tester test
+    [<PerfTest(100)>]
+    let ``Initial 250`` (s : Impl) =    
+        s.Fill()  
+        List.iter (fun _ -> s.Initial()) intlist1 
+
+    [<PerfTest(100)>]
+    let ``Initial 500`` (s : Impl) =
+        s.Fill()  
+        List.iter (fun _ -> s.Initial()) intlist2
+    
+    [<PerfTest(100)>]
+    let ``Head&Tail 250`` (s : Impl) =    
+        s.Fill()  
+        List.iter (fun _ -> 
+            s.Head()
+            s.Tail()) intlist1 
+
+    [<PerfTest(100)>]
+    let ``Head&Tail 500`` (s : Impl) =
+        s.Fill()  
+        List.iter (fun _ -> 
+            s.Head()
+            s.Tail()) intlist2
+
+    [<PerfTest(100)>]
+    let ``Last&Initial 250`` (s : Impl) =    
+        s.Fill()  
+        List.iter (fun _ -> 
+            s.Last()
+            s.Initial()) intlist1 
+
+    [<PerfTest(100)>]
+    let ``Last&Initial 500`` (s : Impl) =
+        s.Fill()  
+        List.iter (fun _ -> 
+            s.Last()
+            s.Initial()) intlist2
+
+PerfTest.OfModuleMarker<Tests.Marker>() 
+|> PerfTest.run (fun () -> new ImplementationComparer<Impl>(FingerTreeImpl(), [ FListImpl(); CListImpl() ],new WeightedComparer(spaceFactor = 0.2, leastAcceptableImprovementFactor = 7.),true,true) :> _)
+//|> printfn "%A"
+let past = new PastImplementationComparer<Impl>(FingerTreeImpl(),Utils.Epoch(),"performance.tests",true,new WeightedComparer(spaceFactor = 0.2, leastAcceptableImprovementFactor = 1.)) 
+PerfTest.OfModuleMarker<Tests.Marker> ()
+|> PerfTest.run (fun () -> past :> _)
+|> printfn "%A"
+past.PersistCurrentResults()
