@@ -54,10 +54,10 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '183', 183)" onmouseover="showTip(event, '183', 183)">
+          <code onmouseout="hideTip(event, '182', 182)" onmouseover="showTip(event, '182', 182)">
             Bind(p, f)
           </code>
-          <div class="tip" id="183">
+          <div class="tip" id="182">
             <strong>Signature:</strong> (p:Parser&lt;&#39;R&gt; * f:Func&lt;&#39;R,Parser&lt;&#39;R2&gt;&gt;) -&gt; Parser&lt;&#39;R2&gt;<br />
                           <strong>Type parameters:</strong> 'R, 'R2          </div>
         </td>
@@ -68,8 +68,22 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '184', 184)" onmouseover="showTip(event, '184', 184)">
+          <code onmouseout="hideTip(event, '183', 183)" onmouseover="showTip(event, '183', 183)">
             Many(p)
+          </code>
+          <div class="tip" id="183">
+            <strong>Signature:</strong> p:Parser&lt;&#39;R&gt; -&gt; Parser&lt;ImmutableList&lt;&#39;R&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'R          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '184', 184)" onmouseover="showTip(event, '184', 184)">
+            Many1(p)
           </code>
           <div class="tip" id="184">
             <strong>Signature:</strong> p:Parser&lt;&#39;R&gt; -&gt; Parser&lt;ImmutableList&lt;&#39;R&gt;&gt;<br />
@@ -83,10 +97,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '185', 185)" onmouseover="showTip(event, '185', 185)">
-            Many1(p)
+            Or(l, r)
           </code>
           <div class="tip" id="185">
-            <strong>Signature:</strong> p:Parser&lt;&#39;R&gt; -&gt; Parser&lt;ImmutableList&lt;&#39;R&gt;&gt;<br />
+            <strong>Signature:</strong> (l:Parser&lt;&#39;R&gt; * r:Parser&lt;&#39;R&gt;) -&gt; Parser&lt;&#39;R&gt;<br />
                           <strong>Type parameters:</strong> 'R          </div>
         </td>
         <td class="xmldoc">
@@ -112,10 +126,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '187', 187)" onmouseover="showTip(event, '187', 187)">
-            Then(p, value)
+            TakeBoth(l, r)
           </code>
           <div class="tip" id="187">
-            <strong>Signature:</strong> (p:Parser&lt;&#39;R&gt; * value:&#39;R2) -&gt; Parser&lt;&#39;R2&gt;<br />
+            <strong>Signature:</strong> (l:Parser&lt;&#39;R&gt; * r:Parser&lt;&#39;R2&gt;) -&gt; Parser&lt;ImmutableTuple&lt;&#39;R,&#39;R2&gt;&gt;<br />
                           <strong>Type parameters:</strong> 'R, 'R2          </div>
         </td>
         <td class="xmldoc">
@@ -126,9 +140,51 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '188', 188)" onmouseover="showTip(event, '188', 188)">
-            Zero()
+            TakeLeft(l, r)
           </code>
           <div class="tip" id="188">
+            <strong>Signature:</strong> (l:Parser&lt;&#39;R&gt; * r:Parser&lt;&#39;R2&gt;) -&gt; Parser&lt;&#39;R&gt;<br />
+                          <strong>Type parameters:</strong> 'R, 'R2          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '189', 189)" onmouseover="showTip(event, '189', 189)">
+            TakeRight(l, r)
+          </code>
+          <div class="tip" id="189">
+            <strong>Signature:</strong> (l:Parser&lt;&#39;R&gt; * r:Parser&lt;&#39;R2&gt;) -&gt; Parser&lt;&#39;R2&gt;<br />
+                          <strong>Type parameters:</strong> 'R, 'R2          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '190', 190)" onmouseover="showTip(event, '190', 190)">
+            Then(p, value)
+          </code>
+          <div class="tip" id="190">
+            <strong>Signature:</strong> (p:Parser&lt;&#39;R&gt; * value:&#39;R2) -&gt; Parser&lt;&#39;R2&gt;<br />
+                          <strong>Type parameters:</strong> 'R, 'R2          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '191', 191)" onmouseover="showTip(event, '191', 191)">
+            Zero()
+          </code>
+          <div class="tip" id="191">
             <strong>Signature:</strong> unit -&gt; Parser&lt;&#39;R&gt;<br />
                           <strong>Type parameters:</strong> 'R          </div>
         </td>
