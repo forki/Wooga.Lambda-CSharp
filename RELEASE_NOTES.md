@@ -1,3 +1,8 @@
+#### 0.3.5 - May 8 2015
+* Uses Pattern.Match in Parser library
+* Additional common parser combinator (takeLeft/Right/Both...)
+* Adds DirPath & FilePath types to Storage library
+
 #### 0.3.4 - April 26 2015
 * Small bugfix in Async.Parallel
 
