@@ -19,11 +19,11 @@ type Impl =
     abstract Last : unit -> unit
 and IV = int
 
-let [<Literal>] countFull = 500
+let [<Literal>] countFull = 50
 
 type FingerTreeImpl() =
     let empty = FingerTree.Empty() :> FingerTree<IV>
-    let full = List.fold (fun (s:FingerTree<IV>) x -> s.Append(x)) empty [1..countFull]
+    let full = List.fold (fun (s:FingerTree<IV>) x -> s.Append(x)) empty [0..countFull]
     let mutable c = empty
     interface Impl with
         member __.Name = "FingerTree"
@@ -39,7 +39,7 @@ type FingerTreeImpl() =
 
 type FListImpl() =
     let empty = List<IV>.Empty
-    let full = [1..countFull]
+    let full = [0..countFull]
     let mutable c = empty
     interface Impl with
         member __.Name = "FSharp.List"
@@ -55,13 +55,14 @@ type FListImpl() =
 
 type CListImpl() =
     let empty = System.Collections.Generic.List<IV>()
-    let full = List.fold (fun (s:System.Collections.Generic.List<IV>) x -> let _ = s.Add(x) in s) empty [1..countFull]
+    let mutable full = new System.Collections.Generic.List<IV>([0..countFull])
     let mutable c = empty
     interface Impl with
         member __.Name = "CSharp.List"
         member __.Init() = ()
         member __.Fini() = c <- System.Collections.Generic.List<IV>()
-        member __.Fill() = c <- List.fold (fun (s:System.Collections.Generic.List<IV>) x -> let _ = s.Add(x) in s) empty [1..countFull]
+                           full <- new System.Collections.Generic.List<IV>([0..countFull])
+        member __.Fill() = c <- full
         member __.Append v = c.Add(v)
         member __.Prepend v = c.Insert(0,v)
         member __.Tail () = c.RemoveAt(0)
@@ -71,7 +72,7 @@ type CListImpl() =
 
 type CImmutableListImpl() =
     let empty = ImmutableList.Empty()
-    let full = List.fold (fun (s:ImmutableList<IV>) x -> s.Add(x)) empty [1..countFull]
+    let full = List.fold (fun (s:ImmutableList<IV>) x -> s.Add(x)) empty [0..countFull]
     let mutable c = empty
     interface Impl with
         member __.Name = "CSharp.ImmutableList"
@@ -90,63 +91,63 @@ module Tests =
         class
         end
 
-    let intlist1 = [ 1..countFull/2 ]
-    let intlist2 = [ 1..countFull ]
+    let intlist1 = [ 0..countFull/2 ]
+    let intlist2 = [ 0..countFull ]
 
-    [<PerfTest(100)>]
+    [<PerfTest(1000)>]
     let ``Append`` (s : Impl) = List.iter s.Append intlist1
 
-    [<PerfTest(100)>]
+    [<PerfTest(1000)>]
     let ``Append2`` (s : Impl) = List.iter s.Append intlist2
 
-    [<PerfTest(100)>]
+    [<PerfTest(1000)>]
     let ``Prepend`` (s : Impl) = List.iter s.Prepend intlist1
 
-    [<PerfTest(100)>]
+    [<PerfTest(1000)>]
     let ``Prepend2`` (s : Impl) = List.iter s.Prepend intlist2
 
-    [<PerfTest(100)>]
+    [<PerfTest(1000)>]
     let ``Tail`` (s : Impl) =
         s.Fill()
         List.iter (fun _ -> s.Tail()) intlist1
 
-    [<PerfTest(100)>]
+    [<PerfTest(1000)>]
     let ``Tail2`` (s : Impl) =
         s.Fill()
         List.iter (fun _ -> s.Tail()) intlist2
 
-    [<PerfTest(100)>]
+    [<PerfTest(1000)>]
     let ``Initial`` (s : Impl) =
         s.Fill()
         List.iter (fun _ -> s.Initial()) intlist1
 
-    [<PerfTest(100)>]
+    [<PerfTest(1000)>]
     let ``Initial2`` (s : Impl) =
         s.Fill()
         List.iter (fun _ -> s.Initial()) intlist2
 
-    [<PerfTest(100)>]
+    [<PerfTest(1000)>]
     let ``Head&Tail`` (s : Impl) =
         s.Fill()
         List.iter (fun _ ->
             s.Head()
             s.Tail()) intlist1
 
-    [<PerfTest(100)>]
+    [<PerfTest(1000)>]
     let ``Head&Tail2`` (s : Impl) =
         s.Fill()
         List.iter (fun _ ->
             s.Head()
             s.Tail()) intlist2
 
-    [<PerfTest(100)>]
+    [<PerfTest(1000)>]
     let ``Last&Initial`` (s : Impl) =
         s.Fill()
         List.iter (fun _ ->
             s.Last()
             s.Initial()) intlist1
 
-    [<PerfTest(100)>]
+    [<PerfTest(1000)>]
     let ``Last&Initial2`` (s : Impl) =
         s.Fill()
         List.iter (fun _ ->
@@ -154,7 +155,7 @@ module Tests =
             s.Initial()) intlist2
 
 PerfTest.OfModuleMarker<Tests.Marker>()
-|> PerfTest.run (fun () -> new ImplementationComparer<Impl>(FingerTreeImpl(), [ FListImpl(); CListImpl(); CImmutableListImpl(); ],new WeightedComparer(spaceFactor = 0.2, leastAcceptableImprovementFactor = 7.),true,true) :> _)
+|> PerfTest.run (fun () -> new ImplementationComparer<Impl>(FingerTreeImpl(), [ (*FListImpl(); CListImpl();*) CImmutableListImpl(); ],new WeightedComparer(spaceFactor = 0.2, leastAcceptableImprovementFactor = 7.),true,true) :> _)
 
 //PerfTest.OfModuleMarker<Tests.Marker> ()
 //|> PerfTest.run (fun () -> new PastImplementationComparer<Impl>(FingerTreeImpl(),Utils.Epoch(),"performance.tests",true,new WeightedComparer(spaceFactor = 0.2, leastAcceptableImprovementFactor = 1.)) :> _)
