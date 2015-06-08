@@ -1,4 +1,5 @@
 ﻿using System;
+// using System.Collections.ObjectModel;
 
 // http://andrew.gibiansky.com/blog/haskell/finger-trees/
 
@@ -27,7 +28,7 @@ namespace Wooga.Lambda.Data
             {
                 return true;
             }
-        } 
+        }
 
         public sealed class Single : FingerTree<T>
         {
@@ -47,7 +48,7 @@ namespace Wooga.Lambda.Data
         public sealed class Deep : FingerTree<T>
         {
             public readonly Affix<T> Prefix;
-            public readonly FingerTree<Node<T>> Tree; 
+            public readonly FingerTree<Node<T>> Tree;
             public readonly Affix<T> Suffix;
 
             public Deep(Affix<T> prefix, FingerTree<Node<T>> tree, Affix<T> suffix)
@@ -100,8 +101,8 @@ namespace Wooga.Lambda.Data
         private static FingerTree<T> PrependDeep<T>(this FingerTree<T>.Deep t, T x)
         {
             var a = t.Prefix as Affix<T>.Four;
-            return a != null 
-                ? Deep(Affix.Two(x, a.A), t.Tree.Prepend(Node.Trio(a.B, a.C, a.D)), t.Suffix) 
+            return a != null
+                ? Deep(Affix.Two(x, a.A), t.Tree.Prepend(Node.Trio(a.B, a.C, a.D)), t.Suffix)
                 : Deep(t.Prefix.Prepend(x), t.Tree, t.Suffix);
         }
 
@@ -184,7 +185,7 @@ namespace Wooga.Lambda.Data
         {
             return false;
         }
-        
+
         public sealed class One : Affix<T>
         {
             public readonly T A;
@@ -362,9 +363,9 @@ namespace Wooga.Lambda.Data
             }
             else
             {
-                throw new Exception("Affix must have two elements to produce Init");    
+                throw new Exception("Affix must have two elements to produce Init");
             }
-        } 
+        }
     }
 
     public abstract class Node<T>
@@ -553,7 +554,7 @@ namespace Wooga.Lambda.Data
                 var suffix = (Affix<T>.Three)t.Suffix;
                 return FingerTree.Deep(Affix.Two(suffix.A, suffix.B), FingerTree.Empty<Node<T>>(), Affix.One(suffix.C));
             }
-            else //if (t.Suffix.IsFour()) 
+            else //if (t.Suffix.IsFour())
             {
                 var four = ((Affix<T>.Four)t.Suffix);
                 return FingerTree.Deep(Affix.Three(four.A, four.B, four.C), FingerTree.Empty<Node<T>>(), Affix.One(four.D));

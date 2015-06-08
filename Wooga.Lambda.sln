@@ -80,11 +80,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "play", "play", "{D21E4C55-0
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Performance", "tests\perf\Performance\Performance.fsproj", "{D81F1B5A-A371-454D-8082-8905472CD4A8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DAF0B638-BE79-49B4-86F2-CFBF09F9705F}"
-	ProjectSection(SolutionItems) = preProject
-		Performance1.psess = Performance1.psess
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
