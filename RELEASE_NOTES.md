@@ -1,3 +1,6 @@
+#### 0.3.7 - May 9 2015
+* Structs constructors of File, FilePath, Dir & DirPath are public 
+
 #### 0.3.6 - May 9 2015
 * Path creation in LocalFileSystem does respect root directories 
 * Adds method to create file and dir path to FileSystem.Api

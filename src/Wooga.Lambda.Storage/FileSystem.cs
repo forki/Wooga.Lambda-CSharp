@@ -37,7 +37,7 @@ namespace Wooga.Lambda.Storage
             public readonly DirPath Path;
             public readonly string Name;
 
-            internal FilePath(DirPath path, string name)
+            public FilePath(DirPath path, string name)
             {
                 Path = path;
                 Name = name;
@@ -58,7 +58,7 @@ namespace Wooga.Lambda.Storage
             /// <summary>   Full pathname of the file. </summary>
             public readonly FilePath Path;
 
-            internal File(FilePath path, Bytes content)
+            public File(FilePath path, Bytes content)
             {
                 Path = path;
                 Content = content;
@@ -69,7 +69,7 @@ namespace Wooga.Lambda.Storage
         {
             public readonly ImmutableList<string> PathElements;
 
-            internal DirPath(ImmutableList<string> elements)
+            public DirPath(ImmutableList<string> elements)
             {
                 PathElements = elements;
             }
@@ -92,7 +92,7 @@ namespace Wooga.Lambda.Storage
             /// <summary>   Full pathname of the dir. </summary>
             public readonly DirPath Path;
 
-            internal Dir(DirPath path, ImmutableList<string> dirs, ImmutableList<string> files)
+            public Dir(DirPath path, ImmutableList<string> dirs, ImmutableList<string> files)
             {
                 Path = path;
                 Dirs = dirs;
