@@ -36,7 +36,7 @@ namespace Wooga.Lambda.Network.Transport
 
         private static Async<HttpResponse> RequestHttpResponse(this HttpRequest httpRequest)
         {
-            return GetWebResponse(httpRequest).Bind(webResponse => webResponse.AsHttpResponse(httpRequest));
+            return GetWebResponse(httpRequest).Bind<HttpWebResponse,HttpResponse>(webResponse => webResponse.AsHttpResponse(httpRequest));
         }
 
         private static Async<HttpWebResponse> GetWebResponse(HttpRequest httpRequest)

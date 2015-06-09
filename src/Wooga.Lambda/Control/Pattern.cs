@@ -23,7 +23,7 @@ namespace Wooga.Lambda.Control
 
             public MatchCase<TValue> Case(Func<TValue, bool> t, Func<TValue, TResult> f)
             {
-                return new MatchCase<TValue>(() => _m().Bind(y => Either.When(() => !t(y), () => f(y), () => y)));
+                return new MatchCase<TValue>(() => _m().Bind<TResult,TValue,TValue>(y => Either.When<TResult,TValue>(() => !t(y), () => f(y), () => y)));
             }
 
             public MatchCase<TValue> Case(TValue x, Func<TValue, TResult> f)

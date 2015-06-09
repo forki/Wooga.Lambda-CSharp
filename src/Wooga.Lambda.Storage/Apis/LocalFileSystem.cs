@@ -21,7 +21,7 @@ namespace Wooga.Lambda.Storage.Apis
         public Async<Maybe<FileSystem.File>> GetFileAsync(FileSystem.FilePath p)
         {
             return () => Async
-                .Return(() => File.ReadAllBytes(FilePathAsString(p)).ToImmutableList())
+                .Return(() => File.ReadAllBytes(p.ToString(Path.Combine)).ToImmutableList())
                 .Catch()
                 .RunSynchronously()
                 .FromEither(e => Maybe.Nothing<FileSystem.File>(),
@@ -39,7 +39,7 @@ namespace Wooga.Lambda.Storage.Apis
             return () => Async
                 .Return(() =>
                 {
-                    File.WriteAllBytes(FilePathAsString(p), c.ToArray());
+                    File.WriteAllBytes(p.ToString(Path.Combine), c.ToArray());
                     return Unit.Default;
                 })
                 .Catch()
@@ -58,7 +58,11 @@ namespace Wooga.Lambda.Storage.Apis
             return () => Async
                 .Return(() =>
                 {
-                    AppendAllBytes(FilePathAsString(p), c.ToArray());
+                    byte[] bytes = c.ToArray();
+                    using (var stream = new FileStream(p.ToString(Path.Combine), FileMode.Append))
+                    {
+                        stream.Write(bytes, 0, bytes.Length);
+                    }
                     return Unit.Default;
                 })
                 .Catch()
@@ -78,8 +82,8 @@ namespace Wooga.Lambda.Storage.Apis
                 Func<string[], ImmutableList<string>> trim =
                     xs => xs.ToImmutableList().Map(f => new FileInfo(f).Name);
 
-                var fs = trim(Directory.GetFiles(DirPathAsString(p)));
-                var ds = trim(Directory.GetDirectories(DirPathAsString(p)));
+                var fs = trim(Directory.GetFiles(p.ToString(Path.Combine)));
+                var ds = trim(Directory.GetDirectories(p.ToString(Path.Combine)));
                 return Maybe.Just(new FileSystem.Dir(p, ds, fs));
             };
         }
@@ -91,7 +95,7 @@ namespace Wooga.Lambda.Storage.Apis
         /// <returns>   An Async&lt;bool&gt; </returns>
         public Async<bool> HasFileAsync(FileSystem.FilePath p)
         {
-            return () => File.Exists(FilePathAsString(p));
+            return () => File.Exists(p.ToString(Path.Combine));
         }
 
         /// <summary>   Has dir asynchronous. </summary>
@@ -101,7 +105,7 @@ namespace Wooga.Lambda.Storage.Apis
         /// <returns>   An Async&lt;bool&gt; </returns>
         public Async<bool> HasDirAsync(FileSystem.DirPath p)
         {
-            return () => Directory.Exists(DirPathAsString(p));
+            return () => Directory.Exists(p.ToString(Path.Combine));
         }
 
         /// <summary>   Creates a new dir asynchronous. </summary>
@@ -113,11 +117,11 @@ namespace Wooga.Lambda.Storage.Apis
         {
             return Async.Return(() =>
             {
-                Directory.CreateDirectory(DirPathAsString(p));
+                Directory.CreateDirectory(p.ToString(Path.Combine));
                 return Unit.Default;
             })
-                .Catch()
-                .Ignore();
+            .Catch()
+            .Ignore();
         }
 
         /// <summary>   Removes the dir asynchronous described by p. </summary>
@@ -129,11 +133,11 @@ namespace Wooga.Lambda.Storage.Apis
         {
             return Async.Return(() =>
             {
-                Directory.Delete(DirPathAsString(p));
+                Directory.Delete(p.ToString(Path.Combine));
                 return Unit.Default;
             })
-                .Catch()
-                .Ignore();
+            .Catch()
+            .Ignore();
         }
 
         /// <summary>   Removes the file asynchronous described by p. </summary>
@@ -145,11 +149,11 @@ namespace Wooga.Lambda.Storage.Apis
         {
             return Async.Return(() =>
             {
-                File.Delete(FilePathAsString(p));
+                File.Delete(p.ToString(Path.Combine));
                 return Unit.Default;
             })
-                .Catch()
-                .Ignore();
+            .Catch()
+            .Ignore();
         }
 
         /// <summary>   Mv dir asynchronous. </summary>
@@ -160,11 +164,11 @@ namespace Wooga.Lambda.Storage.Apis
         {
             return Async.Return(() =>
             {
-                Directory.Move(DirPathAsString(ps), DirPathAsString(pt));
+                Directory.Move(ps.ToString(Path.Combine), pt.ToString(Path.Combine));
                 return Unit.Default;
             })
-                .Catch()
-                .Bind<Either<Exception, Unit>, bool>(b => () => b.FromEither(e => false, _ => true));
+            .Catch()
+            .Bind<Either<Exception, Unit>, bool>(b => () => b.FromEither(e => false, _ => true));
         }
 
         /// <summary>   Mv file asynchronous. </summary>
@@ -175,11 +179,11 @@ namespace Wooga.Lambda.Storage.Apis
         {
             return Async.Return(() =>
             {
-                File.Move(FilePathAsString(ps), FilePathAsString(pt));
+                File.Move(ps.ToString(Path.Combine), pt.ToString(Path.Combine));
                 return Unit.Default;
             })
-                .Catch()
-                .Bind<Either<Exception, Unit>, bool>(b => () => b.FromEither(e => false, _ => true));
+            .Catch()
+            .Bind<Either<Exception, Unit>, bool>(b => () => b.FromEither(e => false, _ => true));
         }
 
         /// <summary>   Cp dir asynchronous. </summary>
@@ -211,11 +215,36 @@ namespace Wooga.Lambda.Storage.Apis
         {
             return Async.Return(() =>
             {
-                File.Copy(FilePathAsString(ps), FilePathAsString(pt));
+                File.Copy(ps.ToString(Path.Combine), pt.ToString(Path.Combine));
                 return Unit.Default;
             })
-                .Catch()
-                .Bind<Either<Exception, Unit>, bool>(b => () => b.FromEither(e => false, _ => true));
+            .Catch()
+            .Bind<Either<Exception, Unit>, bool>(b => () => b.FromEither(e => false, _ => true));
+        }
+
+        private static readonly string DirSeperator = Path.DirectorySeparatorChar.ToString();
+
+        public FileSystem.FilePath FilePath(string s)
+        {
+            var file = new FileInfo(s);
+            return new FileSystem.FilePath(DirPath(file.DirectoryName), file.Name);
+        }
+
+        public FileSystem.FilePath FilePath(FileSystem.DirPath p, string s)
+        {
+            var file = new FileInfo(s);
+            return new FileSystem.FilePath(p, file.Name);
+        }
+
+        public FileSystem.DirPath DirPath(string s)
+        {
+            var dir = new DirectoryInfo(s);
+            var es = dir.FullName.Split(Path.DirectorySeparatorChar).ToImmutableList<string>();
+            if (dir.Root.ToString().Equals(DirSeperator))
+            {
+                es = es.Insert(DirSeperator, 0);
+            }
+            return new FileSystem.DirPath(es);
         }
 
         /// <summary>   Creates a new LocalFileSystem.Api. </summary>
@@ -225,32 +254,5 @@ namespace Wooga.Lambda.Storage.Apis
             return new LocalFileSystem();
         }
 
-        private static string DirPathAsString(FileSystem.DirPath p)
-        {
-            return p.PathElements.Fold(Path.Combine, "");
-        }
-
-        private static string FilePathAsString(FileSystem.FilePath p)
-        {
-            return Path.Combine(DirPathAsString(p.Path), p.Name);
-        }
-
-        private static string DirListAsString(ImmutableList<string> xs)
-        {
-            return xs.Fold(Path.Combine, "");
-        }
-
-        private static string DirListWithFileAsString(ImmutableList<string> xs, string x)
-        {
-            return Path.Combine(DirListAsString(xs), x);
-        }
-
-        private static void AppendAllBytes(string path, byte[] bytes)
-        {
-            using (var stream = new FileStream(path, FileMode.Append))
-            {
-                stream.Write(bytes, 0, bytes.Length);
-            }
-        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Wooga.Lambda.Control.Concurrent;
+﻿using System;
+using System.IO;
+using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 using Bytes = Wooga.Lambda.Data.ImmutableList<byte>;
@@ -11,6 +13,9 @@ namespace Wooga.Lambda.Storage
         /// <summary>   Interface for api. </summary>
         public interface Api
         {
+            FilePath FilePath(string s);
+            FilePath FilePath(DirPath p, string s);
+            DirPath DirPath(string s);
             Async<Maybe<File>> GetFileAsync(FilePath p);
             Async<bool> WriteFileAsync(FilePath p, Bytes c);
             Async<bool> AppendFileAsync(FilePath p, Bytes c);
@@ -28,13 +33,19 @@ namespace Wooga.Lambda.Storage
 
         public struct FilePath
         {
+
             public readonly DirPath Path;
             public readonly string Name;
 
-            public FilePath(DirPath path, string name)
+            internal FilePath(DirPath path, string name)
             {
                 Path = path;
                 Name = name;
+            }
+
+            public string ToString(Func<string, string, string> pathCombinator)
+            {
+                return pathCombinator(Path.ToString(pathCombinator),Name);
             }
         }
 
@@ -58,9 +69,14 @@ namespace Wooga.Lambda.Storage
         {
             public readonly ImmutableList<string> PathElements;
 
-            public DirPath(ImmutableList<string> elements)
+            internal DirPath(ImmutableList<string> elements)
             {
                 PathElements = elements;
+            }
+
+            public string ToString(Func<string,string,string> pathCombinator)
+            {
+                return PathElements.Fold(pathCombinator, "");
             }
         }
 

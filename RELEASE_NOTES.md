@@ -1,3 +1,8 @@
+#### 0.3.6 - May 9 2015
+* Path creation in LocalFileSystem does respect root directories 
+* Adds method to create file and dir path to FileSystem.Api
+* Adds many generic type arguments - the Unity Editor can't infer them 
+
 #### 0.3.5 - May 8 2015
 * Uses Pattern.Match in Parser library
 * Additional common parser combinator (takeLeft/Right/Both...)

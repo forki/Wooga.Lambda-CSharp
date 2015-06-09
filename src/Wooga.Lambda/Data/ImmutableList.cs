@@ -38,8 +38,8 @@ namespace Wooga.Lambda.Data
 
         public static Maybe<T> Find<T>(this ImmutableList<T> xs, Func<T, bool> f)
         {
-            return Either.Try(xs.Choose(x => f(x) ? Maybe.Just(x) : Maybe.Nothing<T>()).First)
-                .FromEither<Exception, T, Maybe<T>>(_ => Maybe.Nothing<T>(), Maybe.Just);
+            return Either.Try<T>(xs.Choose<T,T>(x => f(x) ? Maybe.Just<T>(x) : Maybe.Nothing<T>()).First)
+                .FromEither<Exception, T, Maybe<T>>(_ => Maybe.Nothing<T>(), Maybe.Just<T>);
         }
 
         public static T3 Fold<T1, T2, T3>(this Dictionary<T1, T2> kvs, Func<T3, T1, T2, T3> f, T3 a)
