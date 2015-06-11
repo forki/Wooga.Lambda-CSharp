@@ -1,10 +1,13 @@
+#### 0.4.0 - May 11 2015
+* Wooga.Lambda.FileSystem.Api is now error/exception agnostic
+
 #### 0.3.7 - May 9 2015
-* Structs constructors of File, FilePath, Dir & DirPath are public 
+* Structs constructors of File, FilePath, Dir & DirPath are public
 
 #### 0.3.6 - May 9 2015
-* Path creation in LocalFileSystem does respect root directories 
+* Path creation in LocalFileSystem does respect root directories
 * Adds method to create file and dir path to FileSystem.Api
-* Adds many generic type arguments - the Unity Editor can't infer them 
+* Adds many generic type arguments - the Unity Editor can't infer them
 
 #### 0.3.5 - May 8 2015
 * Uses Pattern.Match in Parser library
