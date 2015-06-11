@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 using Wooga.Lambda.Control.Concurrent;
-using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 using Bytes = Wooga.Lambda.Data.ImmutableList<byte>;
 
@@ -16,19 +14,20 @@ namespace Wooga.Lambda.Storage
             FilePath FilePath(string s);
             FilePath FilePath(DirPath p, string s);
             DirPath DirPath(string s);
-            Async<Maybe<File>> GetFileAsync(FilePath p);
-            Async<bool> WriteFileAsync(FilePath p, Bytes c);
-            Async<bool> AppendFileAsync(FilePath p, Bytes c);
-            Async<Maybe<Dir>> GetDirAsync(DirPath p);
+            DirPath DirPath(DirPath p, string s);
+            Async<File> GetFileAsync(FilePath p);
+            Async<Unit> WriteFileAsync(FilePath p, Bytes c);
+            Async<Unit> AppendFileAsync(FilePath p, Bytes c);
+            Async<Dir> GetDirAsync(DirPath p);
             Async<bool> HasFileAsync(FilePath p);
             Async<bool> HasDirAsync(DirPath p);
             Async<Unit> NewDirAsync(DirPath p);
             Async<Unit> RmDirAsync(DirPath p);
             Async<Unit> RmFileAsync(FilePath p);
-            Async<bool> MvDirAsync(DirPath ps, DirPath pt);
-            Async<bool> MvFileAsync(FilePath ps, FilePath pt);
-            Async<bool> CpDirAsync(DirPath ps, DirPath pt);
-            Async<bool> CpFileAsync(FilePath ps, FilePath pt);
+            Async<Unit> MvDirAsync(DirPath ps, DirPath pt);
+            Async<Unit> MvFileAsync(FilePath ps, FilePath pt);
+            Async<Unit> CpDirAsync(DirPath ps, DirPath pt);
+            Async<Unit> CpFileAsync(FilePath ps, FilePath pt);
         }
 
         public struct FilePath
@@ -43,9 +42,9 @@ namespace Wooga.Lambda.Storage
                 Name = name;
             }
 
-            public string ToString(Func<string, string, string> pathCombinator)
+            public string FullName(Func<string, string, string> pathCombinator)
             {
-                return pathCombinator(Path.ToString(pathCombinator),Name);
+                return pathCombinator(Path.FullName(pathCombinator),Name);
             }
         }
 
@@ -74,7 +73,7 @@ namespace Wooga.Lambda.Storage
                 PathElements = elements;
             }
 
-            public string ToString(Func<string,string,string> pathCombinator)
+            public string FullName(Func<string,string,string> pathCombinator)
             {
                 return PathElements.Fold(pathCombinator, "");
             }

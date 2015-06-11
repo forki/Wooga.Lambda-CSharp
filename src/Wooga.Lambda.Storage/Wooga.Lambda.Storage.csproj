@@ -31,6 +31,7 @@
     <DocumentationFile>bin\Release\Wooga.Lambda.Storage.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.template" />
+    <None Include="Storage.fsx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
