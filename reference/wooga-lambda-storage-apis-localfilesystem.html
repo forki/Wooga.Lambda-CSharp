@@ -43,7 +43,6 @@
 
 <h1>LocalFileSystem</h1>
 <div class="xmldoc">
-<p>A local file system.</p>
 </div>
   <h3>Instance members</h3>
   <table class="table table-bordered member-list">
@@ -58,7 +57,7 @@
             AppendFileAsync(p, c)
           </code>
           <div class="tip" id="193">
-            <strong>Signature:</strong> (p:FilePath * c:ImmutableList&lt;byte&gt;) -&gt; Async&lt;bool&gt;<br />
+            <strong>Signature:</strong> (p:FilePath * c:ImmutableList&lt;byte&gt;) -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -73,13 +72,12 @@
             CpDirAsync(ps, pt)
           </code>
           <div class="tip" id="194">
-            <strong>Signature:</strong> (ps:DirPath * pt:DirPath) -&gt; Async&lt;bool&gt;<br />
+            <strong>Signature:</strong> (ps:DirPath * pt:DirPath) -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-          <p>Cp dir asynchronous.</p>
-
+          
         </td>
       </tr>
       <tr>
@@ -89,23 +87,22 @@
             CpFileAsync(ps, pt)
           </code>
           <div class="tip" id="195">
-            <strong>Signature:</strong> (ps:FilePath * pt:FilePath) -&gt; Async&lt;bool&gt;<br />
+            <strong>Signature:</strong> (ps:FilePath * pt:FilePath) -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-          <p>Cp file asynchronous.</p>
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '196', 196)" onmouseover="showTip(event, '196', 196)">
-            DirPath(s)
+            DirPath(p, s)
           </code>
           <div class="tip" id="196">
-            <strong>Signature:</strong> s:string -&gt; DirPath<br />
+            <strong>Signature:</strong> (p:DirPath * s:string) -&gt; DirPath<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -117,10 +114,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '197', 197)" onmouseover="showTip(event, '197', 197)">
-            FilePath(s)
+            DirPath(s)
           </code>
           <div class="tip" id="197">
-            <strong>Signature:</strong> s:string -&gt; FilePath<br />
+            <strong>Signature:</strong> s:string -&gt; DirPath<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -132,10 +129,10 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '198', 198)" onmouseover="showTip(event, '198', 198)">
-            FilePath(p, s)
+            FilePath(s)
           </code>
           <div class="tip" id="198">
-            <strong>Signature:</strong> (p:DirPath * s:string) -&gt; FilePath<br />
+            <strong>Signature:</strong> s:string -&gt; FilePath<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -147,119 +144,112 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '199', 199)" onmouseover="showTip(event, '199', 199)">
-            GetDirAsync(p)
+            FilePath(p, s)
           </code>
           <div class="tip" id="199">
-            <strong>Signature:</strong> p:DirPath -&gt; Async&lt;Maybe&lt;Dir&gt;&gt;<br />
+            <strong>Signature:</strong> (p:DirPath * s:string) -&gt; FilePath<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-          <p>Gets dir asynchronous.</p>
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '200', 200)" onmouseover="showTip(event, '200', 200)">
-            GetFileAsync(p)
+            GetDirAsync(p)
           </code>
           <div class="tip" id="200">
-            <strong>Signature:</strong> p:FilePath -&gt; Async&lt;Maybe&lt;File&gt;&gt;<br />
+            <strong>Signature:</strong> p:DirPath -&gt; Async&lt;Dir&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-          <p>Gets file asynchronous.</p>
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '201', 201)" onmouseover="showTip(event, '201', 201)">
-            HasDirAsync(p)
+            GetFileAsync(p)
           </code>
           <div class="tip" id="201">
-            <strong>Signature:</strong> p:DirPath -&gt; Async&lt;bool&gt;<br />
+            <strong>Signature:</strong> p:FilePath -&gt; Async&lt;File&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-          <p>Has dir asynchronous.</p>
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '202', 202)" onmouseover="showTip(event, '202', 202)">
-            HasFileAsync(p)
+            HasDirAsync(p)
           </code>
           <div class="tip" id="202">
-            <strong>Signature:</strong> p:FilePath -&gt; Async&lt;bool&gt;<br />
+            <strong>Signature:</strong> p:DirPath -&gt; Async&lt;bool&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-          <p>Has file asynchronous.</p>
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '203', 203)" onmouseover="showTip(event, '203', 203)">
-            MvDirAsync(ps, pt)
+            HasFileAsync(p)
           </code>
           <div class="tip" id="203">
-            <strong>Signature:</strong> (ps:DirPath * pt:DirPath) -&gt; Async&lt;bool&gt;<br />
+            <strong>Signature:</strong> p:FilePath -&gt; Async&lt;bool&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-          <p>Mv dir asynchronous.</p>
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '204', 204)" onmouseover="showTip(event, '204', 204)">
-            MvFileAsync(ps, pt)
+            MvDirAsync(ps, pt)
           </code>
           <div class="tip" id="204">
-            <strong>Signature:</strong> (ps:FilePath * pt:FilePath) -&gt; Async&lt;bool&gt;<br />
+            <strong>Signature:</strong> (ps:DirPath * pt:DirPath) -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-          <p>Mv file asynchronous.</p>
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '205', 205)" onmouseover="showTip(event, '205', 205)">
-            NewDirAsync(p)
+            MvFileAsync(ps, pt)
           </code>
           <div class="tip" id="205">
-            <strong>Signature:</strong> p:DirPath -&gt; Async&lt;Unit&gt;<br />
+            <strong>Signature:</strong> (ps:FilePath * pt:FilePath) -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-          <p>Creates a new dir asynchronous.</p>
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '206', 206)" onmouseover="showTip(event, '206', 206)">
-            RmDirAsync(p)
+            NewDirAsync(p)
           </code>
           <div class="tip" id="206">
             <strong>Signature:</strong> p:DirPath -&gt; Async&lt;Unit&gt;<br />
@@ -267,34 +257,47 @@
                       </div>
         </td>
         <td class="xmldoc">
-          <p>Removes the dir asynchronous described by p.</p>
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '207', 207)" onmouseover="showTip(event, '207', 207)">
-            RmFileAsync(p)
+            RmDirAsync(p)
           </code>
           <div class="tip" id="207">
-            <strong>Signature:</strong> p:FilePath -&gt; Async&lt;Unit&gt;<br />
+            <strong>Signature:</strong> p:DirPath -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
         <td class="xmldoc">
-          <p>Removes the file asynchronous described by p.</p>
-
+          
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '208', 208)" onmouseover="showTip(event, '208', 208)">
-            WriteFileAsync(p, c)
+            RmFileAsync(p)
           </code>
           <div class="tip" id="208">
-            <strong>Signature:</strong> (p:FilePath * c:ImmutableList&lt;byte&gt;) -&gt; Async&lt;bool&gt;<br />
+            <strong>Signature:</strong> p:FilePath -&gt; Async&lt;Unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '209', 209)" onmouseover="showTip(event, '209', 209)">
+            WriteFileAsync(p, c)
+          </code>
+          <div class="tip" id="209">
+            <strong>Signature:</strong> (p:FilePath * c:ImmutableList&lt;byte&gt;) -&gt; Async&lt;Unit&gt;<br />
               <strong>Modifiers:</strong> abstract<br />
                       </div>
         </td>
@@ -313,15 +316,17 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '209', 209)" onmouseover="showTip(event, '209', 209)">
+          <code onmouseout="hideTip(event, '210', 210)" onmouseover="showTip(event, '210', 210)">
             Create()
           </code>
-          <div class="tip" id="209">
+          <div class="tip" id="210">
             <strong>Signature:</strong> unit -&gt; Api<br />
                       </div>
         </td>
         <td class="xmldoc">
           <p>Creates a new LocalFileSystem.Api.</p>
+
+
 
         </td>
       </tr>

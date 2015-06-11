@@ -52,19 +52,23 @@ by convention, <strong>Left</strong> is used to hold an error value and <strong>
 
 <p>Create an <strong>Either</strong> by injecting a value into either case with <strong>Either.Left<'L,'R>('L)</strong> or <strong>Either.Right<'L,'R>('R)</strong>.</p>
 
-<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
 <span class="l">2: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs">Either&lt;<span class="k">int</span>, <span class="k">string</span>&gt; left <span class="o">=</span> Either.Left&lt;<span class="k">int</span>, <span class="k">string</span>&gt;(2);
+<td class="snippet"><pre class="fssnip" lang="cs">Either&lt;<span class="k">int</span>, <span class="k">string</span>&gt; left <span class="o">=</span> Either.Left&lt;<span class="k">int</span>, <span class="k">string</span>&gt;(2);
 Either&lt;<span class="k">int</span>, <span class="k">string</span>&gt; right <span class="o">=</span> Either.Right&lt;<span class="k">int</span>, <span class="k">string</span>&gt;(<span class="s">"rrr"</span>);
 </pre></td></tr></table>
 
 <p>Use the <strong>FromEither<'L,'R,'T>('L-&gt;'T,'R-&gt;'T)</strong> function to extract the value from either side.</p>
 
-<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
 <span class="l">2: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs"><span class="k">var</span> leftV <span class="o">=</span> left.FromEither(l <span class="o">=</span><span class="o">&gt;</span> l.ToString(), r <span class="o">=</span><span class="o">&gt;</span> r); <span class="c">// "2"</span>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">var</span> leftV <span class="o">=</span> left.FromEither(l <span class="o">=</span><span class="o">&gt;</span> l.ToString(), r <span class="o">=</span><span class="o">&gt;</span> r); <span class="c">// "2"</span>
 <span class="k">var</span> rightV <span class="o">=</span> right.FromEither(l <span class="o">=</span><span class="o">&gt;</span> l.ToString(), r <span class="o">=</span><span class="o">&gt;</span> r); <span class="c">// "rrr"</span>
 </pre></td></tr></table>
 
@@ -75,7 +79,8 @@ Either&lt;<span class="k">int</span>, <span class="k">string</span>&gt; right <s
 <p>The following snippet depicts a three step process to <strong>load</strong>, <strong>validate</strong> and <strong>launch</strong> a saved game.
 Each of these steps can potentially fail and raise an <strong>Exception</strong> that needs to be caught.</p>
 
-<table class="pre"><tr><td class="lines"><span class="l"> 1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
 <span class="l"> 4: </span>
@@ -105,8 +110,9 @@ Each of these steps can potentially fail and raise an <strong>Exception</strong>
 <span class="l">28: </span>
 <span class="l">29: </span>
 <span class="l">30: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs"><span class="k">void</span> StartGame(<span class="k">byte</span>[] saveGame)
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">void</span> StartGame(<span class="k">byte</span>[] saveGame)
 {
     <span class="k">if</span>(ValidateSaveGame(saveGame))
     {
@@ -142,7 +148,8 @@ Each of these steps can potentially fail and raise an <strong>Exception</strong>
 
 <p>Using the monadic bind function of <strong>Either</strong> we can compose these steps together while preserving granular information like individual error messages.</p>
 
-<table class="pre"><tr><td class="lines"><span class="l"> 1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
 <span class="l"> 4: </span>
@@ -166,8 +173,9 @@ Each of these steps can potentially fail and raise an <strong>Exception</strong>
 <span class="l">22: </span>
 <span class="l">23: </span>
 <span class="l">24: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs">Either&lt;<span class="k">string</span>, Unit&gt; StartGame(<span class="k">byte</span>[] saveGame)
+<td class="snippet"><pre class="fssnip" lang="cs">Either&lt;<span class="k">string</span>, Unit&gt; StartGame(<span class="k">byte</span>[] saveGame)
 {
     <span class="k">return</span> Either.Try(e=<span class="o">&gt;</span> <span class="s">"start failed: "</span><span class="o">+</span> e.Message,
                      ()<span class="o">=</span><span class="o">&gt;</span> Unit.Default);

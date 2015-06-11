@@ -63,39 +63,47 @@ Creation and manipulation of <strong>Async<'T></strong> computations is done via
 
 <p>Creating an <strong>Async<'T></strong> is as simple as defining a Lambda:</p>
 
-<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs">Async&lt;<span class="k">string</span>&gt; a <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"async"</span>;
+<td class="snippet"><pre class="fssnip" lang="cs">Async&lt;<span class="k">string</span>&gt; a <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"async"</span>;
 </pre></td></tr></table>
 
 <p>Computing the value <strong>'T</strong> is done in a blocking manner on the current thread with <strong>RunSynchronously()</strong>:</p>
 
-<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
 <span class="l">2: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs">Async&lt;<span class="k">string</span>&gt; a <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"async"</span>;
+<td class="snippet"><pre class="fssnip" lang="cs">Async&lt;<span class="k">string</span>&gt; a <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"async"</span>;
 <span class="k">var</span> s <span class="o">=</span> a.RunSynchronously(); <span class="c">// "async"</span>
 </pre></td></tr></table>
 
 <p>The simplest way to execute an <strong>Async<'T></strong> on a worker-thread is done with <strong>Start()</strong>:</p>
 
-<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
 <span class="l">2: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs">Async&lt;<span class="k">string</span>&gt; a <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"async"</span>;
+<td class="snippet"><pre class="fssnip" lang="cs">Async&lt;<span class="k">string</span>&gt; a <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"async"</span>;
 <span class="k">var</span> s <span class="o">=</span> a.Start(); <span class="c">// Unit (it does not wait for the value)</span>
 </pre></td></tr></table>
 
 <p>To get the result of an <strong>Async<'T></strong> running on another thread an <strong>AsyncReplyChannel<'T></strong> needs to be provided to <strong>StartAndReply('T-&gt;'T)</strong>:</p>
 
-<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
 <span class="l">5: </span>
 <span class="l">6: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs">Async&lt;<span class="k">string</span>&gt; a <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"async"</span>;
+<td class="snippet"><pre class="fssnip" lang="cs">Async&lt;<span class="k">string</span>&gt; a <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> <span class="s">"async"</span>;
 a.StartAndReply(_ <span class="o">=</span><span class="o">&gt;</span> <span class="k">new</span> AsyncReplyChannel&lt;<span class="k">string</span>&gt;(r <span class="o">=</span><span class="o">&gt;</span>
 {
     Debug.WriteLine(<span class="s">"reply: "</span> <span class="o">+</span> r); <span class="c">// reply: async</span>
@@ -107,7 +115,8 @@ a.StartAndReply(_ <span class="o">=</span><span class="o">&gt;</span> <span clas
 
 <p>To have multiple <strong>Async<'T></strong> compute sequentially (one after the other) is easily done with a monadic bind:</p>
 
-<table class="pre"><tr><td class="lines"><span class="l"> 1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
 <span class="l"> 4: </span>
@@ -120,8 +129,9 @@ a.StartAndReply(_ <span class="o">=</span><span class="o">&gt;</span> <span clas
 <span class="l">11: </span>
 <span class="l">12: </span>
 <span class="l">13: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs">Func&lt;<span class="k">string</span>, Async&lt;<span class="k">string</span>&gt;<span class="o">&gt;</span> Append(Async&lt;<span class="k">string</span>&gt; x)
+<td class="snippet"><pre class="fssnip" lang="cs">Func&lt;<span class="k">string</span>, Async&lt;<span class="k">string</span>&gt;<span class="o">&gt;</span> Append(Async&lt;<span class="k">string</span>&gt; x)
 {
     <span class="k">return</span> s <span class="o">=</span><span class="o">&gt;</span> Async.Return(s <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> x.RunSynchronously());
 }
@@ -138,7 +148,8 @@ a.StartAndReply(_ <span class="o">=</span><span class="o">&gt;</span> <span clas
 
 <p>Another option would be to do it sequentially inside of another <strong>Async<'T></strong>:</p>
 
-<table class="pre"><tr><td class="lines"><span class="l"> 1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
 <span class="l"> 4: </span>
@@ -151,8 +162,9 @@ a.StartAndReply(_ <span class="o">=</span><span class="o">&gt;</span> <span clas
 <span class="l">11: </span>
 <span class="l">12: </span>
 <span class="l">13: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs"><span class="k">var</span> first <span class="o">=</span> Async.Return(<span class="s">"first"</span>);
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">var</span> first <span class="o">=</span> Async.Return(<span class="s">"first"</span>);
 <span class="k">var</span> second <span class="o">=</span> Async.Return(<span class="s">"second"</span>);
 <span class="k">var</span> third <span class="o">=</span> Async.Return(<span class="s">"third"</span>);
 
@@ -172,7 +184,8 @@ Async&lt;<span class="k">string</span>&gt; comp <span class="o">=</span> () <spa
 <p>Multiple <strong>Async<'T></strong> can be executed in parallel with <strong>Async.Parallel(ImmutableList< Async<'T>&gt;)</strong>.
 Returns an array of values from the array of input computations.</p>
 
-<table class="pre"><tr><td class="lines"><span class="l"> 1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
 <span class="l"> 4: </span>
@@ -188,8 +201,9 @@ Returns an array of values from the array of input computations.</p>
 <span class="l">14: </span>
 <span class="l">15: </span>
 <span class="l">16: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs">Async&lt;<span class="k">int</span>&gt; threadId <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> Thread.CurrentThread.ManagedThreadId;
+<td class="snippet"><pre class="fssnip" lang="cs">Async&lt;<span class="k">int</span>&gt; threadId <span class="o">=</span> () <span class="o">=</span><span class="o">&gt;</span> Thread.CurrentThread.ManagedThreadId;
 <span class="k">var</span> blocker <span class="o">=</span> Async.Sleep(300).Bind(_ <span class="o">=</span><span class="o">&gt;</span> threadId);
 <span class="k">var</span> sleeps <span class="o">=</span> <span class="k">new</span>[]{blocker,<span class="o">.</span><span class="o">.</span><span class="o">.</span>,blocker}.ToImmutableList();
 
@@ -211,16 +225,19 @@ Debug.WriteLine(<span class="s">"total ms: {0} for threads: {1}"</span>,t,thread
 
 <p><strong>Async<'T></strong> can sleep for a given time using <strong>Async.Sleep(int)</strong>:</p>
 
-<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
 <span class="l">2: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs">Async.Sleep(300)
+<td class="snippet"><pre class="fssnip" lang="cs">Async.Sleep(300)
 .RunSynchronously();
 </pre></td></tr></table>
 
 <p><strong>Async<'T></strong> exceptions can be caught with <strong>Async.Catch()</strong>:</p>
 
-<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
@@ -229,8 +246,9 @@ Debug.WriteLine(<span class="s">"total ms: {0} for threads: {1}"</span>,t,thread
 <span class="l">7: </span>
 <span class="l">8: </span>
 <span class="l">9: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs"><span class="k">var</span> failure <span class="o">=</span> Async.Return(() <span class="o">=</span><span class="o">&gt;</span>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">var</span> failure <span class="o">=</span> Async.Return(() <span class="o">=</span><span class="o">&gt;</span>
 {
     <span class="k">throw</span> <span class="k">new</span> System.Exception(<span class="s">"ga"</span>);
     <span class="k">return</span> <span class="s">"txt"</span>;

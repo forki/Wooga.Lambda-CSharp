@@ -54,23 +54,27 @@ The empty <strong>Maybe</strong> case is called <strong>Nothing</strong> and the
 
 <p>Create a <strong>Maybe</strong> by injecting a value with <strong>Maybe.Just('T)</strong> or create the empty one with <strong>Maybe.Nothing<'T>()</strong>.</p>
 
-<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
 <span class="l">2: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs">Maybe&lt;<span class="k">string</span>&gt; justAnX <span class="o">=</span> Maybe.Just(<span class="s">"x"</span>);
+<td class="snippet"><pre class="fssnip" lang="cs">Maybe&lt;<span class="k">string</span>&gt; justAnX <span class="o">=</span> Maybe.Just(<span class="s">"x"</span>);
 Maybe&lt;<span class="k">string</span>&gt; nothing <span class="o">=</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;();
 </pre></td></tr></table>
 
 <p>Use the <strong>FromMaybe('T)</strong> or <strong>FromJustOrDefault('T2,'T-&gt;'T2)</strong> functions to extract the <strong>Just</strong> value;
 both will fallback to the given default value in case of <strong>Nothing</strong>.</p>
 
-<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
 <span class="l">2: </span>
 <span class="l">3: </span>
 <span class="l">4: </span>
 <span class="l">5: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs"><span class="k">string</span> ofJustAnX <span class="o">=</span> justAnX.FromMaybe(<span class="s">"not x"</span>); <span class="c">// "x"</span>
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">string</span> ofJustAnX <span class="o">=</span> justAnX.FromMaybe(<span class="s">"not x"</span>); <span class="c">// "x"</span>
 <span class="k">string</span> ofNothing <span class="o">=</span> nothing.FromMaybe(<span class="s">"not x"</span>); <span class="c">// "not x"</span>
 
 <span class="k">int</span> ofJustAnX2 <span class="o">=</span> justAnX.FromJustOrDefault(0, s <span class="o">=</span><span class="o">&gt;</span> s.Length); <span class="c">// 1</span>
@@ -83,19 +87,23 @@ both will fallback to the given default value in case of <strong>Nothing</strong
 
 <p>Avoid using <strong>null</strong> to represent empty values. The following snippet is valid code and will raise a NullReferenceException.</p>
 
-<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
 <span class="l">2: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs"><span class="k">string</span> name <span class="o">=</span> <span class="k">null</span>;
+<td class="snippet"><pre class="fssnip" lang="cs"><span class="k">string</span> name <span class="o">=</span> <span class="k">null</span>;
 <span class="k">int</span> letters <span class="o">=</span> name.Length;
 </pre></td></tr></table>
 
 <p>By using <strong>Maybe</strong> you make sure that the potential empty case will be handled at runtime.</p>
 
-<table class="pre"><tr><td class="lines"><span class="l">1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
 <span class="l">2: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs">Maybe&lt;<span class="k">string</span>&gt; name <span class="o">=</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;();
+<td class="snippet"><pre class="fssnip" lang="cs">Maybe&lt;<span class="k">string</span>&gt; name <span class="o">=</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;();
 <span class="k">int</span> letters <span class="o">=</span> name.FromJustOrDefault(0, s <span class="o">=</span><span class="o">&gt;</span> s.Length);
 </pre></td></tr></table>
 
@@ -104,7 +112,8 @@ both will fallback to the given default value in case of <strong>Nothing</strong
 <p>Because <strong>Maybe</strong> is a monad, composing multiple of them is very straightforward.
 The monadic operators <strong>&gt;&gt;=</strong> &amp; <strong>&gt;&gt;</strong> are implemented as <strong>Maybe.Bind</strong> and <strong>Maybe.Then</strong>.</p>
 
-<table class="pre"><tr><td class="lines"><span class="l"> 1: </span>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
 <span class="l"> 4: </span>
@@ -123,8 +132,9 @@ The monadic operators <strong>&gt;&gt;=</strong> &amp; <strong>&gt;&gt;</strong>
 <span class="l">17: </span>
 <span class="l">18: </span>
 <span class="l">19: </span>
+</pre>
 </td>
-<td class="snippet"><pre lang="cs">Maybe&lt;<span class="k">string</span>&gt; FirstOf(<span class="k">string</span>[] xs)
+<td class="snippet"><pre class="fssnip" lang="cs">Maybe&lt;<span class="k">string</span>&gt; FirstOf(<span class="k">string</span>[] xs)
 {
     <span class="k">return</span> xs.Length <span class="o">&gt;</span> 0 <span class="o">?</span> Maybe.Just(xs[0]) <span class="o">:</span> Maybe.Nothing&lt;<span class="k">string</span>&gt;();
 }
