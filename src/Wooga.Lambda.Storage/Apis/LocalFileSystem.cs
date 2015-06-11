@@ -40,7 +40,7 @@ namespace Wooga.Lambda.Storage.Apis
                 return Unit.Default;
             };
         }
-            
+
         public Async<FileSystem.Dir> GetDirAsync(FileSystem.DirPath p)
         {
             return () =>
@@ -152,13 +152,11 @@ namespace Wooga.Lambda.Storage.Apis
 
         public FileSystem.DirPath DirPath(FileSystem.DirPath p, string s)
         {
-            System.Console.WriteLine("dir: path: " + p + " name: " + s);
             return DirPath(Path.Combine(p.FullName(Path.Combine), s));
         }
 
         public FileSystem.DirPath DirPath(string s)
         {
-            System.Console.WriteLine("dir: name: " + s);
             var dir = new DirectoryInfo(s);
             var es = dir.FullName.Split(new []{Path.DirectorySeparatorChar,Path.AltDirectorySeparatorChar}, StringSplitOptions.RemoveEmptyEntries).ToImmutableList();
             if (dir.Root.ToString().Equals(DirSeperator))

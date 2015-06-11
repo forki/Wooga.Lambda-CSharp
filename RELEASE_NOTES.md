@@ -1,4 +1,7 @@
-#### 0.4.0 - May 11 2015
+#### 0.4.1 - May 11  2015
+* Wooga.Lambda.FileSystem.Api removing some Logs from LocalFileSystem
+
+#### 0.4.0 - May 11  2015
 * Wooga.Lambda.FileSystem.Api is now error/exception agnostic
 
 #### 0.3.7 - May 9 2015
