@@ -2,12 +2,17 @@
 
 namespace Wooga.Lambda.Control.Monad
 {
-    /// <summary>
-    ///     A delegate to label lambdas as Maybe
-    /// </summary>
-    /// <typeparam name="T">Result type</typeparam>
-    /// <returns>MaybeData representing a value or Nothing.</returns>
-    public delegate Maybe.Result<T> Maybe<T>();
+    public struct Maybe<T>
+    {
+        internal readonly T Value;
+        internal readonly bool HasValue;
+
+        internal Maybe(T value, bool hasValue)
+        {
+            Value = value;
+            HasValue = hasValue;
+        }
+    }
 
     public static class Maybe
     {
@@ -19,7 +24,7 @@ namespace Wooga.Lambda.Control.Monad
         /// <returns>The maybe instance</returns>
         public static Maybe<T> Just<T>(T v)
         {
-            return () => new Result<T>.Just(v);
+            return new Maybe<T>(v,true);
         }
 
         /// <summary>
@@ -29,7 +34,7 @@ namespace Wooga.Lambda.Control.Monad
         /// <returns>The maybe instance</returns>
         public static Maybe<T> Nothing<T>()
         {
-            return () => new Result<T>.Nothing();
+            return new Maybe<T>(default(T),false);
         }
 
         /// <summary>
@@ -40,7 +45,8 @@ namespace Wooga.Lambda.Control.Monad
         /// <returns>The element</returns>
         public static T FromJust<T>(this Maybe<T> m)
         {
-            return m().Value();
+            if(!m.HasValue) throw new InvalidOperationException("No value in None");
+            return m.Value;
         }
 
         /// <summary>
@@ -52,8 +58,7 @@ namespace Wooga.Lambda.Control.Monad
         /// <returns>The element</returns>
         public static T FromMaybe<T>(this Maybe<T> m, T d)
         {
-            var res = m();
-            return res.HasValue() ? res.Value() : d;
+            return m.HasValue ? m.Value : d;
         }
 
         /// <summary>
@@ -68,8 +73,7 @@ namespace Wooga.Lambda.Control.Monad
         /// <returns>The mapped value</returns>
         public static T2 FromJustOrDefault<T1, T2>(this Maybe<T1> m, T2 d, Func<T1, T2> f)
         {
-            var res = m();
-            return res.HasValue() ? f(res.Value()) : d;
+            return m.HasValue ? f(m.Value) : d;
         }
 
         /// <summary>
@@ -80,7 +84,7 @@ namespace Wooga.Lambda.Control.Monad
         /// <returns>isJust?</returns>
         public static bool IsJust<T>(this Maybe<T> m)
         {
-            return m().HasValue();
+            return m.HasValue;
         }
 
         /// <summary>
@@ -104,8 +108,7 @@ namespace Wooga.Lambda.Control.Monad
         /// <returns>Monadically bound maybes</returns>
         public static Maybe<T2> Bind<T1, T2>(this Maybe<T1> m, Func<T1, Maybe<T2>> f)
         {
-            var res = m();
-            return res.HasValue() ? f(res.Value()) : Nothing<T2>();
+            return m.HasValue ? f(m.Value) : Nothing<T2>();
         }
 
         /// <summary>
@@ -143,44 +146,6 @@ namespace Wooga.Lambda.Control.Monad
             return Just(v);
         }
 
-        public abstract class Result<T>
-        {
-            public abstract T Value();
-            public abstract bool HasValue();
-
-            public sealed class Just : Result<T>
-            {
-                private readonly T _v;
-
-                internal Just(T v)
-                {
-                    _v = v;
-                }
-
-                public override T Value()
-                {
-                    return _v;
-                }
-
-                public override bool HasValue()
-                {
-                    return true;
-                }
-            }
-
-            public sealed class Nothing : Result<T>
-            {
-                public override T Value()
-                {
-                    throw new InvalidOperationException("Maybe.FromJust: Nothing");
-                }
-
-                public override bool HasValue()
-                {
-                    return false;
-                }
-            }
-        }
     }
 
     public static class MaybeFunctor

@@ -164,11 +164,13 @@ namespace Wooga.Lambda.Tests.Control.PatternMatching
         [ExpectedException("System.InvalidOperationException")]
         public static void ExceptionOnNoMatch()
         {
-            Pattern<int>
-                .Match<A>(new A.C())
-                .Case<A.B>(s => 2)
-                .Case<A.B>(s => 1)
-                .Run();
+            var x = Pattern<int>
+                    .Match<A>(new A.C())
+                    .Case<A.B>(s => 2)
+                    .Case<A.B>(s => 1)
+                    .Run();
+
+            var y = x;
         }
     }
 }

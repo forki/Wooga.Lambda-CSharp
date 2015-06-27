@@ -36,18 +36,16 @@ namespace Wooga.Lambda.Tests.Control.Monad
         public void WithExceptionEitherShouldBeLeft()
         {
             var tryIo = Either.Try<Unit>(() => { throw new Exception("anError"); });
-            var result = tryIo();
-            Assert.True(result.IsLeft());
-            Assert.AreEqual("anError", result.LeftValue().Message);
+            Assert.True(tryIo.IsLeft());
+            Assert.AreEqual("anError", tryIo.LeftValue.Message);
         }
 
         [Test]
         public void WithoutExceptionEitherShouldBeRight()
         {
             var tryIo = Either.Try(() => "noError");
-            var result = tryIo();
-            Assert.True(result.IsRight());
-            Assert.AreEqual("noError", result.RightValue());
+            Assert.True(tryIo.IsRight());
+            Assert.AreEqual("noError", tryIo.RightValue);
         }
     }
 

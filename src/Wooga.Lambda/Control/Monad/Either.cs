@@ -8,52 +8,66 @@ namespace Wooga.Lambda.Control.Monad
     /// <typeparam name="TLeft">The type of the left/failure value.</typeparam>
     /// <typeparam name="TRight">The type of the right/success value.</typeparam>
     /// <returns>EitherData containing either a success or failure value.</returns>
-    public delegate Either.Result<TLeft, TRight> Either<TLeft, TRight>();
+//    public delegate Either.Result<TLeft, TRight> Either<TLeft, TRight>();
+
+    public struct Either<TLeft,TRight>
+    {
+        internal TLeft LeftValue;
+        internal TRight RightValue;
+        internal bool IsRight;
+
+        internal Either(TLeft leftValue, TRight rightValue, bool isRight)
+        {
+            LeftValue = leftValue;
+            RightValue = rightValue;
+            IsRight = isRight;
+        }
+    }
 
     public static class Either
     {
         public static Either<TLeft, TRight> Left<TLeft, TRight>(TLeft m)
         {
-            return () => new Result<TLeft, TRight>.Left(m);
+            return new Either<TLeft, TRight>(m,default(TRight),false);
         }
 
         public static Either<TLeft, TRight> Right<TLeft, TRight>(TRight m)
         {
-            return () => new Result<TLeft, TRight>.Right(m);
+            return new Either<TLeft, TRight>(default(TLeft), m, true);
         }
 
         public static bool IsRight<TLeft, TRight>(this Either<TLeft, TRight> m)
         {
-            return m().IsRight();
+            return m.IsRight;
         }
 
         public static TLeft FromLeft<TLeft, TRight>(this Either<TLeft, TRight> m)
         {
-            return m().LeftValue();
+            if(m.IsRight) throw new InvalidOperationException("Left value of Either.Right");
+            return m.LeftValue;
         }
 
         public static bool IsLeft<TLeft, TRight>(this Either<TLeft, TRight> m)
         {
-            return m().IsLeft();
+            return !m.IsRight;
         }
 
         public static TRight FromRight<TLeft, TRight>(this Either<TLeft, TRight> m)
         {
-            return m().RightValue();
+            if (!m.IsRight) throw new InvalidOperationException("Right value of Either.Left");
+            return m.RightValue;
         }
 
         public static TResult FromEither<TLeft, TRight, TResult>(this Either<TLeft, TRight> m, Func<TLeft, TResult> fl,
             Func<TRight, TResult> fr)
         {
-            var r = m();
-            return r.IsLeft() ? fl(r.LeftValue()) : fr(r.RightValue());
+            return m.IsLeft() ? fl(m.LeftValue) : fr(m.RightValue);
         }
 
         public static Either<TLeft, TRight2> Bind<TLeft, TRight, TRight2>(this Either<TLeft, TRight> m,
             Func<TRight, Either<TLeft, TRight2>> f)
         {
-            var res = m();
-            return res.IsLeft() ? Left<TLeft, TRight2>(res.LeftValue()) : f(res.RightValue());
+            return m.IsLeft() ? Left<TLeft, TRight2>(m.LeftValue) : f(m.RightValue);
         }
 
         public static Either<TLeft, TRight2> Then<TLeft, TRight, TRight2>(this Either<TLeft, TRight> m,
@@ -93,85 +107,15 @@ namespace Wooga.Lambda.Control.Monad
         {
             return p() ? Right<TLeft, TRight>(fr()) : Left<TLeft, TRight>(fl());
         }
-
-        public abstract class Result<TLeft, TRight>
-        {
-            public abstract bool IsLeft();
-            public abstract bool IsRight();
-            public abstract TLeft LeftValue();
-            public abstract TRight RightValue();
-
-            internal sealed class Left : Result<TLeft, TRight>
-            {
-                private readonly TLeft _v;
-
-                public Left(TLeft v)
-                {
-                    _v = v;
-                }
-
-                public override bool IsLeft()
-                {
-                    return true;
-                }
-
-                public override bool IsRight()
-                {
-                    return false;
-                }
-
-                public override TLeft LeftValue()
-                {
-                    return _v;
-                }
-
-                public override TRight RightValue()
-                {
-                    throw new InvalidOperationException("Right value: EitherDataLeft");
-                }
-            }
-
-            internal sealed class Right : Result<TLeft, TRight>
-            {
-                private readonly TRight _v;
-
-                public Right(TRight v)
-                {
-                    _v = v;
-                }
-
-                public override bool IsLeft()
-                {
-                    return false;
-                }
-
-                public override bool IsRight()
-                {
-                    return true;
-                }
-
-                public override TLeft LeftValue()
-                {
-                    throw new InvalidOperationException("Left value: EitherDataRight");
-                }
-
-                public override TRight RightValue()
-                {
-                    return _v;
-                }
-            }
-        }
     }
 
     public static class EitherFunctor
     {
-        public static Either<TLeft, TRight2> FMap<TLeft, TRight, TRight2>(this Either<TLeft, TRight> m,
-            Func<TRight, TRight2> f)
+        public static Either<TLeft, TRight2> FMap<TLeft, TRight, TRight2>(this Either<TLeft, TRight> m, Func<TRight, TRight2> f)
         {
-            var res = m();
-            return res.IsLeft()
-                ? Either.Left<TLeft, TRight2>(res.LeftValue())
-                : Either.Right<TLeft, TRight2>(f(res.RightValue()));
+            return m.IsLeft()
+                ? Either.Left<TLeft, TRight2>(m.LeftValue)
+                : Either.Right<TLeft, TRight2>(f(m.RightValue));
         }
     }
 }
