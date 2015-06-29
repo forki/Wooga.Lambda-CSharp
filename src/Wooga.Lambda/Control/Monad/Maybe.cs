@@ -23,21 +23,21 @@ namespace Wooga.Lambda.Control.Monad
             return x == null ? new Maybe<T>(default(T), false) : new Maybe<T>(x, true);
         }
 
-        public static Maybe<T2> Bind<T,T2>(this Maybe<T> m, Func<T, Maybe<T2>> f)
+        public static Maybe<TOutput> Bind<TInput,TOutput>(this Maybe<TInput> m, Func<TInput, Maybe<TOutput>> f)
         {
-            return m.HasValue ? f(m.Value) : Maybe.Nothing<T2>();
+            return m.HasValue ? f(m.Value) : Maybe.Nothing<TOutput>();
         }
 
-        public static Maybe<T2> Then<T,T2>(this Maybe<T> m, Maybe<T2> n)
+        public static Maybe<TOutput> Then<TInput,TOutput>(this Maybe<TInput> m, Maybe<TOutput> n)
         {
-            return m.HasValue ? n : Maybe.Nothing<T2>();
+            return m.HasValue ? n : Maybe.Nothing<TOutput>();
         }
 
         // Functor functions
 
-        public static Maybe<T2> Map<T,T2>(this Maybe<T>m, Func<T, T2> f)
+        public static Maybe<TOutput> Map<TInput,TOutput>(this Maybe<TInput>m, Func<TInput, TOutput> f)
         {
-            return m.HasValue ? Maybe.Just(f(m.Value)) : Maybe.Nothing<T2>();
+            return m.HasValue ? Maybe.Just(f(m.Value)) : Maybe.Nothing<TOutput>();
         }
 
         // Maybe functions
@@ -52,7 +52,7 @@ namespace Wooga.Lambda.Control.Monad
             return new Maybe<T>(default(T),false);
         }
         
-        public static T FromJust<T>(this Maybe<T> m)
+        internal static T FromJust<T>(this Maybe<T> m)
         {
             if(!m.HasValue) throw new InvalidOperationException("No value in None");
             return m.Value;
@@ -63,7 +63,7 @@ namespace Wooga.Lambda.Control.Monad
             return m.HasValue ? m.Value : d;
         }
         
-        public static T2 FromJustOrDefault<T1, T2>(this Maybe<T1> m, T2 d, Func<T1, T2> f)
+        public static TOutput FromJustOrDefault<TInput, TOutput>(this Maybe<TInput> m, TOutput d, Func<TInput, TOutput> f)
         {
             return m.HasValue ? f(m.Value) : d;
         }

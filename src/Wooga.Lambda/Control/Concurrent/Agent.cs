@@ -8,11 +8,11 @@ namespace Wooga.Lambda.Control.Concurrent
     /// <summary>
     ///     Actor/Agent implementation similar to Control.Async.MailboxProcessor in F#
     /// </summary>
-    /// <typeparam name="TM">The type of the message consumed by the agent.</typeparam>
-    /// <typeparam name="TR">The type of the response produced by the agent.</typeparam>
-    public class Agent<TM, TR>
+    /// <typeparam name="TMessage">The type of the message consumed by the agent.</typeparam>
+    /// <typeparam name="TReply">The type of the response produced by the agent.</typeparam>
+    public class Agent<TMessage, TReply>
     {
-        private readonly Queue<TM> _inbox = new Queue<TM>();
+        private readonly Queue<TMessage> _inbox = new Queue<TMessage>();
         private volatile bool _shouldCancel;
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace Wooga.Lambda.Control.Concurrent
         /// </value>
         public bool IsRunning { get; private set; }
 
-        private static Async<Unit> Watchdog<TS>(Agent<TM, TR> inbox, Func<Agent<TM, TR>, TS, TS> body, TS state)
+        private static Async<Unit> Watchdog<TS>(Agent<TMessage, TReply> inbox, Func<Agent<TMessage, TReply>, TS, TS> body, TS state)
         {
             return () =>
             {
@@ -41,13 +41,13 @@ namespace Wooga.Lambda.Control.Concurrent
         /// <summary>
         ///     Creates and starts an agent.
         /// </summary>
-        /// <typeparam name="TS">The type of the state.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
         /// <param name="state">The initial state.</param>
         /// <param name="body">The body to be executed.</param>
         /// <returns>The agent.</returns>
-        public static Agent<TM, TR> Start<TS>(TS state, Func<Agent<TM, TR>, TS, TS> body)
+        public static Agent<TMessage, TReply> Start<TState>(TState state, Func<Agent<TMessage, TReply>, TState, TState> body)
         {
-            var agent = new Agent<TM, TR>();
+            var agent = new Agent<TMessage, TReply>();
             Watchdog(agent, body, state).Start();
             return agent;
         }
@@ -55,15 +55,15 @@ namespace Wooga.Lambda.Control.Concurrent
         /// <summary>
         ///     Creates and starts an agent.
         /// </summary>
-        /// <typeparam name="TS">The type of the state.</typeparam>
+        /// <typeparam name="TState">The type of the state.</typeparam>
         /// <param name="state">The initial state.</param>
         /// <param name="body">The body to be executed.</param>
         /// <returns>An async computation producing & starting the agent.</returns>
-        public static Async<Agent<TM, TR>> StartAsync<TS>(TS state, Func<Agent<TM, TR>, TS, TS> body)
+        public static Async<Agent<TMessage, TReply>> StartAsync<TState>(TState state, Func<Agent<TMessage, TReply>, TState, TState> body)
         {
             return () =>
             {
-                var agent = new Agent<TM, TR>();
+                var agent = new Agent<TMessage, TReply>();
                 Watchdog(agent, body, state).RunSynchronously();
                 return agent;
             };
@@ -105,7 +105,7 @@ namespace Wooga.Lambda.Control.Concurrent
         ///     Posts a message to the message queue of the Agent, asynchronously.
         /// </summary>
         /// <param name="msg">The message to post.</param>
-        public Unit Post(TM msg)
+        public Unit Post(TMessage msg)
         {
             return Async.Return(() =>
             {
@@ -123,10 +123,10 @@ namespace Wooga.Lambda.Control.Concurrent
         /// </summary>
         /// <param name="f">The lambda providing the message.</param>
         /// <returns>The agents reply</returns>
-        public TR PostAndReply(Func<AsyncReplyChannel<TR>, TM> f)
+        public TReply PostAndReply(Func<AsyncReplyChannel<TReply>, TMessage> f)
         {
-            var handle = new AsyncEventHandle<TR>();
-            Post(f(new AsyncReplyChannel<TR>(handle.Complete)));
+            var handle = new AsyncEventHandle<TReply>();
+            Post(f(new AsyncReplyChannel<TReply>(handle.Complete)));
             handle.DoneEvent.WaitOne();
             return handle.Result();
         }
@@ -136,7 +136,7 @@ namespace Wooga.Lambda.Control.Concurrent
         /// </summary>
         /// <param name="f">The lambda providing the message.</param>
         /// <returns>An async computation providing the agents reply.</returns>
-        public Async<TR> PostAndAsyncReply(Func<AsyncReplyChannel<TR>, TM> f)
+        public Async<TReply> PostAndAsyncReply(Func<AsyncReplyChannel<TReply>, TMessage> f)
         {
             return () => PostAndReply(f);
         }
@@ -145,7 +145,7 @@ namespace Wooga.Lambda.Control.Concurrent
         ///     Waits for a message. This will consume the first message in arrival order.
         /// </summary>
         /// <returns>An async computation providing a message.</returns>
-        public Async<TM> Receive()
+        public Async<TMessage> Receive()
         {
             return () =>
             {

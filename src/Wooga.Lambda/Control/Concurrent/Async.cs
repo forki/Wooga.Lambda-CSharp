@@ -67,21 +67,21 @@ namespace Wooga.Lambda.Control.Concurrent
             return () => f();
         }
 
-        public static Async<T2> Bind<T, T2>(this Async<T> m, Func<T, Async<T2>> f)
+        public static Async<TOutput> Bind<TInput, TOutput>(this Async<TInput> m, Func<TInput, Async<TOutput>> f)
         {
             return () => f(m.RunSynchronously()).RunSynchronously();
         }
 
-        public static Async<T2> Then<T, T2>(this Async<T> m, Async<T2> h)
+        public static Async<TOutput> Then<TInput, TOutput>(this Async<TInput> m, Async<TOutput> h)
         {
             return m.Bind(_ => h);
         }
 
         // Functor functions
 
-        public static Async<T2> Map<T, T2>(this Async<T> m, Func<T, T2> f)
+        public static Async<TOutput> Map<TInput, TOutput>(this Async<TInput> m, Func<TInput, TOutput> f)
         {
-            return m.Bind<T,T2>(v => () => f(v));
+            return m.Bind<TInput,TOutput>(v => () => f(v));
         }
 
         /// <summary>

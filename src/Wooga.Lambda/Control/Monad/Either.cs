@@ -25,25 +25,24 @@ namespace Wooga.Lambda.Control.Monad
             return Right<TLeft, TRight>(v);
         }
 
-        public static Either<TLeft, TRight2> Bind<TLeft, TRight, TRight2>(this Either<TLeft, TRight> m,
-            Func<TRight, Either<TLeft, TRight2>> f)
+        public static Either<TLeft, TRightOutput> Bind<TLeft, TRightInput, TRightOutput>(this Either<TLeft, TRightInput> m, Func<TRightInput, Either<TLeft, TRightOutput>> f)
         {
-            return m.IsLeft() ? Left<TLeft, TRight2>(m.LeftValue) : f(m.RightValue);
+            return m.IsLeft() ? Left<TLeft, TRightOutput>(m.LeftValue) : f(m.RightValue);
         }
 
-        public static Either<TLeft, TRight2> Then<TLeft, TRight, TRight2>(this Either<TLeft, TRight> m,
-            Either<TLeft, TRight2> h)
+        public static Either<TLeft, TRightOutput> Then<TLeft, TRightInput, TRightOutput>(this Either<TLeft, TRightInput> m,
+            Either<TLeft, TRightOutput> h)
         {
             return m.Bind(_ => h);
         }
 
         // Functor functions
 
-        public static Either<TLeft, TRight2> Map<TLeft, TRight, TRight2>(this Either<TLeft, TRight> m, Func<TRight, TRight2> f)
+        public static Either<TLeft, TRightOutput> Map<TLeft, TRightInput, TRightOutput>(this Either<TLeft, TRightInput> m, Func<TRightInput, TRightOutput> f)
         {
             return m.IsLeft()
-                ? Either.Left<TLeft, TRight2>(m.LeftValue)
-                : Either.Right<TLeft, TRight2>(f(m.RightValue));
+                ? Either.Left<TLeft, TRightOutput>(m.LeftValue)
+                : Either.Right<TLeft, TRightOutput>(f(m.RightValue));
         }
 
         // Either functions
@@ -78,10 +77,10 @@ namespace Wooga.Lambda.Control.Monad
         {
             if (!m.IsRight) throw new InvalidOperationException("Right value of Either.Left");
             return m.RightValue;
+            
         }
 
-        public static TResult FromEither<TLeft, TRight, TResult>(this Either<TLeft, TRight> m, Func<TLeft, TResult> fl,
-            Func<TRight, TResult> fr)
+        public static TResult FromEither<TLeft, TRight, TResult>(this Either<TLeft, TRight> m, Func<TLeft, TResult> fl, Func<TRight, TResult> fr)
         {
             return m.IsLeft() ? fl(m.LeftValue) : fr(m.RightValue);
         }
