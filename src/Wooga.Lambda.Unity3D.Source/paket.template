@@ -21,3 +21,5 @@ description
 files
 	../Wooga.Lambda/**/*.cs ==> content/Wooga.Lambda
 	!../**/AssemblyInfo.cs
+    !../**/bin/**/*.*
+    !../**/obj/**/*.*

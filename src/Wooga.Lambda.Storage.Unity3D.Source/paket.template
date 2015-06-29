@@ -21,5 +21,7 @@ description
 files
 	../Wooga.Lambda.Storage/**/*.cs ==> content/Wooga.Lambda.Storage
 	!../**/AssemblyInfo.cs
+    !../**/bin/**/*.*
+    !../**/obj/**/*.*
 dependencies
 	Wooga.Lambda.Unity3D.Source
