@@ -70,7 +70,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         [Test]
         public void ReturnCreatesRightValue()
         {
-            var either = Either.Return<int, string>(() => "abc");
+            var either = Either.Return<int, string>("abc");
             Assert.True(either.IsRight());
         }
 
@@ -90,14 +90,14 @@ namespace Wooga.Lambda.Tests.Control.Monad
         {
             var str = "abc";
             Func<string, Either<int, string>> f = s => Either.Right<int, string>(s.ToUpper());
-            Assert.AreEqual(Either.Return<int, string>(() => str).Bind(f).FromRight(), f(str).FromRight());
+            Assert.AreEqual(Either.Return<int, string>(str).Bind(f).FromRight(), f(str).FromRight());
         }
 
         [Test]
         public void SecondLaw()
         {
             var str = "abc";
-            var either = Either.Right<int, string>(str).Bind(x => Either.Return<int, string>(() => x));
+            var either = Either.Right<int, string>(str).Bind(Either.Return<int, string>);
             Assert.AreEqual(str, either.FromRight());
         }
 
@@ -120,7 +120,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         public void FunctorWithLeftIsLeft()
         {
             var either = Either.Left<string, int>("hurra");
-            var res = either.FMap(i => i*2);
+            var res = either.Map(i => i*2);
             Assert.True(res.IsLeft());
         }
 
@@ -128,7 +128,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         public void FunctorWithRightAppliesFunctor()
         {
             var either = Either.Right<string, int>(3);
-            var res = either.FMap(i => i*2);
+            var res = either.Map(i => i*2);
             Assert.AreEqual(6, res.FromRight());
         }
     }

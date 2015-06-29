@@ -15,7 +15,7 @@ namespace Wooga.Lambda.Control.Concurrent
     /// <summary>
     ///     A wrapper to encapsulate a ManualResetEvent.
     /// </summary>
-    /// <typeparam name="TReply">The type of the reply.</typeparam>
+    /// <typeparam name="T">The type of the reply.</typeparam>
     internal sealed class AsyncEventHandle<T>
     {
         public readonly ManualResetEvent DoneEvent = new ManualResetEvent(false);
@@ -37,17 +37,17 @@ namespace Wooga.Lambda.Control.Concurrent
     /// <summary>
     ///     A handle to a capability to reply to a message.
     /// </summary>
-    /// <typeparam name="TReply">The type of the reply.</typeparam>
-    public sealed class AsyncReplyChannel<TReply>
+    /// <typeparam name="T">The type of the reply.</typeparam>
+    public sealed class AsyncReplyChannel<T>
     {
-        private readonly Func<TReply, Unit> replyf;
+        private readonly Func<T, Unit> replyf;
 
-        public AsyncReplyChannel(Func<TReply, Unit> reply)
+        public AsyncReplyChannel(Func<T, Unit> reply)
         {
             replyf = reply;
         }
 
-        public void Reply(TReply msg)
+        public void Reply(T msg)
         {
             replyf(msg);
         }
@@ -55,6 +55,35 @@ namespace Wooga.Lambda.Control.Concurrent
 
     public static class Async
     {
+        // Monad functions
+
+        public static Async<T> Return<T>(T f)
+        {
+            return () => f;
+        }
+
+        public static Async<T> Return<T>(Func<T> f)
+        {
+            return () => f();
+        }
+
+        public static Async<T2> Bind<T, T2>(this Async<T> m, Func<T, Async<T2>> f)
+        {
+            return () => f(m.RunSynchronously()).RunSynchronously();
+        }
+
+        public static Async<T2> Then<T, T2>(this Async<T> m, Async<T2> h)
+        {
+            return m.Bind(_ => h);
+        }
+
+        // Functor functions
+
+        public static Async<T2> Map<T, T2>(this Async<T> m, Func<T, T2> f)
+        {
+            return m.Bind<T,T2>(v => () => f(v));
+        }
+
         /// <summary>
         ///     Creates an asynchronous computation that runs the given computation and ignores its result.
         /// </summary>
@@ -183,34 +212,15 @@ namespace Wooga.Lambda.Control.Concurrent
             };
         }
 
+        /// <summary>
+        ///     Creates an asynchronous computation that executes a specified computation. If this computation completes successfully, then this method returns Either.Right with the returned value. If this computation raises an exception before it completes then return Either.Left with the raised exception.
+        /// </summary>
+        /// <typeparam name="T">Type of computation result</typeparam>
+        /// <param name="m">The computation.</param>
+        /// <returns>A new computation that maps the given computation to Either</returns>
         public static Async<Either<Exception, T>> Catch<T>(this Async<T> m)
         {
             return () => Either.Try<T>(m.RunSynchronously);
-        }
-
-        public static Async<T2> Bind<T1, T2>(this Async<T1> m, Func<T1, Async<T2>> f)
-        {
-            return () =>
-            {
-                var xm = m.RunSynchronously();
-                var xf = f(xm).RunSynchronously();
-                return xf;
-            };
-        }
-
-        public static Async<T2> Then<T1, T2>(this Async<T1> m, Async<T2> h)
-        {
-            return m.Bind(_ => h);
-        }
-
-        public static Async<T> Return<T>(Func<T> f)
-        {
-            return () => f();
-        }
-
-        public static Async<T> Return<T>(T f)
-        {
-            return () => f;
         }
     }
 }

@@ -38,8 +38,7 @@ namespace Wooga.Lambda.Network
 
         public static HttpRequest WithBody(this HttpRequest httpRequest, ImmutableList<byte> body)
         {
-            return new HttpRequest(httpRequest.Endpoint, httpRequest.HttpMethod, httpRequest.HttpHeaders,
-                Maybe.Return(() => body));
+            return new HttpRequest(httpRequest.Endpoint, httpRequest.HttpMethod, httpRequest.HttpHeaders, Maybe.Return(body));
         }
     }
 }

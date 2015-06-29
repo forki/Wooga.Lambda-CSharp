@@ -90,7 +90,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         [Test]
         public void ReturnCreatesJustValue()
         {
-            var maybe = Maybe.Return(() => "x");
+            var maybe = Maybe.Return("x");
             Assert.True(maybe.IsJust());
         }
 
@@ -110,14 +110,14 @@ namespace Wooga.Lambda.Tests.Control.Monad
         {
             var str = "abc";
             Func<string, Maybe<string>> f = s => Maybe.Just(s.ToUpper());
-            Assert.AreEqual(Maybe.Return(() => str).Bind(f).FromJust(), f(str).FromJust());
+            Assert.AreEqual(Maybe.Return(str).Bind(f).FromJust(), f(str).FromJust());
         }
 
         [Test]
         public void SecondLaw()
         {
             var str = "abc";
-            var maybe = Maybe.Just(str).Bind(x => Maybe.Return(() => x));
+            var maybe = Maybe.Just(str).Bind(Maybe.Return);
             Assert.AreEqual(str, maybe.FromJust());
         }
 
@@ -140,7 +140,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         public void FunctorWithJustAppliesFunctor()
         {
             var maybe = Maybe.Just(42);
-            var res = maybe.FMap(_ => "42");
+            var res = maybe.Map(_ => "42");
             Assert.AreEqual("42", res.FromJust());
         }
 
@@ -148,7 +148,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         public void FunctorWithNothingIsNothing()
         {
             var maybe = Maybe.Nothing<string>();
-            var res = maybe.FMap(_ => 0);
+            var res = maybe.Map(_ => 0);
             Assert.True(res.IsNothing());
         }
     }

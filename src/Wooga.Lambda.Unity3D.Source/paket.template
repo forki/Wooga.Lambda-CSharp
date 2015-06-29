@@ -19,5 +19,5 @@ summary
 description
     Functional primitives for Unity3D - inspired by csharp-monads, Haskell & F#
 files
-	../Wooga.Lambda/Control/**/*.cs ==> content/Wooga.Lambda/Control
-	../Wooga.Lambda/Data/**/*.cs ==> content/Wooga.Lambda/Data
+	../Wooga.Lambda/**/*.cs ==> content/Wooga.Lambda
+	!../**/AssemblyInfo.cs
