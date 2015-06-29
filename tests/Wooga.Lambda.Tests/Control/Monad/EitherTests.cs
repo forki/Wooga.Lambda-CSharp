@@ -11,9 +11,9 @@ namespace Wooga.Lambda.Tests.Control.Monad
         [Test]
         public void LeftIsLeft()
         {
-            var either = Either.Left<string, int>("twelve");
-            var isRight = either.IsRight();
-            var isLeft = either.IsLeft();
+            var either = Either.Failure<int,string>("twelve");
+            var isRight = either.IsSuccess();
+            var isLeft = either.IsFailure();
             Assert.False(isRight);
             Assert.True(isLeft);
         }
@@ -21,9 +21,9 @@ namespace Wooga.Lambda.Tests.Control.Monad
         [Test]
         public void RightIsRight()
         {
-            var either = Either.Right<string, int>(12);
-            var isRight = either.IsRight();
-            var isLeft = either.IsLeft();
+            var either = Either.Success<int,string>(12);
+            var isRight = either.IsSuccess();
+            var isLeft = either.IsFailure();
             Assert.True(isRight);
             Assert.False(isLeft);
         }
@@ -36,16 +36,16 @@ namespace Wooga.Lambda.Tests.Control.Monad
         public void WithExceptionEitherShouldBeLeft()
         {
             var tryIo = Either.Try<Unit>(() => { throw new Exception("anError"); });
-            Assert.True(tryIo.IsLeft());
-            Assert.AreEqual("anError", tryIo.LeftValue.Message);
+            Assert.True(tryIo.IsFailure());
+            Assert.AreEqual("anError", tryIo.FailureValue.Message);
         }
 
         [Test]
         public void WithoutExceptionEitherShouldBeRight()
         {
             var tryIo = Either.Try(() => "noError");
-            Assert.True(tryIo.IsRight());
-            Assert.AreEqual("noError", tryIo.RightValue);
+            Assert.True(tryIo.IsSuccess());
+            Assert.AreEqual("noError", tryIo.SuccessValue);
         }
     }
 
@@ -55,30 +55,30 @@ namespace Wooga.Lambda.Tests.Control.Monad
         [Test]
         public void BindAppliesFuncForRight()
         {
-            var either = Either.Right<int, string>("abc");
-            Assert.AreEqual(Either.Right<int, int>(100).FromRight(),
-                either.Bind(_ => Either.Right<int, int>(100)).FromRight());
+            var either = Either.Success<string,int>("abc");
+            Assert.AreEqual(Either.Success<int, int>(100).FromSuccess(),
+                either.Bind(_ => Either.Success<int, int>(100)).FromSuccess());
         }
 
         [Test]
         public void BindIsLeftForLeft()
         {
-            var either = Either.Left<int, string>(400);
-            Assert.True(either.Bind(_ => Either.Right<int, string>("abc")).IsLeft());
+            var either = Either.Failure<string,int>(400);
+            Assert.True(either.Bind(_ => Either.Success<string, int>("abc")).IsFailure());
         }
 
         [Test]
         public void ReturnCreatesRightValue()
         {
-            var either = Either.Return<int, string>("abc");
-            Assert.True(either.IsRight());
+            var either = Either.Return<string, int>("abc");
+            Assert.True(either.IsSuccess());
         }
 
         [Test]
         public void ThenIsLeftWhenFirstIsLeft()
         {
-            var either = Either.Left<int, string>(400).Then(Either.Right<int, string>("abc"));
-            Assert.True(either.IsLeft());
+            var either = Either.Failure<string, int>(400).Then(Either.Success<string,int>("abc"));
+            Assert.True(either.IsFailure());
         }
     }
 
@@ -89,27 +89,27 @@ namespace Wooga.Lambda.Tests.Control.Monad
         public void FirstLaw()
         {
             var str = "abc";
-            Func<string, Either<int, string>> f = s => Either.Right<int, string>(s.ToUpper());
-            Assert.AreEqual(Either.Return<int, string>(str).Bind(f).FromRight(), f(str).FromRight());
+            Func<string, Either<string,int>> f = s => Either.Success<string,int>(s.ToUpper());
+            Assert.AreEqual(Either.Return<string,int>(str).Bind(f).FromSuccess(), f(str).FromSuccess());
         }
 
         [Test]
         public void SecondLaw()
         {
             var str = "abc";
-            var either = Either.Right<int, string>(str).Bind(Either.Return<int, string>);
-            Assert.AreEqual(str, either.FromRight());
+            var either = Either.Success<string,int>(str).Bind(Either.Return<string,int>);
+            Assert.AreEqual(str, either.FromSuccess());
         }
 
         [Test]
         public void ThirdLaw()
         {
             var str = "asd";
-            Func<string, Either<int, string[]>> f = s => Either.Right<int, string[]>(s.Split(' '));
-            Func<string[], Either<int, string[]>> g = Either.Right<int, string[]>;
-            var left = Either.Right<int, string>(str).Bind(f).Bind(g);
-            var right = Either.Right<int, string>(str).Bind(x => f(x).Bind(g));
-            Assert.AreEqual(left.FromRight(), right.FromRight());
+            Func<string, Either<string[],int>> f = s => Either.Success<string[],int>(s.Split(' '));
+            Func<string[], Either<string[], int>> g = Either.Success<string[], int>;
+            var left = Either.Success<string,int>(str).Bind(f).Bind(g);
+            var right = Either.Success<string,int>(str).Bind(x => f(x).Bind(g));
+            Assert.AreEqual(left.FromSuccess(), right.FromSuccess());
         }
     }
 
@@ -119,17 +119,17 @@ namespace Wooga.Lambda.Tests.Control.Monad
         [Test]
         public void FunctorWithLeftIsLeft()
         {
-            var either = Either.Left<string, int>("hurra");
+            var either = Either.Failure<int,string>("hurra");
             var res = either.Map(i => i*2);
-            Assert.True(res.IsLeft());
+            Assert.True(res.IsFailure());
         }
 
         [Test]
         public void FunctorWithRightAppliesFunctor()
         {
-            var either = Either.Right<string, int>(3);
+            var either = Either.Success<int,string>(3);
             var res = either.Map(i => i*2);
-            Assert.AreEqual(6, res.FromRight());
+            Assert.AreEqual(6, res.FromSuccess());
         }
     }
 }

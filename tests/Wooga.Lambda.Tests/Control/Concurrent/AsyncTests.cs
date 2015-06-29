@@ -23,8 +23,8 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
                 })
                 .Catch()
                 .RunSynchronously();
-            Assert.IsTrue(ch.IsLeft());
-            Assert.AreEqual("exception", ch.FromLeft().Message);
+            Assert.IsTrue(ch.IsFailure());
+            Assert.AreEqual("exception", ch.FromFailure().Message);
         }
 
         [Test]
@@ -34,8 +34,8 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
                 .Return(() => "no exception")
                 .Catch()
                 .RunSynchronously();
-            Assert.IsTrue(ch.IsRight());
-            Assert.AreEqual("no exception", ch.FromRight());
+            Assert.IsTrue(ch.IsSuccess());
+            Assert.AreEqual("no exception", ch.FromSuccess());
         }
 
         [Test]

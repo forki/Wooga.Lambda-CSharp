@@ -213,12 +213,12 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         /// <summary>
-        ///     Creates an asynchronous computation that executes a specified computation. If this computation completes successfully, then this method returns Either.Right with the returned value. If this computation raises an exception before it completes then return Either.Left with the raised exception.
+        ///     Creates an asynchronous computation that executes a specified computation. If this computation completes successfully, then this method returns Either.Success with the returned value. If this computation raises an exception before it completes then return Either.Failure with the raised exception.
         /// </summary>
         /// <typeparam name="T">Type of computation result</typeparam>
         /// <param name="m">The computation.</param>
         /// <returns>A new computation that maps the given computation to Either</returns>
-        public static Async<Either<Exception, T>> Catch<T>(this Async<T> m)
+        public static Async<Either<T,Exception>> Catch<T>(this Async<T> m)
         {
             return () => Either.Try<T>(m.RunSynchronously);
         }

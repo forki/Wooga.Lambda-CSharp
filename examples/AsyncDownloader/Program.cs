@@ -26,7 +26,7 @@ namespace AsyncDownloader
             for (int i = 0; i < 10000; i++)
             {
                 var x = i;
-                asyncs = asyncs.Add(Async.Return(() => Log.Shared.Debug(x + " : " + System.Threading.Thread.CurrentThread.ManagedThreadId)));
+                asyncs = asyncs.Add(() => Log.Shared.Debug(x + " : " + System.Threading.Thread.CurrentThread.ManagedThreadId));
             }
 
             asyncs.Parallel().RunSynchronously();

@@ -2,17 +2,17 @@
 
 namespace Wooga.Lambda.Control.Monad
 {
-    public struct Either<TLeft,TRight>
+    public struct Either<TSuccess,TFailure>
     {
-        internal TLeft LeftValue;
-        internal TRight RightValue;
-        internal bool IsRight;
+        internal TFailure FailureValue;
+        internal TSuccess SuccessValue;
+        internal bool IsSuccess;
 
-        internal Either(TLeft leftValue, TRight rightValue, bool isRight)
+        internal Either(TFailure failureValue, TSuccess successValue, bool isSuccess)
         {
-            LeftValue = leftValue;
-            RightValue = rightValue;
-            IsRight = isRight;
+            FailureValue = failureValue;
+            SuccessValue = successValue;
+            IsSuccess = isSuccess;
         }
     }
 
@@ -20,91 +20,91 @@ namespace Wooga.Lambda.Control.Monad
     {
         // Monad functions
 
-        public static Either<TLeft, TRight> Return<TLeft, TRight>(TRight v)
+        public static Either<TSuccess,TFailure> Return<TSuccess,TFailure>(TSuccess v)
         {
-            return Right<TLeft, TRight>(v);
+            return Success<TSuccess,TFailure>(v);
         }
 
-        public static Either<TLeft, TRightOutput> Bind<TLeft, TRightInput, TRightOutput>(this Either<TLeft, TRightInput> m, Func<TRightInput, Either<TLeft, TRightOutput>> f)
+        public static Either<TSuccessOutput,TFailure> Bind<TSuccessInput, TFailure, TSuccessOutput>(this Either<TSuccessInput,TFailure> m, Func<TSuccessInput, Either<TSuccessOutput,TFailure>> f)
         {
-            return m.IsLeft() ? Left<TLeft, TRightOutput>(m.LeftValue) : f(m.RightValue);
+            return m.IsFailure() ? Failure<TSuccessOutput,TFailure>(m.FailureValue) : f(m.SuccessValue);
         }
 
-        public static Either<TLeft, TRightOutput> Then<TLeft, TRightInput, TRightOutput>(this Either<TLeft, TRightInput> m,
-            Either<TLeft, TRightOutput> h)
+        public static Either<TSuccessOutput,TFailure> Then<TSuccessInput, TFailure, TSuccessOutput>(this Either<TSuccessInput,TFailure> m,
+            Either<TSuccessOutput,TFailure> h)
         {
             return m.Bind(_ => h);
         }
 
         // Functor functions
 
-        public static Either<TLeft, TRightOutput> Map<TLeft, TRightInput, TRightOutput>(this Either<TLeft, TRightInput> m, Func<TRightInput, TRightOutput> f)
+        public static Either<TSuccessOutput,TFailure> Map<TSuccessInput, TFailure, TSuccessOutput>(this Either<TSuccessInput, TFailure> m, Func<TSuccessInput, TSuccessOutput> f)
         {
-            return m.IsLeft()
-                ? Either.Left<TLeft, TRightOutput>(m.LeftValue)
-                : Either.Right<TLeft, TRightOutput>(f(m.RightValue));
+            return m.IsFailure()
+                ? Either.Failure<TSuccessOutput, TFailure>(m.FailureValue)
+                : Either.Success<TSuccessOutput, TFailure>(f(m.SuccessValue));
         }
 
         // Either functions
 
-        public static Either<TLeft, TRight> Left<TLeft, TRight>(TLeft m)
+        public static Either<TSuccess, TFailure> Failure<TSuccess, TFailure>(TFailure m)
         {
-            return new Either<TLeft, TRight>(m,default(TRight),false);
+            return new Either<TSuccess, TFailure>(m,default(TSuccess),false);
         }
 
-        public static Either<TLeft, TRight> Right<TLeft, TRight>(TRight m)
+        public static Either<TSuccess, TFailure> Success<TSuccess, TFailure>(TSuccess m)
         {
-            return new Either<TLeft, TRight>(default(TLeft), m, true);
+            return new Either<TSuccess, TFailure>(default(TFailure), m, true);
         }
 
-        public static bool IsRight<TLeft, TRight>(this Either<TLeft, TRight> m)
+        public static bool IsSuccess<TSuccess, TFailure>(this Either<TSuccess, TFailure> m)
         {
-            return m.IsRight;
+            return m.IsSuccess;
         }
 
-        public static TLeft FromLeft<TLeft, TRight>(this Either<TLeft, TRight> m)
+        public static TFailure FromFailure<TSuccess, TFailure>(this Either<TSuccess, TFailure> m)
         {
-            if(m.IsRight) throw new InvalidOperationException("Left value of Either.Right");
-            return m.LeftValue;
+            if(m.IsSuccess) throw new InvalidOperationException("Failure value of Either.Success");
+            return m.FailureValue;
         }
 
-        public static bool IsLeft<TLeft, TRight>(this Either<TLeft, TRight> m)
+        public static bool IsFailure<TSuccess, TFailure>(this Either<TSuccess, TFailure> m)
         {
-            return !m.IsRight;
+            return !m.IsSuccess;
         }
 
-        public static TRight FromRight<TLeft, TRight>(this Either<TLeft, TRight> m)
+        public static TSuccess FromSuccess<TSuccess, TFailure>(this Either<TSuccess, TFailure> m)
         {
-            if (!m.IsRight) throw new InvalidOperationException("Right value of Either.Left");
-            return m.RightValue;
+            if (!m.IsSuccess) throw new InvalidOperationException("Success value of Either.Failure");
+            return m.SuccessValue;
             
         }
 
-        public static TResult FromEither<TLeft, TRight, TResult>(this Either<TLeft, TRight> m, Func<TLeft, TResult> fl, Func<TRight, TResult> fr)
+        public static TResult FromEither<TSuccess, TFailure, TResult>(this Either<TSuccess, TFailure> m, Func<TFailure, TResult> fl, Func<TSuccess, TResult> fr)
         {
-            return m.IsLeft() ? fl(m.LeftValue) : fr(m.RightValue);
+            return m.IsFailure() ? fl(m.FailureValue) : fr(m.SuccessValue);
         }
 
-        public static Either<TLeft, TRight> Try<TLeft, TRight>(Func<Exception, TLeft> fl, Func<TRight> fr)
+        public static Either<TSuccess, TFailure> Try<TSuccess, TFailure>(Func<Exception, TFailure> fl, Func<TSuccess> fr)
         {
             try
             {
-                return Right<TLeft, TRight>(fr());
+                return Success<TSuccess, TFailure>(fr());
             }
             catch (Exception e)
             {
-                return Left<TLeft, TRight>(fl(e));
+                return Failure<TSuccess, TFailure>(fl(e));
             }
         }
 
-        public static Either<Exception, T> Try<T>(Func<T> f)
+        public static Either<T, Exception> Try<T>(Func<T> f)
         {
             return Try(e => e, f);
         }
 
-        public static Either<TLeft, TRight> When<TLeft, TRight>(Func<bool> p, Func<TLeft> fl, Func<TRight> fr)
+        public static Either<TSuccess, TFailure> When<TSuccess, TFailure>(Func<bool> p, Func<TFailure> fl, Func<TSuccess> fr)
         {
-            return p() ? Right<TLeft, TRight>(fr()) : Left<TLeft, TRight>(fl());
+            return p() ? Success<TSuccess, TFailure>(fr()) : Failure<TSuccess, TFailure>(fl());
         }
     }
 }
