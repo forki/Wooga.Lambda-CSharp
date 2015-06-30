@@ -1,3 +1,7 @@
+#### 0.5.0 - May 11  2015
+* Maybe & Either types are now structs and cause no memory overhead anymore
+* Changes in APIs of Maybe & Either 
+
 #### 0.4.1 - May 11  2015
 * Wooga.Lambda.FileSystem.Api removing some Logs from LocalFileSystem
 
