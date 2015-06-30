@@ -220,7 +220,7 @@ namespace Wooga.Lambda.Control.Concurrent
         /// <returns>A new computation that maps the given computation to Either</returns>
         public static Async<Either<T,Exception>> Catch<T>(this Async<T> m)
         {
-            return () => Either.Try<T>(m.RunSynchronously);
+            return () => Either.Catch<T>(m.RunSynchronously);
         }
     }
 }

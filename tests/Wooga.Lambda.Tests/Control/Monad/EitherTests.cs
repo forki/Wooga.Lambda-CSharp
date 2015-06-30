@@ -32,28 +32,28 @@ namespace Wooga.Lambda.Tests.Control.Monad
         public void FromSuccessOnFailureReturnsDefault()
         {
             var x = Either.Failure<int, Unit>(Unit.Default);
-            Assert.AreEqual(17,x.FromSuccess(17));
+            Assert.AreEqual(17,x.SuccessOr(17));
         }
 
         [Test]
         public void FromSuccessOnFailureReturnsDeferredDefault()
         {
             var x = Either.Failure<int, Unit>(Unit.Default);
-            Assert.AreEqual(17, x.FromSuccess(()=>17));
+            Assert.AreEqual(17, x.SuccessOr(()=>17));
         }
 
         [Test]
         public void FromFailureOnSuccessReturnsDefault()
         {
             var x = Either.Success<Unit, int>(Unit.Default);
-            Assert.AreEqual(17, x.FromFailure(17));
+            Assert.AreEqual(17, x.FailureOr(17));
         }
 
         [Test]
         public void FromFailureOnSuccessReturnsDeferredDefault()
         {
             var x = Either.Success<Unit, int>(Unit.Default);
-            Assert.AreEqual(17, x.FromFailure(() => 17));
+            Assert.AreEqual(17, x.FailureOr(() => 17));
         }
     }
 
@@ -63,7 +63,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         [Test]
         public void WithExceptionEitherShouldBeLeft()
         {
-            var tryIo = Either.Try<Unit>(() => { throw new Exception("anError"); });
+            var tryIo = Either.Catch<Unit>(() => { throw new Exception("anError"); });
             Assert.True(tryIo.IsFailure());
             Assert.AreEqual("anError", tryIo.FailureValue.Message);
         }
@@ -71,7 +71,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         [Test]
         public void WithoutExceptionEitherShouldBeRight()
         {
-            var tryIo = Either.Try(() => "noError");
+            var tryIo = Either.Catch(() => "noError");
             Assert.True(tryIo.IsSuccess());
             Assert.AreEqual("noError", tryIo.SuccessValue);
         }
@@ -84,7 +84,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         public void BindAppliesFuncForRight()
         {
             var either = Either.Success<string,int>("abc");
-            Assert.AreEqual(Either.Success<int, int>(100).FromSuccess(0), either.Bind(_ => Either.Success<int, int>(100)).FromSuccess(1));
+            Assert.AreEqual(Either.Success<int, int>(100).SuccessOr(0), either.Bind(_ => Either.Success<int, int>(100)).SuccessOr(1));
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         {
             var str = "abc";
             Func<string, Either<string,int>> f = s => Either.Success<string,int>(s.ToUpper());
-            Assert.AreEqual(Either.Return<string,int>(str).Bind(f).FromSuccess("0"), f(str).FromSuccess("1"));
+            Assert.AreEqual(Either.Return<string,int>(str).Bind(f).SuccessOr("0"), f(str).SuccessOr("1"));
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         {
             var str = "abc";
             var either = Either.Success<string,int>(str).Bind(Either.Return<string,int>);
-            Assert.AreEqual(str, either.FromSuccess("0"));
+            Assert.AreEqual(str, either.SuccessOr("0"));
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
             Func<string[], Either<string[], int>> g = Either.Success<string[], int>;
             var left = Either.Success<string,int>(str).Bind(f).Bind(g);
             var right = Either.Success<string,int>(str).Bind(x => f(x).Bind(g));
-            Assert.AreEqual(left.FromSuccess(new [] {"0"}), right.FromSuccess(new[] { "1" }));
+            Assert.AreEqual(left.SuccessOr(new [] {"0"}), right.SuccessOr(new[] { "1" }));
         }
     }
 
@@ -156,7 +156,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         {
             var either = Either.Success<int,string>(3);
             var res = either.Map(i => i*2);
-            Assert.AreEqual(6, res.FromSuccess(1));
+            Assert.AreEqual(6, res.SuccessOr(1));
         }
     }
 }

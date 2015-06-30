@@ -72,27 +72,27 @@ namespace Wooga.Lambda.Control.Monad
             return !m.IsSuccess ? fl(m.FailureValue) : fr(m.SuccessValue);
         }
 
-        public static TFailure FromFailure<TSuccess, TFailure>(this Either<TSuccess, TFailure> m, TFailure dflt)
+        public static TFailure FailureOr<TSuccess, TFailure>(this Either<TSuccess, TFailure> m, TFailure dflt)
         {
             return m.IsSuccess ? dflt : m.FailureValue;
         }
 
-        public static TFailure FromFailure<TSuccess, TFailure>(this Either<TSuccess, TFailure> m, Func<TFailure> dflt)
+        public static TFailure FailureOr<TSuccess, TFailure>(this Either<TSuccess, TFailure> m, Func<TFailure> dflt)
         {
             return m.IsSuccess ? dflt() : m.FailureValue;
         }
 
-        public static TSuccess FromSuccess<TSuccess, TFailure>(this Either<TSuccess, TFailure> m, TSuccess dflt)
+        public static TSuccess SuccessOr<TSuccess, TFailure>(this Either<TSuccess, TFailure> m, TSuccess dflt)
         {
             return m.IsSuccess ? m.SuccessValue : dflt;   
         }
 
-        public static TSuccess FromSuccess<TSuccess, TFailure>(this Either<TSuccess, TFailure> m, Func<TSuccess> dflt)
+        public static TSuccess SuccessOr<TSuccess, TFailure>(this Either<TSuccess, TFailure> m, Func<TSuccess> dflt)
         {
             return m.IsSuccess ? m.SuccessValue : dflt();
         }
 
-        public static Either<TSuccess, TFailure> Try<TSuccess, TFailure>(Func<Exception, TFailure> fl, Func<TSuccess> fr)
+        public static Either<TSuccess, TFailure> Catch<TSuccess, TFailure>(Func<Exception, TFailure> fl, Func<TSuccess> fr)
         {
             try
             {
@@ -104,9 +104,9 @@ namespace Wooga.Lambda.Control.Monad
             }
         }
 
-        public static Either<T, Exception> Try<T>(Func<T> f)
+        public static Either<T, Exception> Catch<T>(Func<T> f)
         {
-            return Try(e => e, f);
+            return Catch(e => e, f);
         }
 
         public static Either<TSuccess, TFailure> When<TSuccess, TFailure>(Func<bool> p, Func<TFailure> fl, Func<TSuccess> fr)

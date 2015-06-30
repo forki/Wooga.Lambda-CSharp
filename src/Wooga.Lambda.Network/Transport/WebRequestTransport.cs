@@ -26,7 +26,7 @@ namespace Wooga.Lambda.Network.Transport
             {
                 using (var postStream = webRequest.GetRequestStream())
                 {
-                    var body = httpRequest.Body.FromJustOrDefault(new ImmutableList<byte>(), _ => _);
+                    var body = httpRequest.Body.ValueOr(new ImmutableList<byte>());
                     postStream.Write(body.ToArray(), 0, body.Count);
                     postStream.Close(); 
                 }

@@ -33,12 +33,12 @@ namespace Wooga.Lambda.Data
 
         public static ImmutableList<T2> Choose<T, T2>(this ImmutableList<T> xs, Func<T, Maybe<T2>> f)
         {
-            return xs.Fold((a, x) => f(x).FromJustOrDefault(a, a.Add), ImmutableList.Empty<T2>());
+            return xs.Fold((a, x) => f(x).Map(a.Add).ValueOr(a), ImmutableList.Empty<T2>());
         }
 
         public static Maybe<T> Find<T>(this ImmutableList<T> xs, Func<T, bool> f)
         {
-            return Either.Try<T>(xs.Choose<T,T>(x => f(x) ? Maybe.Just<T>(x) : Maybe.Nothing<T>()).First)
+            return Either.Catch<T>(xs.Choose<T,T>(x => f(x) ? Maybe.Just<T>(x) : Maybe.Nothing<T>()).First)
                 .From<T,Exception, Maybe<T>>(Maybe.Just<T>, _ => Maybe.Nothing<T>());
         }
 

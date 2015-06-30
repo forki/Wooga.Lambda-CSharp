@@ -53,7 +53,7 @@ namespace Wooga.Lambda.Control
 
             public TResult Run()
             {
-                return _m().FromFailure(() =>
+                return _m().FailureOr(() =>
                 {
                     throw new InvalidOperationException("No match found!");
                 });

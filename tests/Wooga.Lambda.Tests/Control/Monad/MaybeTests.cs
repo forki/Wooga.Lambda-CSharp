@@ -11,42 +11,43 @@ namespace Wooga.Lambda.Tests.Control.Monad
         public void _MaybeAppliesFuncForJust()
         {
             var maybe = Maybe.Just("abc");
-            Assert.AreEqual(99, maybe.FromJustOrDefault(100, _ => 99));
+            Assert.AreEqual(99, maybe.Map(_ => 99).ValueOr(100));
         }
 
         [Test]
         public void _MaybeGetsDefaultForNothing()
         {
             var maybe = Maybe.Nothing<string>();
-            Assert.AreEqual("xzy", maybe.FromJustOrDefault("xzy", _ => _));
+            Assert.AreEqual("xzy", maybe.Map(_ => _).ValueOr("xzy"));
         }
 
         [Test]
         public void FromJustGetsValueOfJust()
         {
             var maybe = Maybe.Just("abc");
-            Assert.AreEqual("abc", maybe.FromJust());
+            Assert.AreEqual("abc", maybe.ValueOr("def"));
         }
 
-        [Test]
-        [ExpectedException(typeof (InvalidOperationException))]
-        public void FromJustThrowsExceptionForNothing()
-        {
-            Maybe.Nothing<string>().FromJust();
-        }
 
         [Test]
         public void FromMaybeGetsDefaultForNothing()
         {
             var maybe = Maybe.Nothing<string>();
-            Assert.AreEqual("xzy", maybe.FromMaybe("xzy"));
+            Assert.AreEqual("xzy", maybe.ValueOr("xzy"));
+        }
+
+        [Test]
+        public void FromMaybeGetsDefaultForNothingDeferred()
+        {
+            var maybe = Maybe.Nothing<string>();
+            Assert.AreEqual("xzy", maybe.ValueOr(() => "xzy"));
         }
 
         [Test]
         public void FromMaybeGetsValueOfJust()
         {
             var maybe = Maybe.Just("abc");
-            Assert.AreEqual("abc", maybe.FromMaybe("xzy"));
+            Assert.AreEqual("abc", maybe.ValueOr("xzy"));
         }
 
         [Test]
@@ -77,7 +78,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         public void BindAppliesFuncForJust()
         {
             var maybe = Maybe.Just("abc");
-            Assert.AreEqual(Maybe.Just(12).FromJust(), maybe.Bind(_ => Maybe.Just(12)).FromJust());
+            Assert.AreEqual(Maybe.Just(12).ValueOr(0), maybe.Bind(_ => Maybe.Just(12)).ValueOr(1));
         }
 
         [Test]
@@ -110,7 +111,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         {
             var str = "abc";
             Func<string, Maybe<string>> f = s => Maybe.Just(s.ToUpper());
-            Assert.AreEqual(Maybe.Return(str).Bind(f).FromJust(), f(str).FromJust());
+            Assert.AreEqual(Maybe.Return(str).Bind(f).ValueOr("def"), f(str).ValueOr("ghi"));
         }
 
         [Test]
@@ -118,7 +119,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         {
             var str = "abc";
             var maybe = Maybe.Just(str).Bind(Maybe.Return);
-            Assert.AreEqual(str, maybe.FromJust());
+            Assert.AreEqual(str, maybe.ValueOr("gfi"));
         }
 
         [Test]
@@ -129,7 +130,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
             Func<string, Maybe<int>> g = s => Maybe.Just(s.Length);
             var left = Maybe.Just(str).Bind(f).Bind(g);
             var right = Maybe.Just(str).Bind(x => f(x).Bind(g));
-            Assert.AreEqual(left.FromJust(), right.FromJust());
+            Assert.AreEqual(left.ValueOr(-1), right.ValueOr(-2));
         }
     }
 
@@ -141,7 +142,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         {
             var maybe = Maybe.Just(42);
             var res = maybe.Map(_ => "42");
-            Assert.AreEqual("42", res.FromJust());
+            Assert.AreEqual("42", res.ValueOr("48"));
         }
 
         [Test]
