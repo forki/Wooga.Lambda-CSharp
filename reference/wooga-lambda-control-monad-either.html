@@ -53,12 +53,57 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '39', 39)" onmouseover="showTip(event, '39', 39)">
+          <code onmouseout="hideTip(event, '36', 36)" onmouseover="showTip(event, '36', 36)">
             Bind(m, f)
           </code>
+          <div class="tip" id="36">
+            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccessInput,&#39;TFailure&gt; * f:Func&lt;&#39;TSuccessInput,Either&lt;&#39;TSuccessOutput,&#39;TFailure&gt;&gt;) -&gt; Either&lt;&#39;TSuccessOutput,&#39;TFailure&gt;<br />
+                          <strong>Type parameters:</strong> 'TSuccessInput, 'TFailure, 'TSuccessOutput          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '37', 37)" onmouseover="showTip(event, '37', 37)">
+            Catch(f)
+          </code>
+          <div class="tip" id="37">
+            <strong>Signature:</strong> f:Func&lt;&#39;T&gt; -&gt; Either&lt;&#39;T,exn&gt;<br />
+                          <strong>Type parameters:</strong> 'T          </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '38', 38)" onmouseover="showTip(event, '38', 38)">
+            Failure(m)
+          </code>
+          <div class="tip" id="38">
+            <strong>Signature:</strong> m:&#39;TFailure -&gt; Either&lt;&#39;TSuccess,&#39;TFailure&gt;<br />
+                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
+        </td>
+        <td class="xmldoc">
+          <p>Constructs Either.Failure with m</p>
+
+
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '39', 39)" onmouseover="showTip(event, '39', 39)">
+            FailureOr(m, dflt)
+          </code>
           <div class="tip" id="39">
-            <strong>Signature:</strong> (m:Either&lt;&#39;TLeft,&#39;TRight&gt; * f:Func&lt;&#39;TRight,Either&lt;&#39;TLeft,&#39;TRight2&gt;&gt;) -&gt; Either&lt;&#39;TLeft,&#39;TRight2&gt;<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight, 'TRight2          </div>
+            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; * dflt:&#39;TFailure) -&gt; &#39;TFailure<br />
+                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
         </td>
         <td class="xmldoc">
           
@@ -68,11 +113,11 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '40', 40)" onmouseover="showTip(event, '40', 40)">
-            FromEither(m, fl, fr)
+            FailureOr(m, dflt)
           </code>
           <div class="tip" id="40">
-            <strong>Signature:</strong> (m:Either&lt;&#39;TLeft,&#39;TRight&gt; * fl:Func&lt;&#39;TLeft,&#39;TResult&gt; * fr:Func&lt;&#39;TRight,&#39;TResult&gt;) -&gt; &#39;TResult<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight, 'TResult          </div>
+            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; * dflt:Func&lt;&#39;TFailure&gt;) -&gt; &#39;TFailure<br />
+                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
         </td>
         <td class="xmldoc">
           
@@ -82,11 +127,11 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '41', 41)" onmouseover="showTip(event, '41', 41)">
-            FromLeft(m)
+            From(m, fr, fl)
           </code>
           <div class="tip" id="41">
-            <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; &#39;TLeft<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; * fr:Func&lt;&#39;TSuccess,&#39;TResult&gt; * fl:Func&lt;&#39;TFailure,&#39;TResult&gt;) -&gt; &#39;TResult<br />
+                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure, 'TResult          </div>
         </td>
         <td class="xmldoc">
           
@@ -96,11 +141,11 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '42', 42)" onmouseover="showTip(event, '42', 42)">
-            FromRight(m)
+            IsFailure(m)
           </code>
           <div class="tip" id="42">
-            <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; &#39;TRight<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+            <strong>Signature:</strong> m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; -&gt; bool<br />
+                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
         </td>
         <td class="xmldoc">
           
@@ -110,11 +155,11 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
-            IsLeft(m)
+            IsSuccess(m)
           </code>
           <div class="tip" id="43">
-            <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; bool<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+            <strong>Signature:</strong> m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; -&gt; bool<br />
+                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
         </td>
         <td class="xmldoc">
           
@@ -124,11 +169,11 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '44', 44)" onmouseover="showTip(event, '44', 44)">
-            IsRight(m)
+            Map(m, f)
           </code>
           <div class="tip" id="44">
-            <strong>Signature:</strong> m:Either&lt;&#39;TLeft,&#39;TRight&gt; -&gt; bool<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccessInput,&#39;TFailure&gt; * f:Func&lt;&#39;TSuccessInput,&#39;TSuccessOutput&gt;) -&gt; Either&lt;&#39;TSuccessOutput,&#39;TFailure&gt;<br />
+                          <strong>Type parameters:</strong> 'TSuccessInput, 'TFailure, 'TSuccessOutput          </div>
         </td>
         <td class="xmldoc">
           
@@ -138,39 +183,45 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
-            Left(m)
+            Return(v)
           </code>
           <div class="tip" id="45">
-            <strong>Signature:</strong> m:&#39;TLeft -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+            <strong>Signature:</strong> v:&#39;TSuccess -&gt; Either&lt;&#39;TSuccess,&#39;TFailure&gt;<br />
+                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
         </td>
         <td class="xmldoc">
-          
+          <p>Constructs Either.Success with v</p>
+
+
+
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
-            Return(f)
+            Success(m)
           </code>
           <div class="tip" id="46">
-            <strong>Signature:</strong> f:Func&lt;&#39;TRight&gt; -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+            <strong>Signature:</strong> m:&#39;TSuccess -&gt; Either&lt;&#39;TSuccess,&#39;TFailure&gt;<br />
+                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
         </td>
         <td class="xmldoc">
-          
+          <p>Constructs Either.Success with m</p>
+
+
+
         </td>
       </tr>
       <tr>
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
-            Return(v)
+            SuccessOr(m, dflt)
           </code>
           <div class="tip" id="47">
-            <strong>Signature:</strong> v:&#39;TRight -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; * dflt:&#39;TSuccess) -&gt; &#39;TSuccess<br />
+                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
         </td>
         <td class="xmldoc">
           
@@ -180,11 +231,11 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '48', 48)" onmouseover="showTip(event, '48', 48)">
-            Right(m)
+            SuccessOr(m, dflt)
           </code>
           <div class="tip" id="48">
-            <strong>Signature:</strong> m:&#39;TRight -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; * dflt:Func&lt;&#39;TSuccess&gt;) -&gt; &#39;TSuccess<br />
+                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
         </td>
         <td class="xmldoc">
           
@@ -197,8 +248,8 @@
             Then(m, h)
           </code>
           <div class="tip" id="49">
-            <strong>Signature:</strong> (m:Either&lt;&#39;TLeft,&#39;TRight&gt; * h:Either&lt;&#39;TLeft,&#39;TRight2&gt;) -&gt; Either&lt;&#39;TLeft,&#39;TRight2&gt;<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight, 'TRight2          </div>
+            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccessInput,&#39;TFailure&gt; * h:Either&lt;&#39;TSuccessOutput,&#39;TFailure&gt;) -&gt; Either&lt;&#39;TSuccessOutput,&#39;TFailure&gt;<br />
+                          <strong>Type parameters:</strong> 'TSuccessInput, 'TFailure, 'TSuccessOutput          </div>
         </td>
         <td class="xmldoc">
           
@@ -208,39 +259,11 @@
         <td class="member-name">
 
           <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
-            Try(fl, fr)
-          </code>
-          <div class="tip" id="50">
-            <strong>Signature:</strong> (fl:Func&lt;exn,&#39;TLeft&gt; * fr:Func&lt;&#39;TRight&gt;) -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '51', 51)" onmouseover="showTip(event, '51', 51)">
-            Try(f)
-          </code>
-          <div class="tip" id="51">
-            <strong>Signature:</strong> f:Func&lt;&#39;T&gt; -&gt; Either&lt;exn,&#39;T&gt;<br />
-                          <strong>Type parameters:</strong> 'T          </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '52', 52)" onmouseover="showTip(event, '52', 52)">
             When(p, fl, fr)
           </code>
-          <div class="tip" id="52">
-            <strong>Signature:</strong> (p:Func&lt;bool&gt; * fl:Func&lt;&#39;TLeft&gt; * fr:Func&lt;&#39;TRight&gt;) -&gt; Either&lt;&#39;TLeft,&#39;TRight&gt;<br />
-                          <strong>Type parameters:</strong> 'TLeft, 'TRight          </div>
+          <div class="tip" id="50">
+            <strong>Signature:</strong> (p:Func&lt;bool&gt; * fl:Func&lt;&#39;TFailure&gt; * fr:Func&lt;&#39;TSuccess&gt;) -&gt; Either&lt;&#39;TSuccess,&#39;TFailure&gt;<br />
+                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
         </td>
         <td class="xmldoc">
           

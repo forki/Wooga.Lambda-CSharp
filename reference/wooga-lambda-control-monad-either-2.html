@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Either<'TLeft, 'TRight> - Wooga.Lambda</title>
+    <title>Either<'TSuccess, 'TFailure> - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -41,87 +41,12 @@
 
 
 
-<h1>Either<'TLeft, 'TRight></h1>
+<h1>Either<'TSuccess, 'TFailure></h1>
 <div class="xmldoc">
-<p>A delegate to label lambdas as Either</p>
+<p>The Either type represents values with two possibilities: a value of type Either 'TSuccess,'TFailure is either Failure 'TFailure or Success 'TSuccess.</p>
 
 
 </div>
-  <h3>Constructors</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Constructor</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '35', 35)" onmouseover="showTip(event, '35', 35)">
-            new(object, method)
-          </code>
-          <div class="tip" id="35">
-            <strong>Signature:</strong> (object:obj * method:nativeint) -&gt; unit<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <h3>Instance members</h3>
-  <table class="table table-bordered member-list">
-    <thead>
-      <tr><td>Instance member</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '36', 36)" onmouseover="showTip(event, '36', 36)">
-            BeginInvoke(callback, object)
-          </code>
-          <div class="tip" id="36">
-            <strong>Signature:</strong> (callback:AsyncCallback * object:obj) -&gt; IAsyncResult<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '37', 37)" onmouseover="showTip(event, '37', 37)">
-            EndInvoke(result)
-          </code>
-          <div class="tip" id="37">
-            <strong>Signature:</strong> result:IAsyncResult -&gt; Result&lt;&#39;TLeft,&#39;TRight&gt;<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '38', 38)" onmouseover="showTip(event, '38', 38)">
-            Invoke()
-          </code>
-          <div class="tip" id="38">
-            <strong>Signature:</strong> unit -&gt; Result&lt;&#39;TLeft,&#39;TRight&gt;<br />
-              <strong>Modifiers:</strong> abstract<br />
-                      </div>
-        </td>
-        <td class="xmldoc">
-          
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
         </div>
         <div class="span3">

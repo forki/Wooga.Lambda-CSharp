@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Agent<'TM, 'TR> - Wooga.Lambda</title>
+    <title>Agent<'TMessage, 'TReply> - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -41,7 +41,7 @@
 
 
 
-<h1>Agent<'TM, 'TR></h1>
+<h1>Agent<'TMessage, 'TReply></h1>
 <div class="xmldoc">
 <p>Actor/Agent implementation similar to Control.Async.MailboxProcessor in F#</p>
 
@@ -150,7 +150,7 @@
             Post(msg)
           </code>
           <div class="tip" id="11">
-            <strong>Signature:</strong> msg:&#39;TM -&gt; Unit<br />
+            <strong>Signature:</strong> msg:&#39;TMessage -&gt; Unit<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -167,7 +167,7 @@
             PostAndAsyncReply(f)
           </code>
           <div class="tip" id="12">
-            <strong>Signature:</strong> f:Func&lt;AsyncReplyChannel&lt;&#39;TR&gt;,&#39;TM&gt; -&gt; Async&lt;&#39;TR&gt;<br />
+            <strong>Signature:</strong> f:Func&lt;AsyncReplyChannel&lt;&#39;TReply&gt;,&#39;TMessage&gt; -&gt; Async&lt;&#39;TReply&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -181,7 +181,7 @@
             PostAndReply(f)
           </code>
           <div class="tip" id="13">
-            <strong>Signature:</strong> f:Func&lt;AsyncReplyChannel&lt;&#39;TR&gt;,&#39;TM&gt; -&gt; &#39;TR<br />
+            <strong>Signature:</strong> f:Func&lt;AsyncReplyChannel&lt;&#39;TReply&gt;,&#39;TMessage&gt; -&gt; &#39;TReply<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -195,7 +195,7 @@
             Receive()
           </code>
           <div class="tip" id="14">
-            <strong>Signature:</strong> unit -&gt; Async&lt;&#39;TM&gt;<br />
+            <strong>Signature:</strong> unit -&gt; Async&lt;&#39;TMessage&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -220,7 +220,7 @@
             Start(state, body)
           </code>
           <div class="tip" id="15">
-            <strong>Signature:</strong> (state:&#39;TS * body:Func&lt;Agent&lt;&#39;TM,&#39;TR&gt;,&#39;TS,&#39;TS&gt;) -&gt; Agent&lt;&#39;TM,&#39;TR&gt;<br />
+            <strong>Signature:</strong> (state:&#39;TState * body:Func&lt;Agent&lt;&#39;TMessage,&#39;TReply&gt;,&#39;TState,&#39;TState&gt;) -&gt; Agent&lt;&#39;TMessage,&#39;TReply&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">
@@ -234,7 +234,7 @@
             StartAsync(state, body)
           </code>
           <div class="tip" id="16">
-            <strong>Signature:</strong> (state:&#39;TS * body:Func&lt;Agent&lt;&#39;TM,&#39;TR&gt;,&#39;TS,&#39;TS&gt;) -&gt; Async&lt;Agent&lt;&#39;TM,&#39;TR&gt;&gt;<br />
+            <strong>Signature:</strong> (state:&#39;TState * body:Func&lt;Agent&lt;&#39;TMessage,&#39;TReply&gt;,&#39;TState,&#39;TState&gt;) -&gt; Async&lt;Agent&lt;&#39;TMessage,&#39;TReply&gt;&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">

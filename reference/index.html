@@ -74,7 +74,7 @@
     <tbody>
         <tr>
           <td class="type-name">
-            <a href="wooga-lambda-control-concurrent-agent-2.html">Agent<'TM, 'TR></a>
+            <a href="wooga-lambda-control-concurrent-agent-2.html">Agent<'TMessage, 'TReply></a>
           </td>
           <td class="xmldoc"><p>Actor/Agent implementation similar to Control.Async.MailboxProcessor in F#</p>
 
@@ -85,7 +85,7 @@
           <td class="type-name">
             <a href="wooga-lambda-control-concurrent-async-1.html">Async<'T></a>
           </td>
-          <td class="xmldoc"><p>A delegate to label lambdas as Async</p>
+          <td class="xmldoc"><p>A computation that can be run asynchronously</p>
 
 
 </td>
@@ -98,9 +98,9 @@
         </tr>
         <tr>
           <td class="type-name">
-            <a href="wooga-lambda-control-concurrent-asyncreplychannel-1.html">AsyncReplyChannel<'TReply></a>
+            <a href="wooga-lambda-control-concurrent-asyncreplychannel-1.html">AsyncReplyChannel<'T></a>
           </td>
-          <td class="xmldoc"><p>A handle to a capability to reply to a message.</p>
+          <td class="xmldoc"><p>A reply channel for an asynchronous operation</p>
 
 
 </td>
@@ -118,9 +118,9 @@
     <tbody>
         <tr>
           <td class="type-name">
-            <a href="wooga-lambda-control-monad-either-2.html">Either<'TLeft, 'TRight></a>
+            <a href="wooga-lambda-control-monad-either-2.html">Either<'TSuccess, 'TFailure></a>
           </td>
-          <td class="xmldoc"><p>A delegate to label lambdas as Either</p>
+          <td class="xmldoc"><p>The Either type represents values with two possibilities: a value of type Either 'TSuccess,'TFailure is either Failure 'TFailure or Success 'TSuccess.</p>
 
 
 </td>
@@ -133,15 +133,9 @@
         </tr>
         <tr>
           <td class="type-name">
-            <a href="wooga-lambda-control-monad-eitherfunctor.html">EitherFunctor</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
             <a href="wooga-lambda-control-monad-maybe-1.html">Maybe<'T></a>
           </td>
-          <td class="xmldoc"><p>A delegate to label lambdas as Maybe</p>
+          <td class="xmldoc"><p>The Maybe type encapsulates an optional value. A value of type Maybe 'T either contains a value of type 'T, or it is empty.</p>
 
 
 </td>
@@ -149,12 +143,6 @@
         <tr>
           <td class="type-name">
             <a href="wooga-lambda-control-monad-maybe.html">Maybe</a>
-          </td>
-          <td class="xmldoc"></td>
-        </tr>
-        <tr>
-          <td class="type-name">
-            <a href="wooga-lambda-control-monad-maybefunctor.html">MaybeFunctor</a>
           </td>
           <td class="xmldoc"></td>
         </tr>
@@ -248,7 +236,7 @@
     <tbody>
         <tr>
           <td class="type-name">
-            <a href="wooga-lambda-logging-loggingagent.html">LoggingAgent</a>
+            <a href="wooga-lambda-logging-log.html">Log</a>
           </td>
           <td class="xmldoc"><p>An agent for logging with customizable handlers</p>
 
