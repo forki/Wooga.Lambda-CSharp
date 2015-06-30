@@ -24,7 +24,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
                 .Catch()
                 .RunSynchronously();
             Assert.IsTrue(ch.IsFailure());
-            Assert.AreEqual("exception", ch.FromFailure().Message);
+            Assert.AreEqual("exception", ch.FromFailure(new Exception("default")).Message);
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
                 .Catch()
                 .RunSynchronously();
             Assert.IsTrue(ch.IsSuccess());
-            Assert.AreEqual("no exception", ch.FromSuccess());
+            Assert.AreEqual("no exception", ch.FromSuccess("default"));
         }
 
         [Test]

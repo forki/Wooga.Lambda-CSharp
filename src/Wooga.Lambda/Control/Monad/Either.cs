@@ -62,27 +62,34 @@ namespace Wooga.Lambda.Control.Monad
             return m.IsSuccess;
         }
 
-        public static TFailure FromFailure<TSuccess, TFailure>(this Either<TSuccess, TFailure> m)
-        {
-            if(m.IsSuccess) throw new InvalidOperationException("Failure value of Either.Success");
-            return m.FailureValue;
-        }
-
         public static bool IsFailure<TSuccess, TFailure>(this Either<TSuccess, TFailure> m)
         {
             return !m.IsSuccess;
         }
 
-        public static TSuccess FromSuccess<TSuccess, TFailure>(this Either<TSuccess, TFailure> m)
+        public static TResult From<TSuccess, TFailure, TResult>(this Either<TSuccess, TFailure> m, Func<TSuccess, TResult> fr, Func<TFailure, TResult> fl)
         {
-            if (!m.IsSuccess) throw new InvalidOperationException("Success value of Either.Failure");
-            return m.SuccessValue;
-            
+            return !m.IsSuccess ? fl(m.FailureValue) : fr(m.SuccessValue);
         }
 
-        public static TResult FromEither<TSuccess, TFailure, TResult>(this Either<TSuccess, TFailure> m, Func<TFailure, TResult> fl, Func<TSuccess, TResult> fr)
+        public static TFailure FromFailure<TSuccess, TFailure>(this Either<TSuccess, TFailure> m, TFailure dflt)
         {
-            return m.IsFailure() ? fl(m.FailureValue) : fr(m.SuccessValue);
+            return m.IsSuccess ? dflt : m.FailureValue;
+        }
+
+        public static TFailure FromFailure<TSuccess, TFailure>(this Either<TSuccess, TFailure> m, Func<TFailure> dflt)
+        {
+            return m.IsSuccess ? dflt() : m.FailureValue;
+        }
+
+        public static TSuccess FromSuccess<TSuccess, TFailure>(this Either<TSuccess, TFailure> m, TSuccess dflt)
+        {
+            return m.IsSuccess ? m.SuccessValue : dflt;   
+        }
+
+        public static TSuccess FromSuccess<TSuccess, TFailure>(this Either<TSuccess, TFailure> m, Func<TSuccess> dflt)
+        {
+            return m.IsSuccess ? m.SuccessValue : dflt();
         }
 
         public static Either<TSuccess, TFailure> Try<TSuccess, TFailure>(Func<Exception, TFailure> fl, Func<TSuccess> fr)

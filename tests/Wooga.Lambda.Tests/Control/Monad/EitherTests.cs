@@ -27,6 +27,34 @@ namespace Wooga.Lambda.Tests.Control.Monad
             Assert.True(isRight);
             Assert.False(isLeft);
         }
+
+        [Test]
+        public void FromSuccessOnFailureReturnsDefault()
+        {
+            var x = Either.Failure<int, Unit>(Unit.Default);
+            Assert.AreEqual(17,x.FromSuccess(17));
+        }
+
+        [Test]
+        public void FromSuccessOnFailureReturnsDeferredDefault()
+        {
+            var x = Either.Failure<int, Unit>(Unit.Default);
+            Assert.AreEqual(17, x.FromSuccess(()=>17));
+        }
+
+        [Test]
+        public void FromFailureOnSuccessReturnsDefault()
+        {
+            var x = Either.Success<Unit, int>(Unit.Default);
+            Assert.AreEqual(17, x.FromFailure(17));
+        }
+
+        [Test]
+        public void FromFailureOnSuccessReturnsDeferredDefault()
+        {
+            var x = Either.Success<Unit, int>(Unit.Default);
+            Assert.AreEqual(17, x.FromFailure(() => 17));
+        }
     }
 
     [TestFixture]
@@ -56,8 +84,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         public void BindAppliesFuncForRight()
         {
             var either = Either.Success<string,int>("abc");
-            Assert.AreEqual(Either.Success<int, int>(100).FromSuccess(),
-                either.Bind(_ => Either.Success<int, int>(100)).FromSuccess());
+            Assert.AreEqual(Either.Success<int, int>(100).FromSuccess(0), either.Bind(_ => Either.Success<int, int>(100)).FromSuccess(1));
         }
 
         [Test]
@@ -90,7 +117,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         {
             var str = "abc";
             Func<string, Either<string,int>> f = s => Either.Success<string,int>(s.ToUpper());
-            Assert.AreEqual(Either.Return<string,int>(str).Bind(f).FromSuccess(), f(str).FromSuccess());
+            Assert.AreEqual(Either.Return<string,int>(str).Bind(f).FromSuccess("0"), f(str).FromSuccess("1"));
         }
 
         [Test]
@@ -98,7 +125,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         {
             var str = "abc";
             var either = Either.Success<string,int>(str).Bind(Either.Return<string,int>);
-            Assert.AreEqual(str, either.FromSuccess());
+            Assert.AreEqual(str, either.FromSuccess("0"));
         }
 
         [Test]
@@ -109,7 +136,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
             Func<string[], Either<string[], int>> g = Either.Success<string[], int>;
             var left = Either.Success<string,int>(str).Bind(f).Bind(g);
             var right = Either.Success<string,int>(str).Bind(x => f(x).Bind(g));
-            Assert.AreEqual(left.FromSuccess(), right.FromSuccess());
+            Assert.AreEqual(left.FromSuccess(new [] {"0"}), right.FromSuccess(new[] { "1" }));
         }
     }
 
@@ -129,7 +156,7 @@ namespace Wooga.Lambda.Tests.Control.Monad
         {
             var either = Either.Success<int,string>(3);
             var res = either.Map(i => i*2);
-            Assert.AreEqual(6, res.FromSuccess());
+            Assert.AreEqual(6, res.FromSuccess(1));
         }
     }
 }
