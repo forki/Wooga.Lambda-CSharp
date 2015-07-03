@@ -13,7 +13,7 @@
 
         public string HeaderString
         {
-            get { return string.Join(":", new[] {Key, Value}); }
+            get { return string.Join(": ", new[] {Key, Value}); }
         }
     }
 }

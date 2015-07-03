@@ -1,5 +1,7 @@
-﻿using Wooga.Lambda.Control;
+﻿using System;
+using Wooga.Lambda.Control;
 using Wooga.Lambda.Control.Concurrent;
+using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 using Handlers = Wooga.Lambda.Data.ImmutableList<Wooga.Lambda.Logging.Log.Handler>;
 
@@ -53,27 +55,52 @@ namespace Wooga.Lambda.Logging
 
         public Unit Debug(string msg)
         {
-            return PostLog(new Msg {Message = msg, Level = Level.Debug});
+            return PostLog(Msg.With(msg,Level.Debug));
+        }
+
+        public Unit Debug(string msg, Object context)
+        {
+            return PostLog(Msg.With(msg, Level.Debug, context));
         }
 
         public Unit Info(string msg)
         {
-            return PostLog(new Msg {Message = msg, Level = Level.Info});
+            return PostLog(Msg.With(msg, Level.Info));
+        }
+
+        public Unit Info(string msg, Object context)
+        {
+            return PostLog(Msg.With(msg, Level.Info, context));
         }
 
         public Unit Warn(string msg)
         {
-            return PostLog(new Msg {Message = msg, Level = Level.Warn});
+            return PostLog(Msg.With(msg, Level.Warn));
+        }
+
+        public Unit Warn(string msg, Object context)
+        {
+            return PostLog(Msg.With(msg, Level.Warn, context));
         }
 
         public Unit Error(string msg)
         {
-            return PostLog(new Msg {Message = msg, Level = Level.Error});
+            return PostLog(Msg.With(msg, Level.Error));
+        }
+
+        public Unit Error(string msg, Object context)
+        {
+            return PostLog(Msg.With(msg, Level.Error, context));
         }
 
         public Unit Fatal(string msg)
         {
-            return PostLog(new Msg {Message = msg, Level = Level.Fatal});
+            return PostLog(Msg.With(msg, Level.Fatal));
+        }
+
+        public Unit Fatal(string msg, Object context)
+        {
+            return PostLog(Msg.With(msg, Level.Fatal, context));
         }
 
         public Unit AddHandler(Handler handler)
@@ -85,6 +112,17 @@ namespace Wooga.Lambda.Logging
         {
             public Level Level { get; internal set; }
             public string Message { get; internal set; }
+            public Maybe<object> Context { get; internal set; }
+
+            public static Msg With(string message, Level level)
+            {
+                return new Msg {Message = message, Level = level, Context = Maybe.Nothing<Object>()};
+            }
+
+            public static Msg With(string message, Level level, Object context)
+            {
+                return new Msg { Message = message, Level = level, Context = Maybe.Just(context) };
+            }
         }
 
         internal interface AgentMsg

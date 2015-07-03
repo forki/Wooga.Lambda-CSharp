@@ -45,6 +45,10 @@
     <Compile Include="Transport\WebRequestTransport.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Wooga.Lambda.Logging\Wooga.Lambda.Logging.csproj">
+      <Project>{a07f2d08-5db7-44e7-a33b-9bfdc1292272}</Project>
+      <Name>Wooga.Lambda.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Wooga.Lambda\Wooga.Lambda.csproj">
       <Project>{03231AC8-DCA3-49E4-89CD-E68BE439C2A4}</Project>
       <Name>Wooga.Lambda</Name>

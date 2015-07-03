@@ -1,9 +1,11 @@
 ﻿using System.IO;
 using System.Net;
 using System.Text;
+using Wooga.Lambda.Control;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
+using Wooga.Lambda.Logging;
 
 namespace Wooga.Lambda.Network.Transport
 {
@@ -20,7 +22,7 @@ namespace Wooga.Lambda.Network.Transport
         private static HttpWebRequest AsWebRequest(this HttpRequest httpRequest)
         {
             var webRequest = WebRequest.Create(httpRequest.Endpoint) as HttpWebRequest;
-            webRequest.Headers = httpRequest.HttpHeaders.ToWebHeaders();
+            webRequest = AddHeaders(httpRequest.HttpHeaders, webRequest);
             webRequest.Method = httpRequest.HttpMethod.Name;
             if (httpRequest.Body.IsJust())
             {
@@ -31,6 +33,7 @@ namespace Wooga.Lambda.Network.Transport
                     postStream.Close(); 
                 }
             }
+            Log.Shared.Info("webRequest", webRequest);
             return webRequest;
         }
 
@@ -70,14 +73,25 @@ namespace Wooga.Lambda.Network.Transport
             return () => Encoding.UTF8.GetBytes(new StreamReader(stream).ReadToEnd()).ToImmutableList();
         }
 
-        private static WebHeaderCollection ToWebHeaders(this ImmutableList<HttpHeader> self)
+        private static HttpWebRequest AddHeaders(ImmutableList<HttpHeader> self, HttpWebRequest request)
         {
             return self.Fold((headers, header) =>
             {
-                headers.Add(header.Key, header.Value);
-                return headers;
-            },
-                new WebHeaderCollection());
+                Pattern<Unit>
+                .Match(header.Key)
+                .Case("Content-Type", _ =>
+                {
+                    request.ContentType = header.Value;
+                    return Unit.Default;
+                })
+                .Default(_ =>
+                {
+                    request.Headers.Add(header.Key,header.Value);
+                    return Unit.Default;
+                })
+                .Run();
+                return request;
+            },request);
         }
 
         private static ImmutableList<HttpHeader> OfWebHeaders(WebHeaderCollection webHeaders)

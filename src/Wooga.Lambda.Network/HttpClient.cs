@@ -1,6 +1,7 @@
 ﻿using System;
 using Wooga.Lambda.Control.Concurrent;
-using Wooga.Lambda.Data;
+using Headers = Wooga.Lambda.Data.ImmutableList<Wooga.Lambda.Network.HttpHeader>;
+using Body = Wooga.Lambda.Data.ImmutableList<byte>;
 
 namespace Wooga.Lambda.Network
 {
@@ -21,18 +22,30 @@ namespace Wooga.Lambda.Network
         /// <param name="endpoint"> The endpoint. </param>
         /// <param name="body">     The body. </param>
         /// <returns>   A HttpResponse. </returns>
-        public HttpResponse Post(string endpoint, ImmutableList<byte> body)
+        public HttpResponse Post(string endpoint, Body body)
         {
-            return PostAsync(endpoint, body).RunSynchronously();
+            return Post(endpoint, body, HttpHeaders.Empty);
+        }
+
+        public HttpResponse Post(string endpoint, Body body, Headers headers)
+        {
+            return PostAsync(endpoint, body, headers).RunSynchronously();
         }
 
         /// <summary>   Posts the asynchronous. </summary>
         /// <param name="endpoint"> The endpoint. </param>
         /// <param name="body">     The body. </param>
         /// <returns>   An Async&lt;HttpResponse&gt; </returns>
-        public Async<HttpResponse> PostAsync(string endpoint, ImmutableList<byte> body)
+        public Async<HttpResponse> PostAsync(string endpoint, Body body)
         {
-            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Post).WithBody(body));
+            return PostAsync(endpoint, body, HttpHeaders.Empty);
+        }
+
+        public Async<HttpResponse> PostAsync(string endpoint, Body body, Headers headers)
+        {
+            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Post)
+                                             .WithBody(body)
+                                             .WithHeaders(headers));
         }
 
         /// <summary>   Gets. </summary>
@@ -40,7 +53,12 @@ namespace Wooga.Lambda.Network
         /// <returns>   A HttpResponse. </returns>
         public HttpResponse Get(string endpoint)
         {
-            return GetAsync(endpoint).RunSynchronously();
+            return Get(endpoint, HttpHeaders.Empty);
+        }
+
+        public HttpResponse Get(string endpoint, Headers headers)
+        {
+            return GetAsync(endpoint, headers).RunSynchronously();
         }
 
         /// <summary>   Gets the asynchronous. </summary>
@@ -48,7 +66,13 @@ namespace Wooga.Lambda.Network
         /// <returns>   The asynchronous. </returns>
         public Async<HttpResponse> GetAsync(string endpoint)
         {
-            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Get));
+            return GetAsync(endpoint, HttpHeaders.Empty);
+        }
+
+        public Async<HttpResponse> GetAsync(string endpoint, Headers headers)
+        {
+            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Get)
+                                             .WithHeaders(headers));
         }
 
         /// <summary>   Heads. </summary>
@@ -56,7 +80,12 @@ namespace Wooga.Lambda.Network
         /// <returns>   A HttpResponse. </returns>
         public HttpResponse Head(string endpoint)
         {
-            return HeadAsync(endpoint).RunSynchronously();
+            return Head(endpoint, HttpHeaders.Empty);
+        }
+
+        public HttpResponse Head(string endpoint, Headers headers)
+        {
+            return HeadAsync(endpoint, headers).RunSynchronously();
         }
 
         /// <summary>   Head asynchronous. </summary>
@@ -64,25 +93,43 @@ namespace Wooga.Lambda.Network
         /// <returns>   An Async&lt;HttpResponse&gt; </returns>
         public Async<HttpResponse> HeadAsync(string endpoint)
         {
-            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Head));
+            return HeadAsync(endpoint, HttpHeaders.Empty);
+        }
+
+        public Async<HttpResponse> HeadAsync(string endpoint, Headers headers)
+        {
+            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Head)
+                                             .WithHeaders(headers));
         }
 
         /// <summary>   Puts. </summary>
         /// <param name="endpoint"> The endpoint. </param>
         /// <param name="body">     The body. </param>
         /// <returns>   A HttpResponse. </returns>
-        public HttpResponse Put(string endpoint, ImmutableList<byte> body)
+        public HttpResponse Put(string endpoint, Body body)
         {
-            return PutAsync(endpoint, body).RunSynchronously();
+            return Put(endpoint, body, HttpHeaders.Empty);
+        }
+
+        public HttpResponse Put(string endpoint, Body body, Headers headers)
+        {
+            return PutAsync(endpoint, body, headers).RunSynchronously();
         }
 
         /// <summary>   Puts the asynchronous. </summary>
         /// <param name="endpoint"> The endpoint. </param>
         /// <param name="body">     The body. </param>
         /// <returns>   An Async&lt;HttpResponse&gt; </returns>
-        public Async<HttpResponse> PutAsync(string endpoint, ImmutableList<byte> body)
+        public Async<HttpResponse> PutAsync(string endpoint, Body body)
         {
-            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Put).WithBody(body));
+            return PutAsync(endpoint, body, HttpHeaders.Empty);
+        }
+
+        public Async<HttpResponse> PutAsync(string endpoint, Body body, Headers headers)
+        {
+            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Put)
+                                             .WithBody(body)
+                                             .WithHeaders(headers));
         }
 
         /// <summary>   Deletes the given endpoint. </summary>
@@ -90,7 +137,12 @@ namespace Wooga.Lambda.Network
         /// <returns>   A HttpResponse. </returns>
         public HttpResponse Delete(string endpoint)
         {
-            return DeleteAsync(endpoint).RunSynchronously();
+            return Delete(endpoint, HttpHeaders.Empty);
+        }
+
+        public HttpResponse Delete(string endpoint, Headers headers)
+        {
+            return DeleteAsync(endpoint, headers).RunSynchronously();
         }
 
         /// <summary>   Deletes the asynchronous described by endpoint. </summary>
@@ -98,7 +150,12 @@ namespace Wooga.Lambda.Network
         /// <returns>   An Async&lt;HttpResponse&gt; </returns>
         public Async<HttpResponse> DeleteAsync(string endpoint)
         {
-            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Delete));
+            return DeleteAsync(endpoint, HttpHeaders.Empty);
+        }
+
+        public Async<HttpResponse> DeleteAsync(string endpoint, Headers headers)
+        {
+            return TransportAsync(HttpRequest.Basic(endpoint, HttpMethod.Delete).WithHeaders(headers));
         }
     }
 }
