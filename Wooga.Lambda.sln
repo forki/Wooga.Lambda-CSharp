@@ -67,6 +67,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Logging", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Storage", "src\Wooga.Lambda.Storage\Wooga.Lambda.Storage.csproj", "{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Stats", "src\Wooga.Lambda.Stats\Wooga.Lambda.Stats.csproj", "{B3CDEEB4-D210-4372-AEA0-D68E3EA1E4AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4B9287D2-3D48-4C3F-8762-F0A138FD8C5C}"
+	ProjectSection(SolutionItems) = preProject
+		examples\stats.fsx = examples\stats.fsx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +108,10 @@ Global
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3CDEEB4-D210-4372-AEA0-D68E3EA1E4AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3CDEEB4-D210-4372-AEA0-D68E3EA1E4AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3CDEEB4-D210-4372-AEA0-D68E3EA1E4AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3CDEEB4-D210-4372-AEA0-D68E3EA1E4AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
