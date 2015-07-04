@@ -109,7 +109,7 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         {
             var p = Common.Return(20).TakeBoth(Common.Return(30));
             var r = ((Result<ImmutableTuple<int,int>>.Success)p((new CharStream("a"))));
-            Assert.AreEqual(ImmutableTuple.Create(20,30), r.Value);
+            Assert.AreEqual(ImmutableTuple.Tuple(20,30), r.Value);
         }
 
         [Test]

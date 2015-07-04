@@ -45,7 +45,7 @@ namespace Wooga.Lambda.Data
         public static T3 Fold<T1, T2, T3>(this Dictionary<T1, T2> kvs, Func<T3, T1, T2, T3> f, T3 a)
         {
             return ImmutableList
-                .Create(kvs.Keys.ToArray())
+                .List(kvs.Keys.ToArray())
                 .Map(k => new ImmutableTuple<T1, T2>(k, kvs[k]))
                 .Fold((x, s) => f(x, s.Item1, s.Item2), a);
         }
@@ -63,12 +63,12 @@ namespace Wooga.Lambda.Data
             return new ImmutableList<T>();
         }
 
-        public static ImmutableList<T> Create<T>(IEnumerable<T> xs)
+        public static ImmutableList<T> List<T>(IEnumerable<T> xs)
         {
             return new ImmutableList<T>(xs);
         }
 
-        public static ImmutableList<T> Create<T>(params T[] xs)
+        public static ImmutableList<T> List<T>(params T[] xs)
         {
             return new ImmutableList<T>(xs);
         }

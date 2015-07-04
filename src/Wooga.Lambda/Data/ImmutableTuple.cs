@@ -4,17 +4,17 @@ namespace Wooga.Lambda.Data
 {
     public static class ImmutableTuple
     {
-        public static ImmutableTuple<T1, T2> Create<T1, T2>(T1 x, T2 y)
+        public static ImmutableTuple<T1, T2> Tuple<T1, T2>(T1 x, T2 y)
         {
             return new ImmutableTuple<T1, T2>(x, y);
         }
 
-        public static ImmutableTuple<T1, T2, T3> Create<T1, T2, T3>(T1 x, T2 y, T3 z)
+        public static ImmutableTuple<T1, T2, T3> Tuple<T1, T2, T3>(T1 x, T2 y, T3 z)
         {
             return new ImmutableTuple<T1, T2, T3>(x, y, z);
         }
 
-        public static ImmutableTuple<T1, T2, T3, T4> Create<T1, T2, T3, T4>(T1 x, T2 y, T3 z, T4 w)
+        public static ImmutableTuple<T1, T2, T3, T4> Tuple<T1, T2, T3, T4>(T1 x, T2 y, T3 z, T4 w)
         {
             return new ImmutableTuple<T1, T2, T3, T4>(x, y, z, w);
         }

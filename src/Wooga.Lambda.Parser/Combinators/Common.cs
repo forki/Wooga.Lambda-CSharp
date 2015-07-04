@@ -71,7 +71,7 @@ namespace Wooga.Lambda.Parser.Combinators
 
         public static Parser<ImmutableTuple<R, R2>> TakeBoth<R, R2>(this Parser<R> l, Parser<R2> r)
         {
-            return l.Bind(lv => r.Bind<R2, ImmutableTuple<R, R2>>(rv => c => Result.Succeed(ImmutableTuple.Create(lv, rv),c.Position)));
+            return l.Bind(lv => r.Bind<R2, ImmutableTuple<R, R2>>(rv => c => Result.Succeed(ImmutableTuple.Tuple(lv, rv),c.Position)));
         }
 
         public static Parser<R> Or<R>(this Parser<R> l, Parser<R> r)
