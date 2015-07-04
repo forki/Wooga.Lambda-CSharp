@@ -33,7 +33,6 @@ namespace Wooga.Lambda.Network.Transport
                     postStream.Close(); 
                 }
             }
-            Log.Shared.Info("webRequest", webRequest);
             return webRequest;
         }
 

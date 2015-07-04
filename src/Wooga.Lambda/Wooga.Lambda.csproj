@@ -44,6 +44,7 @@
     <Compile Include="Control\Pattern.cs" />
     <Compile Include="Control\Monad\Either.cs" />
     <Compile Include="Control\Monad\Maybe.cs" />
+    <Compile Include="Control\Retry.cs" />
     <Compile Include="Data\ImmutableList.cs" />
     <Compile Include="Data\ImmutableTuple.cs" />
     <Compile Include="Data\Unit.cs" />
