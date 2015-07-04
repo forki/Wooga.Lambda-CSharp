@@ -3,8 +3,6 @@ using Wooga.Lambda.Control;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
-using static Wooga.Lambda.Control.Monad.Maybe;
-using static Wooga.Lambda.Logging.Log.Msg;
 using Handlers = Wooga.Lambda.Data.ImmutableList<Wooga.Lambda.Logging.Log.Handler>;
 
 namespace Wooga.Lambda.Logging
@@ -58,52 +56,52 @@ namespace Wooga.Lambda.Logging
 
         public Unit Debug(string msg)
         {
-            return PostLog(With(msg,Level.Debug));
+            return PostLog(Msg.With(msg,Level.Debug));
         }
 
         public Unit Debug(string msg, Object context)
         {
-            return PostLog(With(msg, Level.Debug, context));
+            return PostLog(Msg.With(msg, Level.Debug, context));
         }
 
         public Unit Info(string msg)
         {
-            return PostLog(With(msg, Level.Info));
+            return PostLog(Msg.With(msg, Level.Info));
         }
 
         public Unit Info(string msg, Object context)
         {
-            return PostLog(With(msg, Level.Info, context));
+            return PostLog(Msg.With(msg, Level.Info, context));
         }
 
         public Unit Warn(string msg)
         {
-            return PostLog(With(msg, Level.Warn));
+            return PostLog(Msg.With(msg, Level.Warn));
         }
 
         public Unit Warn(string msg, Object context)
         {
-            return PostLog(With(msg, Level.Warn, context));
+            return PostLog(Msg.With(msg, Level.Warn, context));
         }
 
         public Unit Error(string msg)
         {
-            return PostLog(With(msg, Level.Error));
+            return PostLog(Msg.With(msg, Level.Error));
         }
 
         public Unit Error(string msg, Object context)
         {
-            return PostLog(With(msg, Level.Error, context));
+            return PostLog(Msg.With(msg, Level.Error, context));
         }
 
         public Unit Fatal(string msg)
         {
-            return PostLog(With(msg, Level.Fatal));
+            return PostLog(Msg.With(msg, Level.Fatal));
         }
 
         public Unit Fatal(string msg, Object context)
         {
-            return PostLog(With(msg, Level.Fatal, context));
+            return PostLog(Msg.With(msg, Level.Fatal, context));
         }
 
         public Unit AddHandler(Handler handler)
@@ -119,12 +117,12 @@ namespace Wooga.Lambda.Logging
 
             public static Msg With(string message, Level level)
             {
-                return new Msg {Message = message, Level = level, Context = Nothing<Object>()};
+                return new Msg {Message = message, Level = level, Context = Maybe.Nothing<Object>()};
             }
 
             public static Msg With(string message, Level level, Object context)
             {
-                return new Msg { Message = message, Level = level, Context = Just(context) };
+                return new Msg { Message = message, Level = level, Context = Maybe.Just(context) };
             }
         }
 

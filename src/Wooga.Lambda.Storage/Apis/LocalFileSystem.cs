@@ -4,24 +4,23 @@ using System.Text.RegularExpressions;
 using Wooga.Lambda.Control;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Data;
-using static Wooga.Lambda.Storage.FileSystem;
 using File = System.IO.File;
 
 namespace Wooga.Lambda.Storage.Apis
 {
 
-    public class LocalFileSystem : Api
+    public class LocalFileSystem : FileSystem.Api
     {
         private LocalFileSystem()
         {
         }
 
-        public Async<FileSystem.File> GetFileAsync(FilePath p)
+        public Async<FileSystem.File> GetFileAsync(FileSystem.FilePath p)
         {
             return () => new FileSystem.File(p, File.ReadAllBytes(p.FullName(Path.Combine)).ToImmutableList());
         }
 
-        public Async<Unit> WriteFileAsync(FilePath p, ImmutableList<byte> c)
+        public Async<Unit> WriteFileAsync(FileSystem.FilePath p, ImmutableList<byte> c)
         {
             return () =>
             {
@@ -30,7 +29,7 @@ namespace Wooga.Lambda.Storage.Apis
             };
         }
 
-        public Async<Unit> AppendFileAsync(FilePath p, ImmutableList<byte> c)
+        public Async<Unit> AppendFileAsync(FileSystem.FilePath p, ImmutableList<byte> c)
         {
             return () =>
             {
@@ -43,7 +42,7 @@ namespace Wooga.Lambda.Storage.Apis
             };
         }
 
-        public Async<Dir> GetDirAsync(DirPath p)
+        public Async<FileSystem.Dir> GetDirAsync(FileSystem.DirPath p)
         {
             return () =>
             {
@@ -54,21 +53,21 @@ namespace Wooga.Lambda.Storage.Apis
                 var ds = Directory.GetDirectories(path)
                          .ToImmutableList()
                          .Map(d=> new DirectoryInfo(d).Name);
-                return new Dir(p, ds, fs);
+                return new FileSystem.Dir(p, ds, fs);
             };
         }
 
-        public Async<bool> HasFileAsync(FilePath p)
+        public Async<bool> HasFileAsync(FileSystem.FilePath p)
         {
             return () => File.Exists(p.FullName(Path.Combine));
         }
 
-        public Async<bool> HasDirAsync(DirPath p)
+        public Async<bool> HasDirAsync(FileSystem.DirPath p)
         {
             return () => Directory.Exists(p.FullName(Path.Combine));
         }
 
-        public Async<Unit> NewDirAsync(DirPath p)
+        public Async<Unit> NewDirAsync(FileSystem.DirPath p)
         {
             return () =>
             {
@@ -77,7 +76,7 @@ namespace Wooga.Lambda.Storage.Apis
             };
         }
 
-        public Async<Unit> RmDirAsync(DirPath p)
+        public Async<Unit> RmDirAsync(FileSystem.DirPath p)
         {
             return Async.Return(() =>
             {
@@ -86,7 +85,7 @@ namespace Wooga.Lambda.Storage.Apis
             });
         }
 
-        public Async<Unit> RmFileAsync(FilePath p)
+        public Async<Unit> RmFileAsync(FileSystem.FilePath p)
         {
             return () =>
             {
@@ -95,7 +94,7 @@ namespace Wooga.Lambda.Storage.Apis
             };
         }
 
-        public Async<Unit> MvDirAsync(DirPath ps, DirPath pt)
+        public Async<Unit> MvDirAsync(FileSystem.DirPath ps, FileSystem.DirPath pt)
         {
             return () =>
             {
@@ -104,7 +103,7 @@ namespace Wooga.Lambda.Storage.Apis
             };
         }
 
-        public Async<Unit> MvFileAsync(FilePath ps, FilePath pt)
+        public Async<Unit> MvFileAsync(FileSystem.FilePath ps, FileSystem.FilePath pt)
         {
             return () =>
             {
@@ -113,7 +112,7 @@ namespace Wooga.Lambda.Storage.Apis
             };
         }
 
-        public Async<Unit> CpDirAsync(DirPath ps, DirPath pt)
+        public Async<Unit> CpDirAsync(FileSystem.DirPath ps, FileSystem.DirPath pt)
         {
             return GetDirAsync(ps)
                 .Bind(d => NewDirAsync(pt).Then(() => d))
@@ -121,7 +120,7 @@ namespace Wooga.Lambda.Storage.Apis
                     d =>
                         d.Files
                         .Map(f => FilePath(d.Path, f))
-                        .Fold<FilePath, Async<Unit>>(
+                        .Fold<FileSystem.FilePath, Async<Unit>>(
                             (a, fp) => a.Then(CpFileAsync(fp, FilePath(pt, fp.Name))), () => Unit.Default)
                         .Then(() => d))
                 .Bind(
@@ -130,8 +129,8 @@ namespace Wooga.Lambda.Storage.Apis
                         .Fold<string, Async<Unit>>((a, dir) => a.Then(CpDirAsync(DirPath(d.Path,dir), DirPath(pt,dir))), () => Unit.Default));
         }
 
-        public Async<Unit> CpFileAsync(FilePath ps,
-            FilePath pt)
+        public Async<Unit> CpFileAsync(FileSystem.FilePath ps,
+            FileSystem.FilePath pt)
         {
             return () =>
             {
@@ -140,23 +139,23 @@ namespace Wooga.Lambda.Storage.Apis
             };
         }
 
-        public FilePath FilePath(string s)
+        public FileSystem.FilePath FilePath(string s)
         {
             var file = new FileInfo(s);
-            return new FilePath(DirPath(file.DirectoryName), file.Name);
+            return new FileSystem.FilePath(DirPath(file.DirectoryName), file.Name);
         }
 
-        public FilePath FilePath(DirPath p, string s)
+        public FileSystem.FilePath FilePath(FileSystem.DirPath p, string s)
         {
-            return new FilePath(p, new FileInfo(s).Name);
+            return new FileSystem.FilePath(p, new FileInfo(s).Name);
         }
 
-        public DirPath DirPath(DirPath p, string s)
+        public FileSystem.DirPath DirPath(FileSystem.DirPath p, string s)
         {
             return DirPath(Path.Combine(p.FullName(Path.Combine), s));
         }
 
-        public DirPath DirPath(string s)
+        public FileSystem.DirPath DirPath(string s)
         {
             Func<string, bool> isWinDrive = new Regex(@"^\w:\\.*", RegexOptions.Compiled).IsMatch;
             Func<string, bool> isNixRoot = new Regex(@"^\/.*", RegexOptions.Compiled).IsMatch;
@@ -176,12 +175,12 @@ namespace Wooga.Lambda.Storage.Apis
                 .Item2
                 .Split(new []{'\\','/'}, StringSplitOptions.RemoveEmptyEntries)
                 .ToImmutableList();
-            return new DirPath(parts.Item1.ToImmutableList().AddRange(es));
+            return new FileSystem.DirPath(parts.Item1.ToImmutableList().AddRange(es));
         }
 
         /// <summary>   Creates a new LocalFileSystem.Api. </summary>
         /// <returns>   A FileSystem.Api. </returns>
-        public static Api Create()
+        public static FileSystem.Api Create()
         {
             return new LocalFileSystem();
         }
