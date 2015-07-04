@@ -35,6 +35,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileSystem\AtomicExtensions.cs" />
     <Compile Include="FileSystem\FileSystem.cs" />
     <Compile Include="FileSystem\LocalFileSystem.cs" />
     <Compile Include="FileSystem\VirtualFileSystem.cs" />
@@ -48,7 +49,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.template" />
-    <None Include="Storage.fsx" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

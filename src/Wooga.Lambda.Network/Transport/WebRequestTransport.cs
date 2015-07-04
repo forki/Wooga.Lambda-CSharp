@@ -5,15 +5,11 @@ using Wooga.Lambda.Control;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
-using Wooga.Lambda.Logging;
 
 namespace Wooga.Lambda.Network.Transport
 {
-    /// <summary>   A web request transport. </summary>
     public static class WebRequestTransport
     {
-        /// <summary>   Creates HTTP client. </summary>
-        /// <returns>   The new HTTP client. </returns>
         public static HttpClient CreateHttpClient()
         {
             return new HttpClient((c, r) => r.RequestHttpResponse().RunSynchronously());
