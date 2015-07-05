@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Wooga.Lambda.Control.Concurrent;
+﻿using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Network;
 using static Wooga.Lambda.Data.ImmutableList;
@@ -11,15 +7,20 @@ namespace Wooga.Lambda.Stats.Network
 {
     public static class HttpClientStats
     {
-        public static HttpClient CollectStats(HttpClient http, Stats stats, string prefix = "HttpClientStats")
+        public static HttpClient CollectStats(HttpClient http, Stats stats)
         {
             var clientWithStats = new HttpClient((c, r) =>
             {
-                var p = $"{prefix}.request.[{r.Endpoint.ToString()}]";
-                stats.Count($"{p}.start", 1);
-                var result = stats.Time($"{p}.duration", () => http.TransportAsync(r).RunSynchronously());
-                stats.Gauge($"{p}.response.code", (double) result.StatusCode);
-                stats.Gauge($"{p}.response.body.size", (double)result.Body.ValueOr(Empty<byte>()).Count);
+                var verb = r.HttpMethod.Name;
+                var host = r.Endpoint.Host;
+                var path = r.Endpoint.AbsolutePath;
+                var pre = $"http.request.{verb}.{host}.{path}";
+
+                var result = stats.Time($"{pre}.response.time", () => http.TransportAsync(r).RunSynchronously());
+
+                stats.Gauge($"{pre}.response.status", (double) result.StatusCode);
+                stats.Gauge($"{pre}.response.body.size", (double)result.Body.ValueOr(Empty<byte>()).Count);
+
                 return result;
             });
             return clientWithStats;

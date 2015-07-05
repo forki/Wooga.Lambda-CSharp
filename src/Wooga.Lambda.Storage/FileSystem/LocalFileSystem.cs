@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Wooga.Lambda.Control;
 using Wooga.Lambda.Control.Concurrent;
@@ -28,7 +29,7 @@ namespace Wooga.Lambda.Storage.FileSystem
             var parts =
                 Pattern<ImmutableTuple<ImmutableList<string>, string>>
                     .Match(p)
-                    .Case(isWinDrive,_ =>  Tuple(List(p.Substring(0, 3)), p.Substring(3)))
+                    .Case(isWinDrive,_ =>  Tuple(List(p.Substring(0,3)), p.Substring(3)))
                     .Case(isNixRoot, _ =>  Tuple(List("/"), p.Substring(1)))
                     .Case(isWinShare,_ =>  Tuple(List("\\\\"), p.Substring(2)))
                     .Default(_ => Tuple(Empty<string>(), p))
@@ -81,9 +82,9 @@ namespace Wooga.Lambda.Storage.FileSystem
             return () =>
             {
                 var path = FullName(p);
-                var fs = Directory.GetFiles(path).ToImmutableList().Map(x => Location.Create(PathSplit(x)));
-                var ds = Directory.GetDirectories(path).ToImmutableList().Map(x => Location.Create(PathSplit(x)));
-                return Dir.Create(Location.Create(PathSplit(path)), fs, ds);
+                var fs = Directory.GetFiles(path).ToImmutableList().Map(Locate);
+                var ds = Directory.GetDirectories(path).ToImmutableList().Map(Locate);
+                return Dir.Create(Locate(path), ds, fs);
             };
         }
 

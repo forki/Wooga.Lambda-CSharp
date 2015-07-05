@@ -4,16 +4,15 @@
 #r "Wooga.Lambda.Stats.dll"
 #r "Wooga.Lambda.Network.dll"
 
+System.Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
+
 open Wooga.Lambda.Stats
 open Wooga.Lambda.Stats.Network
 open Wooga.Lambda.Network.Transport
 
 let stats = Stats.Shared
-
-stats.Count("wooga.lambda.stats.fsharp.script.run",1)
-
 let HTTP = WebRequestTransport.CreateHttpClient ()
-let STATSHTTP = HttpClientStats.CollectStats(HTTP,stats,"HttpClientStatsTests")
+let STATSHTTP = HttpClientStats.CollectStats(HTTP,stats)
 
 STATSHTTP.Get("http://google.com")
 STATSHTTP.Get("http://amazon.com")

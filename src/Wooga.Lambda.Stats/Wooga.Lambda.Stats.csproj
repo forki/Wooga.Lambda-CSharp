@@ -38,6 +38,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Backends\Backend.cs" />
+    <Compile Include="Backends\Statsd.cs" />
     <Compile Include="Network\HttpClientStats.cs" />
     <Compile Include="Stats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
