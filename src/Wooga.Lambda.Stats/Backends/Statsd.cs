@@ -1,7 +1,11 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using Wooga.Lambda.Control.Concurrent;
+using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
+using Wooga.Lambda.Network;
+using Wooga.Lambda.Network.Transport;
 
 namespace Wooga.Lambda.Stats.Backends
 {
@@ -33,10 +37,14 @@ namespace Wooga.Lambda.Stats.Backends
             private readonly Socket socket;
             private readonly IPEndPoint ipEndPoint;
 
-            private UDP(string name, int port)
+            private UDP(string host, int port, int timeout = 1000)
             {
-                socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-                var ipAddress = GetIpv4Address(name);
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
+                {
+                    SendTimeout = timeout,
+                    Blocking = true
+                };
+                var ipAddress = GetIpv4Address(host);
                 ipEndPoint = new IPEndPoint(ipAddress, port);
             }
 
@@ -45,7 +53,8 @@ namespace Wooga.Lambda.Stats.Backends
                 return () =>
                 {
                     var msg = data.ToArray();
-                    socket.SendTo(msg, msg.Length, SocketFlags.None, ipEndPoint);
+                    var sent = socket.SendTo(msg, msg.Length, SocketFlags.None, ipEndPoint);
+                    
                     return Unit.Default;
                 };
             }

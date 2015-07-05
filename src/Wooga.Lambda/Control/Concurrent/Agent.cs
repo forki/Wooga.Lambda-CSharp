@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Concurrent
@@ -22,6 +24,17 @@ namespace Wooga.Lambda.Control.Concurrent
         ///     <c>true</c> if this agent is running; otherwise, <c>false</c>.
         /// </value>
         public bool IsRunning { get; private set; }
+
+        public int CurrentQueueLength
+        {
+            get
+            {
+                lock (_inbox)
+                {
+                    return _inbox.Count;
+                }
+            }
+        }
 
         private static Async<Unit> Watchdog<TS>(Agent<TMessage, TReply> inbox, Func<Agent<TMessage, TReply>, TS, TS> body, TS state)
         {

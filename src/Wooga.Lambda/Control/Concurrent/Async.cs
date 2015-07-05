@@ -172,7 +172,7 @@ namespace Wooga.Lambda.Control.Concurrent
         {
             return m.Invoke();
         }
-
+        
         /// <summary>
         /// Creates an asynchronous computation that will sleep for the given time.
         /// </summary>

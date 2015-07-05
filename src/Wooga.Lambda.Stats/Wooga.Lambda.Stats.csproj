@@ -39,10 +39,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backends\Backend.cs" />
+    <Compile Include="Backends\NoBackend.cs" />
     <Compile Include="Backends\Statsd.cs" />
     <Compile Include="Network\HttpClientStats.cs" />
     <Compile Include="Stats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Storage\FileSystemStats.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Wooga.Lambda.Network\Wooga.Lambda.Network.csproj">

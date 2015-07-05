@@ -5,6 +5,6 @@ namespace Wooga.Lambda.Stats.Backends
 {
     public interface Backend
     {
-        Async<Unit> Send(ImmutableList<byte> data);
+        Async<Unit> Send(ImmutableList<byte> bs);
     }
 }

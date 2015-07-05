@@ -3,94 +3,122 @@ using System.Diagnostics;
 using System.Globalization;
 using Wooga.Lambda.Control;
 using Wooga.Lambda.Control.Concurrent;
+using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 using Wooga.Lambda.Stats.Backends;
 using Wooga.Lambda.Storage.FileSystem;
 using static System.Guid;
 using static System.Text.Encoding;
-using static Wooga.Lambda.Data.ImmutableTuple;
 
 namespace Wooga.Lambda.Stats
 {
+    public struct Stat
+    {
+        public static Stat Create(string name, DateTime time, string value, string unit)
+        {
+            return new Stat(name,time,value,unit);
+        }
+        
+        public readonly string Name;
+        public readonly DateTime Time;
+        public readonly ImmutableList<byte> Bytes;
+
+        private Stat(string name, DateTime time, string value, string unit)
+        {
+            Name = name;
+            Time = time;
+            Bytes = UTF8
+                    .GetBytes($"{name}:{value}|{unit}")
+                    .ToImmutableList();
+        }
+
+    }
+
     public class Stats
     {
-        public static readonly Stats Shared = new Stats();
-        public static readonly Stats STATS = Shared;
-        private static readonly FileSystem HDD = LocalFileSystem.Local();
-        private static readonly Location Cache = HDD.Locate(".lambda-stats");
-        private const uint MaxLogs = 2;
-        private static readonly Backend Backend = Statsd.UDP.Create("192.168.59.103", 8125);
+        public static Stats Create(FileSystem fs, Location cache, Backend be)
+        {
+            return new Stats(fs,cache,be);    
+        }
+        
+        private readonly FileSystem HDD;
+        private readonly Location Cache;
+        private readonly Backend Backend;
         private readonly Agent<AgentMsg, Unit> agent;
 
-        private Stats()
+        private Stats(FileSystem fs, Location cache, Backend be)
         {
-            agent = Agent<AgentMsg, Unit>.Start(Tuple("", 0),
-                (inbox, logs) =>
+            HDD = fs;
+            Cache = cache;
+            Backend = be;
+
+            fs.NewDirAsync(cache).RunSynchronously();
+
+            agent = Agent<AgentMsg, Unit>.Start(
+                Unit.Default,
+                (inbox, _) =>
                 {
-                    var msg = logs.Item2 > MaxLogs
-                        ? new Persist()
-                        : inbox.Receive().RunSynchronously();
-                    return
-                        Pattern<ImmutableTuple<string, int>>
-                            .Match(msg)
-                            .Case<Metric>(m => LogMetric(logs, m))
-                            .Case<Persist>(p => PersistMetrics(logs, p))
-                            .Case<Send>(s => SendMetrics(logs, s)())
-                            .Default(logs)
-                            .Run();
+                    var msg = inbox.Receive().RunSynchronously();
+                    Console.WriteLine(msg);
+                    Pattern<Unit>
+                    .Match(msg)
+                    .Case<Send>(m  => SendOrSaveStat(m.Stat).Start())
+                    .Case<Save>(m  => SaveStat(m.Stat).Start())
+                    .Case<Flush>(m => FlushStatsCache().RunSynchronously())
+                    .Default(_)
+                    .Run();
+                    return _;
                 });
         }
 
-        private Async<ImmutableTuple<string, int>> SendMetrics(ImmutableTuple<string, int> logs, Send send)
+        private Async<Unit> SendOrSaveStat(Stat m)
+        {
+            return  Backend
+                    .Send(m.Bytes)
+                    .Catch()
+                    .Map(e => e.SuccessOr(() => agent.Post(Save.Msg(m))));
+        }
+        
+        private Async<Unit> SaveStat(Stat m)
+        {
+            var l = HDD.Locate(Cache, NewGuid()+".stat");
+            return HDD.WriteFileAsync(l, m.Bytes);
+        }
+
+        private Async<Unit> FlushStatsCache()
         {
             return () =>
             {
                 var dir = HDD.GetDirAsync(Cache)();
                 foreach (var l in dir.Files)
                 {
+                    if (!l.Name.EndsWith(".stat")) continue;
                     var file = HDD.GetFileAsync(l)();
                     Backend.Send(file.Content)();
                     HDD.RmFileAsync(l)();
                 }
-                return logs;
+                return Unit.Default;
             };
         }
 
-        private ImmutableTuple<string, int> PersistMetrics(ImmutableTuple<string, int> log, Persist persist)
+        private Unit PostStat(Stat m)
         {
-            var loc = HDD.Locate(Cache, NewGuid() + ".stats");
-            var data = UTF8.GetBytes(log.Item1).ToImmutableList();
-            HDD.NewDirAsync(Cache)
-                .Then(HDD.WriteFileAsync(loc, data))
-                .RunSynchronously();
-            agent.Post(new Send());
-            return Tuple("", 0);
-        }
-
-        private static ImmutableTuple<string, int> LogMetric(ImmutableTuple<string, int> log, Metric m)
-        {
-            var text = $"{log.Item1}\n{m.Serialize()}";
-            return Tuple(text.TrimStart(), log.Item2 + 1);
-        }
-
-        private static long ToUnixTimestamp(DateTime t)
-        {
-            return (long) ((t.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToUniversalTime()).TotalSeconds);
+            return agent.Post(Send.Msg(m));
         }
 
         public Unit Count(string name, int value)
         {
-            return agent.Post(new Metric(name, DateTime.Now, value.ToString(), "c"));
+            return PostStat(Stat.Create(name, DateTime.Now, value.ToString(), "c"));
         }
 
         public Unit Gauge(string name, double value)
         {
-            return agent.Post(new Metric(name, DateTime.Now, value.ToString(CultureInfo.InvariantCulture), "g"));
+            return PostStat(Stat.Create(name, DateTime.Now, value.ToString(CultureInfo.InvariantCulture), "g"));
         }
 
         public Unit Time(string name, long value)
         {
-            return agent.Post(new Metric(name, DateTime.Now, value.ToString(), "ms"));
+            return PostStat(Stat.Create(name, DateTime.Now, value.ToString(), "ms"));
         }
 
         public T Time<T>(string name, Func<T> f)
@@ -103,36 +131,50 @@ namespace Wooga.Lambda.Stats
             return r;
         }
 
-        public interface AgentMsg
+        public Unit FlushCache()
+        {
+            return agent.Post(Flush.Msg());
+        }
+
+        private interface AgentMsg
         {
         }
 
-        public struct Send : AgentMsg
+        private struct Send : AgentMsg
         {
-        }
-
-        public struct Persist : AgentMsg
-        {
-        }
-
-        public struct Metric : AgentMsg
-        {
-            public Metric(string name, DateTime timestamp, string valueString, string metricString)
+            public static Send Msg(Stat m)
             {
-                Name = name;
-                Timestamp = timestamp;
-                ValueString = valueString;
-                MetricString = metricString;
+                return new Send(m);
             }
 
-            public string Name { get; }
-            public DateTime Timestamp { get; }
-            private string ValueString { get; }
-            private string MetricString { get; }
-
-            public string Serialize()
+            private Send(Stat stat)
             {
-                return $"{Name}:{ValueString}|{MetricString}";
+                Stat = stat;
+            }
+
+            public readonly Stat Stat;
+        }
+
+        private struct Flush : AgentMsg
+        {
+            public static Flush Msg()
+            {
+                return new Flush();    
+            }
+          }
+
+        private struct Save : AgentMsg
+        {
+            public static Save Msg(Stat m)
+            {
+                return new Save(m);
+            }
+
+            public readonly Stat Stat;
+
+            private Save(Stat stat)
+            {
+                Stat = stat;
             }
         }
     }

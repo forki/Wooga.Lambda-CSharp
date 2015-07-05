@@ -20,6 +20,7 @@ namespace Wooga.Lambda.Network.Transport
             var webRequest = WebRequest.Create(httpRequest.Endpoint) as HttpWebRequest;
             webRequest = AddHeaders(httpRequest.HttpHeaders, webRequest);
             webRequest.Method = httpRequest.HttpMethod.Name;
+            webRequest.Timeout = httpRequest.Timeout;
             if (httpRequest.Body.IsJust())
             {
                 using (var postStream = webRequest.GetRequestStream())
@@ -47,6 +48,7 @@ namespace Wooga.Lambda.Network.Transport
                 }
                 catch (WebException webException)
                 {
+                    if (webException.Response == null) throw webException;
                     return webException.Response as HttpWebResponse;
                 }
             };
@@ -57,15 +59,20 @@ namespace Wooga.Lambda.Network.Transport
             return () =>
             {
                 var headers = OfWebHeaders(response.Headers);
-                var body = ReadEntireStream(response.GetResponseStream()).RunSynchronously();
+                var body = ReadEntireStream(response.GetResponseStream(), httpRequest.Timeout).RunSynchronously();
                 return new HttpResponse(httpRequest, headers, response.StatusCode,
                     body.Count > 0 ? Maybe.Just(body) : Maybe.Nothing<ImmutableList<byte>>());
             };
         }
 
-        private static Async<ImmutableList<byte>> ReadEntireStream(Stream stream)
+        private static Async<ImmutableList<byte>> ReadEntireStream(Stream stream,int timeout)
         {
-            return () => Encoding.UTF8.GetBytes(new StreamReader(stream).ReadToEnd()).ToImmutableList();
+            return () =>
+            {
+                var streamReader = new StreamReader(stream);
+                streamReader.BaseStream.ReadTimeout = timeout;
+                return Encoding.UTF8.GetBytes(streamReader.ReadToEnd()).ToImmutableList();
+            };
         }
 
         private static HttpWebRequest AddHeaders(ImmutableList<HttpHeader> self, HttpWebRequest request)

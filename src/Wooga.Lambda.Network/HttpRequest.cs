@@ -10,14 +10,18 @@ namespace Wooga.Lambda.Network
         public readonly Uri Endpoint;
         public readonly ImmutableList<HttpHeader> HttpHeaders;
         public readonly HttpMethod HttpMethod;
+        public readonly int Timeout;
 
-        public HttpRequest(Uri endpoint, HttpMethod httpMethod, ImmutableList<HttpHeader> httpHeaders,
-            Maybe<ImmutableList<byte>> body)
+        public HttpRequest(Uri endpoint, HttpMethod httpMethod, 
+            ImmutableList<HttpHeader> httpHeaders,
+            Maybe<ImmutableList<byte>> body, 
+            int timeout = 100000)
         {
             Endpoint = endpoint;
             HttpMethod = httpMethod;
             HttpHeaders = httpHeaders.Unique();
             Body = body;
+            Timeout = timeout;
         }
 
         public static HttpRequest Basic(string url, HttpMethod httpMethod)
