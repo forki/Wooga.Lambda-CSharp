@@ -1,6 +1,12 @@
+#### 0.6.0 - July 24 2015
+* [Storage] Location type instead of FilePath & DirPath
+* [Storage] Local- & VirtualFileSystem
+* [Storage] Atomic write & recovery operations for files
+* [Network] HTTPClient gets a parameter to add custom headers
+
 #### 0.5.0 - May 11  2015
 * Maybe & Either types are now structs and cause no memory overhead anymore
-* Changes in APIs of Maybe & Either 
+* Changes in APIs of Maybe & Either
 
 #### 0.4.1 - May 11  2015
 * Wooga.Lambda.FileSystem.Api removing some Logs from LocalFileSystem
