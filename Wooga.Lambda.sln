@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{63297B98-5CED-492C-A5B7-A5B4F73CF142}"
 	ProjectSection(SolutionItems) = preProject
@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Logging", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Storage", "src\Wooga.Lambda.Storage\Wooga.Lambda.Storage.csproj", "{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Storage.Tests", "tests\Wooga.Lambda.Storage.Tests\Wooga.Lambda.Storage.Tests.csproj", "{0E344637-E2FD-405D-985E-A86D237A9EB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,10 @@ Global
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E344637-E2FD-405D-985E-A86D237A9EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E344637-E2FD-405D-985E-A86D237A9EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E344637-E2FD-405D-985E-A86D237A9EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E344637-E2FD-405D-985E-A86D237A9EB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,5 +120,6 @@ Global
 		{75137CDF-FBDA-45E6-835C-4F4F38AE395A} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
 		{DD381F18-597A-486B-9D44-CCA1E9FBE6C1} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
 		{40C3D7A7-A94A-4925-BA28-6739F0E6F339} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
+		{0E344637-E2FD-405D-985E-A86D237A9EB5} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
 	EndGlobalSection
 EndGlobal
