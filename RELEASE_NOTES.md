@@ -1,3 +1,6 @@
+#### 0.6.2 - July 24 2015
+* [Storage] Fixes LocalFileSystem where Files ended up as Dirs and absoulte paths weren't concatenated properly
+
 #### 0.6.1 - July 24 2015
 * [Storage] Fixes LocalFileSystem where Unity3D misses enum-value of RegexOption.Compiled
 
