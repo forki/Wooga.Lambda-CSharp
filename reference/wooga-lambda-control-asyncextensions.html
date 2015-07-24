@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Pattern<'TResult> - Wooga.Lambda</title>
+    <title>AsyncExtensions - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -41,7 +41,7 @@
 
 
 
-<h1>Pattern<'TResult></h1>
+<h1>AsyncExtensions</h1>
 <p>
   <span>Namespace: Wooga.Lambda.Control</span><br />
 </p>
@@ -56,12 +56,12 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
-            Match(x)
+          <code onmouseout="hideTip(event, '1', 1)" onmouseover="showTip(event, '1', 1)">
+            Retry(m, s)
           </code>
-          <div class="tip" id="6">
-            <strong>Signature:</strong> x:&#39;TValue -&gt; MatchCase&lt;&#39;TResult,&#39;TValue&gt;<br />
-                      </div>
+          <div class="tip" id="1">
+            <strong>Signature:</strong> (m:Async&lt;&#39;T&gt; * s:Strategy) -&gt; Async&lt;Either&lt;&#39;T,exn&gt;&gt;<br />
+                          <strong>Type parameters:</strong> 'T          </div>
         </td>
         <td class="xmldoc">
           

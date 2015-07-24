@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Pattern<'TResult> - Wooga.Lambda</title>
+    <title>AtomicExtensions - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -41,9 +41,9 @@
 
 
 
-<h1>Pattern<'TResult></h1>
+<h1>AtomicExtensions</h1>
 <p>
-  <span>Namespace: Wooga.Lambda.Control</span><br />
+  <span>Namespace: Wooga.Lambda.Storage.FileSystem</span><br />
 </p>
 <div class="xmldoc">
 </div>
@@ -56,11 +56,39 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '6', 6)" onmouseover="showTip(event, '6', 6)">
-            Match(x)
+          <code onmouseout="hideTip(event, '208', 208)" onmouseover="showTip(event, '208', 208)">
+            RollbackFailedWrite(s, p, t1, t2)
           </code>
-          <div class="tip" id="6">
-            <strong>Signature:</strong> x:&#39;TValue -&gt; MatchCase&lt;&#39;TResult,&#39;TValue&gt;<br />
+          <div class="tip" id="208">
+            <strong>Signature:</strong> (s:FileSystem * p:Location * t1:string * t2:string) -&gt; Async&lt;Unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '209', 209)" onmouseover="showTip(event, '209', 209)">
+            WriteFileAtomically(s, p, d, t1, t2)
+          </code>
+          <div class="tip" id="209">
+            <strong>Signature:</strong> (s:FileSystem * p:Location * d:ImmutableList&lt;byte&gt; * t1:string * t2:string) -&gt; Async&lt;Unit&gt;<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '210', 210)" onmouseover="showTip(event, '210', 210)">
+            WriteNewFileThenMv(s, p, d, t1, t2)
+          </code>
+          <div class="tip" id="210">
+            <strong>Signature:</strong> (s:FileSystem * p:Location * d:ImmutableList&lt;byte&gt; * t1:string * t2:string) -&gt; Async&lt;Unit&gt;<br />
                       </div>
         </td>
         <td class="xmldoc">

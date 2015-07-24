@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Either - Wooga.Lambda</title>
+    <title>FileSystem - Wooga.Lambda</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content=""/>
     <meta name="author" content="devboy"/>
@@ -41,27 +41,31 @@
 
 
 
-<h1>Either</h1>
+<h1>FileSystem</h1>
 <p>
-  <span>Namespace: Wooga.Lambda.Control.Monad</span><br />
+  <span>Namespace: Wooga.Lambda.Storage.FileSystem</span><br />
 </p>
 <div class="xmldoc">
+<p>FileSystem with asynchronous file operations</p>
+
+
 </div>
-  <h3>Static members</h3>
+  <h3>Instance members</h3>
   <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Static member</td><td>Description</td></tr>
+      <tr><td>Instance member</td><td>Description</td></tr>
     </thead>
     <tbody>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '42', 42)" onmouseover="showTip(event, '42', 42)">
-            Bind(m, f)
+          <code onmouseout="hideTip(event, '213', 213)" onmouseover="showTip(event, '213', 213)">
+            AppendFileAsync(p, c)
           </code>
-          <div class="tip" id="42">
-            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccessInput,&#39;TFailure&gt; * f:Func&lt;&#39;TSuccessInput,Either&lt;&#39;TSuccessOutput,&#39;TFailure&gt;&gt;) -&gt; Either&lt;&#39;TSuccessOutput,&#39;TFailure&gt;<br />
-                          <strong>Type parameters:</strong> 'TSuccessInput, 'TFailure, 'TSuccessOutput          </div>
+          <div class="tip" id="213">
+            <strong>Signature:</strong> (p:Location * c:ImmutableList&lt;byte&gt;) -&gt; Async&lt;Unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
         </td>
         <td class="xmldoc">
           
@@ -70,12 +74,13 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
-            Catch(f)
+          <code onmouseout="hideTip(event, '214', 214)" onmouseover="showTip(event, '214', 214)">
+            CpDirAsync(ps, pt)
           </code>
-          <div class="tip" id="43">
-            <strong>Signature:</strong> f:Func&lt;&#39;T&gt; -&gt; Either&lt;&#39;T,exn&gt;<br />
-                          <strong>Type parameters:</strong> 'T          </div>
+          <div class="tip" id="214">
+            <strong>Signature:</strong> (ps:Location * pt:Location) -&gt; Async&lt;Unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
         </td>
         <td class="xmldoc">
           
@@ -84,29 +89,13 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '44', 44)" onmouseover="showTip(event, '44', 44)">
-            Failure(m)
+          <code onmouseout="hideTip(event, '215', 215)" onmouseover="showTip(event, '215', 215)">
+            CpFileAsync(ps, pt)
           </code>
-          <div class="tip" id="44">
-            <strong>Signature:</strong> m:&#39;TFailure -&gt; Either&lt;&#39;TSuccess,&#39;TFailure&gt;<br />
-                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
-        </td>
-        <td class="xmldoc">
-          <p>Constructs Either.Failure with m</p>
-
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '45', 45)" onmouseover="showTip(event, '45', 45)">
-            FailureOr(m, dflt)
-          </code>
-          <div class="tip" id="45">
-            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; * dflt:&#39;TFailure) -&gt; &#39;TFailure<br />
-                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
+          <div class="tip" id="215">
+            <strong>Signature:</strong> (ps:Location * pt:Location) -&gt; Async&lt;Unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
         </td>
         <td class="xmldoc">
           
@@ -115,12 +104,13 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '46', 46)" onmouseover="showTip(event, '46', 46)">
-            FailureOr(m, dflt)
+          <code onmouseout="hideTip(event, '216', 216)" onmouseover="showTip(event, '216', 216)">
+            GetDirAsync(p)
           </code>
-          <div class="tip" id="46">
-            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; * dflt:Func&lt;&#39;TFailure&gt;) -&gt; &#39;TFailure<br />
-                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
+          <div class="tip" id="216">
+            <strong>Signature:</strong> p:Location -&gt; Async&lt;Dir&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
         </td>
         <td class="xmldoc">
           
@@ -129,12 +119,13 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '47', 47)" onmouseover="showTip(event, '47', 47)">
-            From(m, fr, fl)
+          <code onmouseout="hideTip(event, '217', 217)" onmouseover="showTip(event, '217', 217)">
+            GetFileAsync(p)
           </code>
-          <div class="tip" id="47">
-            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; * fr:Func&lt;&#39;TSuccess,&#39;TResult&gt; * fl:Func&lt;&#39;TFailure,&#39;TResult&gt;) -&gt; &#39;TResult<br />
-                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure, 'TResult          </div>
+          <div class="tip" id="217">
+            <strong>Signature:</strong> p:Location -&gt; Async&lt;File&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
         </td>
         <td class="xmldoc">
           
@@ -143,12 +134,13 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '48', 48)" onmouseover="showTip(event, '48', 48)">
-            IsFailure(m)
+          <code onmouseout="hideTip(event, '218', 218)" onmouseover="showTip(event, '218', 218)">
+            HasDirAsync(p)
           </code>
-          <div class="tip" id="48">
-            <strong>Signature:</strong> m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; -&gt; bool<br />
-                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
+          <div class="tip" id="218">
+            <strong>Signature:</strong> p:Location -&gt; Async&lt;bool&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
         </td>
         <td class="xmldoc">
           
@@ -157,12 +149,13 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '49', 49)" onmouseover="showTip(event, '49', 49)">
-            IsSuccess(m)
+          <code onmouseout="hideTip(event, '219', 219)" onmouseover="showTip(event, '219', 219)">
+            HasFileAsync(p)
           </code>
-          <div class="tip" id="49">
-            <strong>Signature:</strong> m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; -&gt; bool<br />
-                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
+          <div class="tip" id="219">
+            <strong>Signature:</strong> p:Location -&gt; Async&lt;bool&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
         </td>
         <td class="xmldoc">
           
@@ -171,12 +164,13 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '50', 50)" onmouseover="showTip(event, '50', 50)">
-            Map(m, f)
+          <code onmouseout="hideTip(event, '220', 220)" onmouseover="showTip(event, '220', 220)">
+            Locate(s)
           </code>
-          <div class="tip" id="50">
-            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccessInput,&#39;TFailure&gt; * f:Func&lt;&#39;TSuccessInput,&#39;TSuccessOutput&gt;) -&gt; Either&lt;&#39;TSuccessOutput,&#39;TFailure&gt;<br />
-                          <strong>Type parameters:</strong> 'TSuccessInput, 'TFailure, 'TSuccessOutput          </div>
+          <div class="tip" id="220">
+            <strong>Signature:</strong> s:string -&gt; Location<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
         </td>
         <td class="xmldoc">
           
@@ -185,46 +179,13 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '51', 51)" onmouseover="showTip(event, '51', 51)">
-            Return(v)
+          <code onmouseout="hideTip(event, '221', 221)" onmouseover="showTip(event, '221', 221)">
+            Locate(p, s)
           </code>
-          <div class="tip" id="51">
-            <strong>Signature:</strong> v:&#39;TSuccess -&gt; Either&lt;&#39;TSuccess,&#39;TFailure&gt;<br />
-                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
-        </td>
-        <td class="xmldoc">
-          <p>Constructs Either.Success with v</p>
-
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '52', 52)" onmouseover="showTip(event, '52', 52)">
-            Success(m)
-          </code>
-          <div class="tip" id="52">
-            <strong>Signature:</strong> m:&#39;TSuccess -&gt; Either&lt;&#39;TSuccess,&#39;TFailure&gt;<br />
-                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
-        </td>
-        <td class="xmldoc">
-          <p>Constructs Either.Success with m</p>
-
-
-
-        </td>
-      </tr>
-      <tr>
-        <td class="member-name">
-
-          <code onmouseout="hideTip(event, '53', 53)" onmouseover="showTip(event, '53', 53)">
-            SuccessOr(m, dflt)
-          </code>
-          <div class="tip" id="53">
-            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; * dflt:&#39;TSuccess) -&gt; &#39;TSuccess<br />
-                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
+          <div class="tip" id="221">
+            <strong>Signature:</strong> (p:Location * s:string) -&gt; Location<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
         </td>
         <td class="xmldoc">
           
@@ -233,12 +194,13 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '54', 54)" onmouseover="showTip(event, '54', 54)">
-            SuccessOr(m, dflt)
+          <code onmouseout="hideTip(event, '222', 222)" onmouseover="showTip(event, '222', 222)">
+            MvDirAsync(ps, pt)
           </code>
-          <div class="tip" id="54">
-            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccess,&#39;TFailure&gt; * dflt:Func&lt;&#39;TSuccess&gt;) -&gt; &#39;TSuccess<br />
-                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
+          <div class="tip" id="222">
+            <strong>Signature:</strong> (ps:Location * pt:Location) -&gt; Async&lt;Unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
         </td>
         <td class="xmldoc">
           
@@ -247,12 +209,13 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '55', 55)" onmouseover="showTip(event, '55', 55)">
-            Then(m, h)
+          <code onmouseout="hideTip(event, '223', 223)" onmouseover="showTip(event, '223', 223)">
+            MvFileAsync(ps, pt)
           </code>
-          <div class="tip" id="55">
-            <strong>Signature:</strong> (m:Either&lt;&#39;TSuccessInput,&#39;TFailure&gt; * h:Either&lt;&#39;TSuccessOutput,&#39;TFailure&gt;) -&gt; Either&lt;&#39;TSuccessOutput,&#39;TFailure&gt;<br />
-                          <strong>Type parameters:</strong> 'TSuccessInput, 'TFailure, 'TSuccessOutput          </div>
+          <div class="tip" id="223">
+            <strong>Signature:</strong> (ps:Location * pt:Location) -&gt; Async&lt;Unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
         </td>
         <td class="xmldoc">
           
@@ -261,12 +224,88 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '56', 56)" onmouseover="showTip(event, '56', 56)">
-            When(p, fl, fr)
+          <code onmouseout="hideTip(event, '224', 224)" onmouseover="showTip(event, '224', 224)">
+            NewDirAsync(p)
           </code>
-          <div class="tip" id="56">
-            <strong>Signature:</strong> (p:Func&lt;bool&gt; * fl:Func&lt;&#39;TFailure&gt; * fr:Func&lt;&#39;TSuccess&gt;) -&gt; Either&lt;&#39;TSuccess,&#39;TFailure&gt;<br />
-                          <strong>Type parameters:</strong> 'TSuccess, 'TFailure          </div>
+          <div class="tip" id="224">
+            <strong>Signature:</strong> p:Location -&gt; Async&lt;Unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '225', 225)" onmouseover="showTip(event, '225', 225)">
+            Parent(p)
+          </code>
+          <div class="tip" id="225">
+            <strong>Signature:</strong> p:Location -&gt; Location<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '226', 226)" onmouseover="showTip(event, '226', 226)">
+            PathCombinator
+          </code>
+          <div class="tip" id="226">
+            <strong>Signature:</strong> Combinator<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '227', 227)" onmouseover="showTip(event, '227', 227)">
+            RmDirAsync(p)
+          </code>
+          <div class="tip" id="227">
+            <strong>Signature:</strong> p:Location -&gt; Async&lt;Unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '228', 228)" onmouseover="showTip(event, '228', 228)">
+            RmFileAsync(p)
+          </code>
+          <div class="tip" id="228">
+            <strong>Signature:</strong> p:Location -&gt; Async&lt;Unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
+        </td>
+        <td class="xmldoc">
+          
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '229', 229)" onmouseover="showTip(event, '229', 229)">
+            WriteFileAsync(p, c)
+          </code>
+          <div class="tip" id="229">
+            <strong>Signature:</strong> (p:Location * c:ImmutableList&lt;byte&gt;) -&gt; Async&lt;Unit&gt;<br />
+              <strong>Modifiers:</strong> abstract<br />
+                      </div>
         </td>
         <td class="xmldoc">
           
