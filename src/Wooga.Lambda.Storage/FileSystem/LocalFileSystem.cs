@@ -83,7 +83,7 @@ namespace Wooga.Lambda.Storage.FileSystem
                 var path = FullName(p);
                 var fs = Directory.GetFiles(path).ToImmutableList().Map(x => Location.Create(PathSplit(x)));
                 var ds = Directory.GetDirectories(path).ToImmutableList().Map(x => Location.Create(PathSplit(x)));
-                return Dir.Create(Location.Create(PathSplit(path)), fs, ds);
+                return Dir.Create(Location.Create(PathSplit(path)), ds, fs);
             };
         }
 
