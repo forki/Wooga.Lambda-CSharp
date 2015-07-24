@@ -61,9 +61,10 @@ namespace Wooga.Lambda.Logging
             return PostLog(With(msg,Level.Debug));
         }
 
-        public Unit Debug(string msg, Object context)
+        public T Debug<T>(string msg, T context)
         {
-            return PostLog(With(msg, Level.Debug, context));
+            PostLog(With(msg, Level.Debug, context));
+            return context;
         }
 
         public Unit Info(string msg)
@@ -71,9 +72,10 @@ namespace Wooga.Lambda.Logging
             return PostLog(With(msg, Level.Info));
         }
 
-        public Unit Info(string msg, Object context)
+        public T Info<T>(string msg, T context)
         {
-            return PostLog(With(msg, Level.Info, context));
+            PostLog(With(msg, Level.Info, context));
+            return context;
         }
 
         public Unit Warn(string msg)
@@ -81,9 +83,10 @@ namespace Wooga.Lambda.Logging
             return PostLog(With(msg, Level.Warn));
         }
 
-        public Unit Warn(string msg, Object context)
+        public T Warn<T>(string msg, T context)
         {
-            return PostLog(With(msg, Level.Warn, context));
+            PostLog(With(msg, Level.Warn, context));
+            return context;
         }
 
         public Unit Error(string msg)
@@ -91,9 +94,10 @@ namespace Wooga.Lambda.Logging
             return PostLog(With(msg, Level.Error));
         }
 
-        public Unit Error(string msg, Object context)
+        public T Error<T>(string msg, T context)
         {
-            return PostLog(With(msg, Level.Error, context));
+            PostLog(With(msg, Level.Error, context));
+            return context;
         }
 
         public Unit Fatal(string msg)
@@ -101,9 +105,10 @@ namespace Wooga.Lambda.Logging
             return PostLog(With(msg, Level.Fatal));
         }
 
-        public Unit Fatal(string msg, Object context)
+        public T Fatal<T>(string msg, T context)
         {
-            return PostLog(With(msg, Level.Fatal, context));
+            PostLog(With(msg, Level.Fatal, context));
+            return context;
         }
 
         public Unit AddHandler(Handler handler)
