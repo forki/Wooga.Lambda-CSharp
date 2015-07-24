@@ -114,7 +114,7 @@ namespace Wooga.Lambda.Storage.FileSystem
                 {
                     RmDirAsync(d);
                 }
-                RmDirAsync(p);
+                dirs.Remove(p);
                 return Unit.Default;
             };
         }
