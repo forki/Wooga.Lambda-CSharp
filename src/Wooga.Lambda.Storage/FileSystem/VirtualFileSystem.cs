@@ -201,7 +201,7 @@ namespace Wooga.Lambda.Storage.FileSystem
 
         private static Func<string, bool> PathMatch(string p)
         {
-            return new Regex(p, RegexOptions.Compiled).IsMatch;
+            return new Regex(p, RegexOptions.None).IsMatch;
         }
 
         private static ImmutableList<string> PathSplit(string p)
