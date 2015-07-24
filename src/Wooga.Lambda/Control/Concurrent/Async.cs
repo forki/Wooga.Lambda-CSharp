@@ -11,7 +11,12 @@ namespace Wooga.Lambda.Control.Concurrent
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     public delegate T Async<T>();
-    
+
+    public interface AsyncComputationQueue
+    {
+        Unit Enqueue<T>(Async<T> a);
+    }
+
     internal sealed class AsyncEventHandle<T>
     {
         public readonly ManualResetEvent DoneEvent = new ManualResetEvent(false);
