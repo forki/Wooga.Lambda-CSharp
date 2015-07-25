@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using Wooga.Lambda.Control.Monad;
+﻿using System.Threading;
 using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Concurrent
