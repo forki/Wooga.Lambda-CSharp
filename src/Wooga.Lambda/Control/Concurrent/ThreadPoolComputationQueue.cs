@@ -6,9 +6,35 @@ namespace Wooga.Lambda.Control.Concurrent
 {
     public sealed class ThreadPoolComputationQueue : AsyncComputationQueue
     {
-        public Unit Enqueue<T>(Async<T> a)
+        private readonly Agent<Unit, Unit> _agent;
+
+        public ThreadPoolComputationQueue()
         {
-            ThreadPool.QueueUserWorkItem(_=>a.RunSynchronously());
+            _agent = Agent<Unit, Unit>.Start(Unit.Default,
+                (inbox, handlers) =>
+                {
+                    var msg = inbox.Receive().RunSynchronously();
+                    return Pattern<Unit>
+                            .Match(msg)
+                            .Default(Unit.Default)
+                            .Run();
+                });
+        }
+
+        public Unit Enqueue(Async<Unit> a)
+        {
+            ThreadPool.QueueUserWorkItem(_=> 
+            {
+                try
+                {
+                    a.RunSynchronously();
+                }
+                catch (Exception e)
+                {
+                    var f = e;
+                }
+
+            });
             return Unit.Default;
         }
     }

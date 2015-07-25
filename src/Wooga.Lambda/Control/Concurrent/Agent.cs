@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Concurrent
@@ -48,7 +50,7 @@ namespace Wooga.Lambda.Control.Concurrent
         public static Agent<TMessage, TReply> Start<TState>(TState state, Func<Agent<TMessage, TReply>, TState, TState> body)
         {
             var agent = new Agent<TMessage, TReply>();
-            Watchdog(agent, body, state).Start();
+            new Thread(_ => Watchdog(agent, body, state).RunSynchronously()).Start();
             return agent;
         }
 
@@ -107,15 +109,16 @@ namespace Wooga.Lambda.Control.Concurrent
         /// <param name="msg">The message to post.</param>
         public Unit Post(TMessage msg)
         {
-            return Async.Return(() =>
+            new Thread(() =>
             {
                 lock (_inbox)
                 {
                     _inbox.Enqueue(msg);
                     Monitor.Pulse(_inbox);
                 }
-                return Unit.Default;
-            }).Start();
+            })
+            .Start();
+            return Unit.Default;
         }
 
         /// <summary>
@@ -158,6 +161,47 @@ namespace Wooga.Lambda.Control.Concurrent
                     return _inbox.Dequeue();
                 }
             };
+        }
+
+        public Async<TMessage> Scan(Func<TMessage, bool> f)
+        {
+            return () =>
+            {
+                var msg = Maybe.Nothing<TMessage>();
+                lock (_inbox)
+                {
+                    while (msg.IsNothing())
+                    {
+                        Monitor.Wait(_inbox);
+                        msg = Find(f);
+                    }
+                }
+
+                return msg.ValueOr(()=>{throw new Exception("shouldn't be nothing");});
+            };
+        }
+
+        public Maybe<TMessage> Find(Func<TMessage, bool> f)
+        {
+            var fmsg = Maybe.Nothing<TMessage>();
+            lock (_inbox)
+            {
+                var msgs = _inbox.ToList();
+                _inbox.Clear();
+                foreach (var msg in msgs)
+                {
+                    if (fmsg.IsNothing() && f(msg))
+                    {
+                        fmsg = Maybe.Just(msg);
+                    }
+                    else
+                    {
+                        _inbox.Enqueue(msg);
+                    }
+                }
+                
+            }
+            return fmsg;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Wooga.Lambda.Control.Concurrent
 
     public interface AsyncComputationQueue
     {
-        Unit Enqueue<T>(Async<T> a);
+        Unit Enqueue(Async<Unit> a);
     }
 
     internal sealed class AsyncEventHandle<T>
@@ -147,7 +147,7 @@ namespace Wooga.Lambda.Control.Concurrent
             var empty = new ImmutableList<T>();
             return () =>
             {
-                var num = (uint) Math.Min(32, ms.Count); // 64 is maximum here
+                var num = (uint) Math.Min(8, ms.Count); // 64 is maximum here
                 if (num == 0)
                 {
                     return empty;
@@ -201,8 +201,7 @@ namespace Wooga.Lambda.Control.Concurrent
         /// <returns></returns>
         public static Unit Start<T>(this Async<T> m)
         {
-            ThreadPool.QueueUserWorkItem(_ => m.RunSynchronously());
-            return Unit.Default;
+            return ComputationQueue.Enqueue(m.Ignore());
         }
         
         /// <summary>
@@ -258,5 +257,7 @@ namespace Wooga.Lambda.Control.Concurrent
         {
             return () => Either.Catch<T>(m.RunSynchronously);
         }
+
+        public static AsyncComputationQueue ComputationQueue = new ThreadComputationQueue(16);
     }
 }

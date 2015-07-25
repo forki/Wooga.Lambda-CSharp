@@ -1,18 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
+using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Concurrent
 {
     public sealed class ThreadComputationQueue : AsyncComputationQueue
     {
-        public Unit Enqueue<T>(Async<T> a)
+        private readonly Agent<AgentMsg, Unit> Agent;
+        private readonly uint ConcurrentThreads;
+
+        public ThreadComputationQueue(uint concurrentThreads)
         {
-            new Thread(() => a.RunSynchronously()).Start();
-            return Unit.Default;
+            ConcurrentThreads = concurrentThreads;
+            Agent = Agent<AgentMsg, Unit>.Start((uint)0,
+                (inbox, threads) =>
+                {
+                    var msg = threads < ConcurrentThreads
+                        ? inbox.Receive().RunSynchronously()
+                        : inbox.Scan(m => m is CompletedComputation).RunSynchronously();
+
+                    return Pattern<uint>
+                            .Match(msg)
+                            .Case<EnqueueComputation>(c =>
+                            {
+                                new Thread(()=> 
+                                    c.Computation
+                                    .Catch()
+                                    .Then(() => Agent.Post(new CompletedComputation()))
+                                    .RunSynchronously())
+                                .Start();
+                                
+                                return threads + 1;
+                            })
+                            .Case<CompletedComputation>(_=>threads-1)
+                            .Default(threads)
+                            .Run();
+                });
+        }
+
+        public Unit Enqueue(Async<Unit> a)
+        {
+            return Agent.Post(new EnqueueComputation(a));
+        }
+
+        private interface AgentMsg
+        {
+        }
+
+        private struct EnqueueComputation : AgentMsg
+        {
+            public readonly Async<Unit> Computation;
+
+            public EnqueueComputation(Async<Unit> computation)
+            {
+                Computation = computation;
+            }
+        }
+
+        private struct CompletedComputation : AgentMsg
+        {
         }
     }
+
+    
 }
