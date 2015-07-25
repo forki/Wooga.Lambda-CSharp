@@ -56,6 +56,8 @@ namespace Wooga.Lambda.Control.Concurrent
 
     public static class Async
     {
+        public static AsyncComputationQueue ComputationQueue = new ThreadComputationQueue(16);
+
         // Monad functions
 
         /// <summary>
@@ -107,7 +109,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         // Functor functions
-        
+
         /// <summary>
         /// Applies f to the result of m
         /// </summary>
@@ -203,7 +205,7 @@ namespace Wooga.Lambda.Control.Concurrent
         {
             return ComputationQueue.Enqueue(m.Ignore());
         }
-        
+
         /// <summary>
         /// Starts the asynchronous computation in the thread pool. Await result on AsyncReplyChannel.
         /// </summary>
@@ -221,7 +223,7 @@ namespace Wooga.Lambda.Control.Concurrent
             }).Start();
             return Unit.Default;
         }
-        
+
         /// <summary>
         /// Starts a child computation. This allows multiple asynchronous computations to be executed simultaneously.
         /// </summary>
@@ -257,7 +259,5 @@ namespace Wooga.Lambda.Control.Concurrent
         {
             return () => Either.Catch<T>(m.RunSynchronously);
         }
-
-        public static AsyncComputationQueue ComputationQueue = new ThreadComputationQueue(16);
     }
 }

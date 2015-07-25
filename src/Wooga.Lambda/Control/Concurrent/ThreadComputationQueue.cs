@@ -22,13 +22,13 @@ namespace Wooga.Lambda.Control.Concurrent
                             .Match(msg)
                             .Case<EnqueueComputation>(c =>
                             {
-                                new Thread(()=> 
+                                var thread = new Thread(() =>
                                     c.Computation
                                     .Catch()
                                     .Then(() => Agent.Post(new CompletedComputation()))
-                                    .RunSynchronously())
-                                .Start();
-                                
+                                    .RunSynchronously());
+                                thread.Start();
+
                                 return threads + 1;
                             })
                             .Case<CompletedComputation>(_=>threads-1)
@@ -61,5 +61,5 @@ namespace Wooga.Lambda.Control.Concurrent
         }
     }
 
-    
+
 }
