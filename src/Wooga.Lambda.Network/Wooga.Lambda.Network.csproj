@@ -42,6 +42,9 @@
     <Compile Include="HttpRequest.cs" />
     <Compile Include="HttpResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Restful\Protocol.cs" />
+    <Compile Include="Restful\Resource.cs" />
+    <Compile Include="Restful\Resources.cs" />
     <Compile Include="Transport\WebRequestTransport.cs" />
   </ItemGroup>
   <ItemGroup>
