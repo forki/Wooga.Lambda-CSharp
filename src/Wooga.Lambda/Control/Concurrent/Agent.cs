@@ -7,6 +7,53 @@ using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Concurrent
 {
+    public static class ListExtensions
+    {
+        public static TE Dequeue<TE>(this List<TE> l)
+        {
+            if (l.Count == 0)
+            {
+                throw new InvalidOperationException("trying to dequeue from an empty List");
+            }
+            TE r = l[0];
+            l.RemoveAt(0);
+            return r;
+        }
+
+        public static Maybe<TE> PopElement<TE>(this List<TE> l, Func<TE, Boolean> p)
+        {
+            if (l.Count > 0 && p(l[l.Count - 1]))
+            {
+                var i = l.Count - 1;
+                TE r = l[i];
+                l.RemoveAt(i);
+                return Maybe.Just<TE>(r);
+            }
+            return Maybe.Nothing<TE>();
+        }
+
+        public static Maybe<TE> DequeueFirst<TE>(this List<TE> l,Func<TE, Boolean> p)
+        {
+            for (int i = 0; i < l.Count; i++)
+            {
+                if (p(l[i]))
+                {
+                    TE r = l[i];
+                    l.RemoveAt(i);
+                    return Maybe.Just<TE>(r);
+                }    
+            }
+            return Maybe.Nothing<TE>();
+        }
+
+        public static Unit Enqueue<TE>(this List<TE> l, TE e)
+        {
+            l.Add(e);
+            return Unit.Default;
+        }
+    }
+    
+
     /// <summary>
     ///     Actor/Agent implementation similar to Control.Async.MailboxProcessor in F#
     /// </summary>
@@ -14,9 +61,9 @@ namespace Wooga.Lambda.Control.Concurrent
     /// <typeparam name="TReply">The type of the response produced by the agent.</typeparam>
     public class Agent<TMessage, TReply>
     {
-        private readonly Queue<TMessage> _inbox = new Queue<TMessage>();
+        private readonly List<TMessage> _inbox = new List<TMessage>();
         private volatile bool _shouldCancel;
-
+        private readonly Object _receiveLock = new Object();
         /// <summary>
         ///     Gets a value indicating whether this agent is running.
         /// </summary>
@@ -103,6 +150,8 @@ namespace Wooga.Lambda.Control.Concurrent
             };
         }
 
+        
+
         /// <summary>
         ///     Posts a message to the message queue of the Agent, asynchronously.
         /// </summary>
@@ -152,13 +201,16 @@ namespace Wooga.Lambda.Control.Concurrent
         {
             return () =>
             {
-                lock (_inbox)
+                lock (_receiveLock)
                 {
-                    while (_inbox.Count == 0)
+                    lock (_inbox)
                     {
-                        Monitor.Wait(_inbox);
+                        while (_inbox.Count == 0)
+                        {
+                            Monitor.Wait(_inbox);
+                        }
+                        return _inbox.Dequeue();
                     }
-                    return _inbox.Dequeue();
                 }
             };
         }
@@ -167,41 +219,21 @@ namespace Wooga.Lambda.Control.Concurrent
         {
             return () =>
             {
-                var msg = Maybe.Nothing<TMessage>();
-                lock (_inbox)
+                lock (_receiveLock)
                 {
-                    while (msg.IsNothing())
+                    lock (_inbox)
                     {
-                        Monitor.Wait(_inbox);
-                        msg = Find(f);
-                    }
-                }
-
-                return msg.ValueOr(()=>{throw new Exception("shouldn't be nothing");});
-            };
-        }
-
-        public Maybe<TMessage> Find(Func<TMessage, bool> f)
-        {
-            var fmsg = Maybe.Nothing<TMessage>();
-            lock (_inbox)
-            {
-                var msgs = _inbox.ToList();
-                _inbox.Clear();
-                foreach (var msg in msgs)
-                {
-                    if (fmsg.IsNothing() && f(msg))
-                    {
-                        fmsg = Maybe.Just(msg);
-                    }
-                    else
-                    {
-                        _inbox.Enqueue(msg);
+                        Maybe<TMessage> msg = _inbox.DequeueFirst(f); 
+                        while (msg.IsNothing())
+                        {
+                            Monitor.Wait(_inbox);
+                            msg = _inbox.PopElement(f); 
+                        }
+                        return msg.ValueOr(() => { throw new Exception("shouldn't be nothing"); });
                     }
                 }
                 
-            }
-            return fmsg;
+            };
         }
     }
 }
