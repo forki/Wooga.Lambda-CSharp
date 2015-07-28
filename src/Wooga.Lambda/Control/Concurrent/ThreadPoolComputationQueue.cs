@@ -8,7 +8,16 @@ namespace Wooga.Lambda.Control.Concurrent
     {
         public Unit Enqueue(Async<Unit> a)
         {
-            ThreadPool.QueueUserWorkItem(_=>a.RunSynchronously());
+            ThreadPool.QueueUserWorkItem(_=> {
+                    try
+                    {
+                        a.RunSynchronously();
+                    }catch(Exception e)
+                    {
+                        Async.DispatchException(e);
+                    }
+                
+                });
             return Unit.Default;
         }
     }

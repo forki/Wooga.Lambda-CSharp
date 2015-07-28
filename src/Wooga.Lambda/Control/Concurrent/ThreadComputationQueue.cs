@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
+using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Concurrent
@@ -22,13 +24,20 @@ namespace Wooga.Lambda.Control.Concurrent
                             .Match(msg)
                             .Case<EnqueueComputation>(c =>
                             {
-                                var thread = new Thread(() =>
-                                    c.Computation
-                                    .Catch()
-                                    .Then(() => Agent.Post(new CompletedComputation()))
-                                    .RunSynchronously());
-                                thread.Start();
-
+                                new Thread(() =>
+                                {
+                                    try
+                                    {
+                                        c.Computation.RunSynchronously();
+                                        Agent.Post(new CompletedComputation());
+                                    }
+                                    catch (Exception exception)
+                                    {
+                                        Agent.Post(new CompletedComputation());
+                                        Async.DispatchException(exception); 
+                                    }
+                                }).Start();
+                                
                                 return threads + 1;
                             })
                             .Case<CompletedComputation>(_=>threads-1)
@@ -60,6 +69,4 @@ namespace Wooga.Lambda.Control.Concurrent
         {
         }
     }
-
-
 }

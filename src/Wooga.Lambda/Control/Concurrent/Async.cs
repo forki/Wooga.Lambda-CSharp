@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom;
 using System.Threading;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
@@ -57,6 +58,9 @@ namespace Wooga.Lambda.Control.Concurrent
     public static class Async
     {
         public static AsyncComputationQueue ComputationQueue = new ThreadComputationQueue(16);
+
+        public delegate void AsyncComputationExceptionEventHandler(Exception e);
+        public static event AsyncComputationExceptionEventHandler AsyncComputationExceptionEvent;
 
         // Monad functions
 
@@ -258,6 +262,20 @@ namespace Wooga.Lambda.Control.Concurrent
         public static Async<Either<T,Exception>> Catch<T>(this Async<T> m)
         {
             return () => Either.Catch<T>(m.RunSynchronously);
+        }
+
+        public static Unit DispatchException(Exception e)
+        {
+            if (AsyncComputationExceptionEvent != null)
+            {
+                AsyncComputationExceptionEvent(e);
+            }
+            else
+            {
+                throw e;
+            }
+
+            return Unit.Default;
         }
     }
 }
