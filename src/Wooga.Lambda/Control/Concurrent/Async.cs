@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom;
 using System.Threading;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
@@ -11,7 +12,12 @@ namespace Wooga.Lambda.Control.Concurrent
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     public delegate T Async<T>();
-    
+
+    public interface AsyncComputationQueue
+    {
+        Unit Enqueue(Async<Unit> a);
+    }
+
     internal sealed class AsyncEventHandle<T>
     {
         public readonly ManualResetEvent DoneEvent = new ManualResetEvent(false);
@@ -51,6 +57,11 @@ namespace Wooga.Lambda.Control.Concurrent
 
     public static class Async
     {
+        public static AsyncComputationQueue ComputationQueue = new ThreadComputationQueue(16);
+
+        public delegate void AsyncComputationExceptionEventHandler(Exception e);
+        public static event AsyncComputationExceptionEventHandler AsyncComputationExceptionEvent;
+
         // Monad functions
 
         /// <summary>
@@ -102,7 +113,7 @@ namespace Wooga.Lambda.Control.Concurrent
         }
 
         // Functor functions
-        
+
         /// <summary>
         /// Applies f to the result of m
         /// </summary>
@@ -142,7 +153,7 @@ namespace Wooga.Lambda.Control.Concurrent
             var empty = new ImmutableList<T>();
             return () =>
             {
-                var num = (uint) Math.Min(32, ms.Count); // 64 is maximum here
+                var num = (uint) Math.Min(8, ms.Count); // 64 is maximum here
                 if (num == 0)
                 {
                     return empty;
@@ -196,10 +207,9 @@ namespace Wooga.Lambda.Control.Concurrent
         /// <returns></returns>
         public static Unit Start<T>(this Async<T> m)
         {
-            ThreadPool.QueueUserWorkItem(_ => m.RunSynchronously());
-            return Unit.Default;
+            return ComputationQueue.Enqueue(m.Ignore());
         }
-        
+
         /// <summary>
         /// Starts the asynchronous computation in the thread pool. Await result on AsyncReplyChannel.
         /// </summary>
@@ -217,7 +227,7 @@ namespace Wooga.Lambda.Control.Concurrent
             }).Start();
             return Unit.Default;
         }
-        
+
         /// <summary>
         /// Starts a child computation. This allows multiple asynchronous computations to be executed simultaneously.
         /// </summary>
@@ -252,6 +262,20 @@ namespace Wooga.Lambda.Control.Concurrent
         public static Async<Either<T,Exception>> Catch<T>(this Async<T> m)
         {
             return () => Either.Catch<T>(m.RunSynchronously);
+        }
+
+        public static Unit DispatchException(Exception e)
+        {
+            if (AsyncComputationExceptionEvent != null)
+            {
+                AsyncComputationExceptionEvent(e);
+            }
+            else
+            {
+                throw e;
+            }
+
+            return Unit.Default;
         }
     }
 }

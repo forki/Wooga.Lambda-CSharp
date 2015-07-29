@@ -41,6 +41,8 @@
   <ItemGroup>
     <Compile Include="Control\Concurrent\Agent.cs" />
     <Compile Include="Control\Concurrent\Async.cs" />
+    <Compile Include="Control\Concurrent\ThreadPoolComputationQueue.cs" />
+    <Compile Include="Control\Concurrent\ThreadComputationQueue.cs" />
     <Compile Include="Control\Pattern.cs" />
     <Compile Include="Control\Monad\Either.cs" />
     <Compile Include="Control\Monad\Maybe.cs" />
