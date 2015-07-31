@@ -97,7 +97,18 @@ namespace Wooga.Lambda.Control.Concurrent
         public static Agent<TMessage, TReply> Start<TState>(TState state, Func<Agent<TMessage, TReply>, TState, TState> body)
         {
             var agent = new Agent<TMessage, TReply>();
-            new Thread(_ => Watchdog(agent, body, state).RunSynchronously()).Start();
+            new Thread(_ =>
+            {
+                try
+                {
+                    Watchdog(agent, body, state).RunSynchronously();
+                }
+                catch (Exception e)
+                {
+                    Async.DispatchException(e);
+                }
+                
+            }).Start();
             return agent;
         }
 
@@ -162,8 +173,16 @@ namespace Wooga.Lambda.Control.Concurrent
             {
                 lock (_inbox)
                 {
-                    _inbox.Enqueue(msg);
-                    Monitor.Pulse(_inbox);
+                    try
+                    {
+                        _inbox.Enqueue(msg);
+                        Monitor.Pulse(_inbox);
+                    }
+                    catch (Exception e)
+                    {
+                        Async.DispatchException(e);
+                    }
+                    
                 }
             })
             .Start();
