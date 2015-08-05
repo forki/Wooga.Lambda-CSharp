@@ -1,3 +1,7 @@
+#### 0.6.3 - July 24 2015
+* [Control] Custom threading implementations for Async
+* [Control] Error handling of Async computations
+
 #### 0.6.2 - July 24 2015
 * [Storage] Fixes LocalFileSystem where Files ended up as Dirs and absoulte paths weren't concatenated properly
 
