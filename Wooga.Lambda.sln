@@ -39,28 +39,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda", "src\Wooga.L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Network", "src\Wooga.Lambda.Network\Wooga.Lambda.Network.csproj", "{2247283E-0466-40AC-9D05-B8972C8451BF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unity3d", "unity3d", "{F610FD27-9335-44F1-A478-AEEF5D6FE036}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wooga.Lambda.Unity3D.Source", "Wooga.Lambda.Unity3D.Source", "{B87CF6E6-0B48-4C2E-BE19-DDCDDEDB3393}"
-	ProjectSection(SolutionItems) = preProject
-		src\Wooga.Lambda.Unity3D.Source\paket.template = src\Wooga.Lambda.Unity3D.Source\paket.template
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wooga.Lambda.Storage.Unity3D.Source", "Wooga.Lambda.Storage.Unity3D.Source", "{75137CDF-FBDA-45E6-835C-4F4F38AE395A}"
-	ProjectSection(SolutionItems) = preProject
-		src\Wooga.Lambda.Storage.Unity3D.Source\paket.template = src\Wooga.Lambda.Storage.Unity3D.Source\paket.template
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wooga.Lambda.Logging.Unity3D.Source", "Wooga.Lambda.Logging.Unity3D.Source", "{DD381F18-597A-486B-9D44-CCA1E9FBE6C1}"
-	ProjectSection(SolutionItems) = preProject
-		src\Wooga.Lambda.Logging.Unity3D.Source\paket.template = src\Wooga.Lambda.Logging.Unity3D.Source\paket.template
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wooga.Lambda.Network.Unity3D.Source", "Wooga.Lambda.Network.Unity3D.Source", "{40C3D7A7-A94A-4925-BA28-6739F0E6F339}"
-	ProjectSection(SolutionItems) = preProject
-		src\Wooga.Lambda.Network.Unity3D.Source\paket.template = src\Wooga.Lambda.Network.Unity3D.Source\paket.template
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Parser", "src\Wooga.Lambda.Parser\Wooga.Lambda.Parser.csproj", "{DC9FE4FF-8E70-4525-8E2C-3AF0A78683EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Logging", "src\Wooga.Lambda.Logging\Wooga.Lambda.Logging.csproj", "{A07F2D08-5DB7-44E7-A33B-9BFDC1292272}"
@@ -110,9 +88,5 @@ Global
 		{8E6D5255-776D-4B61-85F9-73C37AA1FB9A} = {A6A6AF7D-D6E3-442D-9B1E-58CC91879BE1}
 		{A4C35F19-C520-4912-8F3C-DE7E6324E6FE} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
 		{D651D213-21E5-4225-8E47-B44DF5D502A6} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
-		{B87CF6E6-0B48-4C2E-BE19-DDCDDEDB3393} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
-		{75137CDF-FBDA-45E6-835C-4F4F38AE395A} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
-		{DD381F18-597A-486B-9D44-CCA1E9FBE6C1} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
-		{40C3D7A7-A94A-4925-BA28-6739F0E6F339} = {F610FD27-9335-44F1-A478-AEEF5D6FE036}
 	EndGlobalSection
 EndGlobal

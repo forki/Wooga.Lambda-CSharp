@@ -9,6 +9,12 @@ namespace Wooga.Lambda.Control.Concurrent
 {
     internal static class ListAsQueue
     {
+        internal static Unit Enqueue<TE>(this List<TE> l, TE e)
+        {
+            l.Add(e);
+            return Unit.Default;
+        }
+
         internal static TE Dequeue<TE>(this List<TE> l)
         {
             if (l.Count == 0)
@@ -20,7 +26,7 @@ namespace Wooga.Lambda.Control.Concurrent
             return r;
         }
 
-        internal static Maybe<TE> PopElement<TE>(this List<TE> l, Func<TE, Boolean> p)
+        internal static Maybe<TE> DequeueLastWhen<TE>(this List<TE> l, Func<TE, Boolean> p)
         {
             if (l.Count > 0 && p(l[l.Count - 1]))
             {
@@ -32,7 +38,7 @@ namespace Wooga.Lambda.Control.Concurrent
             return Maybe.Nothing<TE>();
         }
 
-        internal static Maybe<TE> DequeueFirst<TE>(this List<TE> l,Func<TE, Boolean> p)
+        internal static Maybe<TE> DequeueFirstWhen<TE>(this List<TE> l,Func<TE, Boolean> p)
         {
             for (int i = 0; i < l.Count; i++)
             {
@@ -44,12 +50,6 @@ namespace Wooga.Lambda.Control.Concurrent
                 }    
             }
             return Maybe.Nothing<TE>();
-        }
-
-        internal static Unit Enqueue<TE>(this List<TE> l, TE e)
-        {
-            l.Add(e);
-            return Unit.Default;
         }
     }
     
@@ -242,11 +242,11 @@ namespace Wooga.Lambda.Control.Concurrent
                 {
                     lock (_inbox)
                     {
-                        Maybe<TMessage> msg = _inbox.DequeueFirst(f); 
+                        Maybe<TMessage> msg = _inbox.DequeueFirstWhen(f); 
                         while (msg.IsNothing())
                         {
                             Monitor.Wait(_inbox);
-                            msg = _inbox.PopElement(f); 
+                            msg = _inbox.DequeueLastWhen(f); 
                         }
                         return msg.ValueOr(() => { throw new Exception("shouldn't be nothing"); });
                     }
