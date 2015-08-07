@@ -7,9 +7,9 @@ using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Concurrent
 {
-    public static class ListExtensions
+    internal static class ListAsQueue
     {
-        public static TE Dequeue<TE>(this List<TE> l)
+        internal static TE Dequeue<TE>(this List<TE> l)
         {
             if (l.Count == 0)
             {
@@ -20,7 +20,7 @@ namespace Wooga.Lambda.Control.Concurrent
             return r;
         }
 
-        public static Maybe<TE> PopElement<TE>(this List<TE> l, Func<TE, Boolean> p)
+        internal static Maybe<TE> PopElement<TE>(this List<TE> l, Func<TE, Boolean> p)
         {
             if (l.Count > 0 && p(l[l.Count - 1]))
             {
@@ -32,7 +32,7 @@ namespace Wooga.Lambda.Control.Concurrent
             return Maybe.Nothing<TE>();
         }
 
-        public static Maybe<TE> DequeueFirst<TE>(this List<TE> l,Func<TE, Boolean> p)
+        internal static Maybe<TE> DequeueFirst<TE>(this List<TE> l,Func<TE, Boolean> p)
         {
             for (int i = 0; i < l.Count; i++)
             {
@@ -46,7 +46,7 @@ namespace Wooga.Lambda.Control.Concurrent
             return Maybe.Nothing<TE>();
         }
 
-        public static Unit Enqueue<TE>(this List<TE> l, TE e)
+        internal static Unit Enqueue<TE>(this List<TE> l, TE e)
         {
             l.Add(e);
             return Unit.Default;
