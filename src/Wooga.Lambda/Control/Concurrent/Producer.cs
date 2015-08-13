@@ -25,7 +25,7 @@ namespace Wooga.Lambda.Control.Concurrent
                     var x = producer.Consume(consumer).RunSynchronously();
                     if (x.IsJust())
                     {
-                        consumed.Add(x.ValueOr(default(TConsumed)));
+                        consumed = consumed.Add(x.ValueOr(default(TConsumed)));
                     }
                     else
                     {

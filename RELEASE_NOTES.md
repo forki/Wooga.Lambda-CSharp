@@ -1,3 +1,6 @@
+#### 0.6.6 - Aug 13 2015
+* [Control] Async producer/consumer consume many accumulates list of products
+
 #### 0.6.5 - Aug 13 2015
 * [Control] Async producer/consumer pattern types added
 
