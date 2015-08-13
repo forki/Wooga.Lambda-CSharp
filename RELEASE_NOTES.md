@@ -1,3 +1,6 @@
+#### 0.6.5 - Aug 13 2015
+* [Control] Async producer/consumer pattern types added
+
 #### 0.6.4 - Aug 13 2015
 * [Control] Async computations are run on ThreadPool by default
 
