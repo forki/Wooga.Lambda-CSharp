@@ -1,3 +1,6 @@
+#### 0.6.4 - Aug 13 2015
+* [Control] Async computations are run on ThreadPool by default
+
 #### 0.6.3 - July 24 2015
 * [Control] Custom threading implementations for Async
 * [Control] Error handling of Async computations

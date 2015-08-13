@@ -47,7 +47,7 @@ namespace Wooga.Lambda.Control.Concurrent
                     TE r = l[i];
                     l.RemoveAt(i);
                     return Maybe.Just<TE>(r);
-                }    
+                }
             }
             return Maybe.Nothing<TE>();
         }
@@ -107,7 +107,7 @@ namespace Wooga.Lambda.Control.Concurrent
                 {
                     Async.DispatchException(e);
                 }
-                
+
             }).Start();
             return agent;
         }
@@ -161,7 +161,7 @@ namespace Wooga.Lambda.Control.Concurrent
             };
         }
 
-        
+
 
         /// <summary>
         ///     Posts a message to the message queue of the Agent, asynchronously.
@@ -182,7 +182,7 @@ namespace Wooga.Lambda.Control.Concurrent
                     {
                         Async.DispatchException(e);
                     }
-                    
+
                 }
             })
             .Start();
@@ -242,16 +242,16 @@ namespace Wooga.Lambda.Control.Concurrent
                 {
                     lock (_inbox)
                     {
-                        Maybe<TMessage> msg = _inbox.DequeueFirstWhen(f); 
+                        Maybe<TMessage> msg = _inbox.DequeueFirstWhen(f);
                         while (msg.IsNothing())
                         {
                             Monitor.Wait(_inbox);
-                            msg = _inbox.DequeueLastWhen(f); 
+                            msg = _inbox.DequeueLastWhen(f);
                         }
                         return msg.ValueOr(() => { throw new Exception("shouldn't be nothing"); });
                     }
                 }
-                
+
             };
         }
     }

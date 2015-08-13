@@ -57,7 +57,7 @@ namespace Wooga.Lambda.Control.Concurrent
 
     public static class Async
     {
-        public static AsyncComputationQueue ComputationQueue = new ThreadComputationQueue(16);
+        public static AsyncComputationQueue ComputationQueue = new ThreadPoolComputationQueue();
 
         public delegate void AsyncComputationExceptionEventHandler(Exception e);
         public static event AsyncComputationExceptionEventHandler AsyncComputationExceptionEvent;
