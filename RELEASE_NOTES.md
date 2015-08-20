@@ -1,3 +1,6 @@
+#### 0.6.7-prerelease - Aug 20 2015
+* [Control] Async consumer returns Maybe<TConsumed>
+
 #### 0.6.6 - Aug 13 2015
 * [Control] Async producer/consumer consume many accumulates list of products
 
