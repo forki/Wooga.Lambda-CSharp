@@ -3,8 +3,20 @@ using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Concurrent
 {
-    public delegate Async<TConsumed> Consumer<TProduct, TConsumed>(TProduct product);
+    /// <summary>
+    /// A method that consumes a produced value asynchronously 
+    /// </summary>
+    /// <typeparam name="TProduct">type of produced value</typeparam>
+    /// <typeparam name="TConsumed">type of consumed value</typeparam>
+    /// <param name="product">produced value</param>
+    /// <returns>Returns a maybe indicating success of consumption</returns>
+    public delegate Async<Maybe<TConsumed>> Consumer<TProduct, TConsumed>(TProduct product);
 
+    /// <summary>
+    /// The producer provides a way to turn input into a product and handles the consumption of them
+    /// </summary>
+    /// <typeparam name="TInput"></typeparam>
+    /// <typeparam name="TProduct"></typeparam>
     public interface Producer<TInput, TProduct>
     {
         Async<Unit> Produce(TInput input);
