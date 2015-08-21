@@ -5,11 +5,11 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitleAttribute("Wooga.Lambda.Logging")]
 [assembly: AssemblyProductAttribute("Wooga.Lambda")]
 [assembly: AssemblyDescriptionAttribute("Functional primitives for Unity3D")]
-[assembly: AssemblyVersionAttribute("0.6.7")]
-[assembly: AssemblyFileVersionAttribute("0.6.7")]
+[assembly: AssemblyVersionAttribute("0.6.8")]
+[assembly: AssemblyFileVersionAttribute("0.6.8")]
 [assembly: InternalsVisibleToAttribute("Wooga.Lambda.Logging.Tests")]
 namespace System {
     internal static class AssemblyVersionInformation {
-        internal const string Version = "0.6.7";
+        internal const string Version = "0.6.8";
     }
 }
