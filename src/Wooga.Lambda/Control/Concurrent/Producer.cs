@@ -1,4 +1,5 @@
-﻿using Wooga.Lambda.Control.Monad;
+﻿using System.Collections.Generic;
+using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Control.Concurrent
@@ -25,7 +26,7 @@ namespace Wooga.Lambda.Control.Concurrent
 
     public static class Producer
     {
-        public static Async<ImmutableList<TConsumed>> ConsumeMany<TInput, TProduct, TConsumed>(
+        public static Async<IEnumerable<TConsumed>> Map<TInput, TProduct, TConsumed>(
             this Producer<TInput, TProduct> producer, Consumer<TProduct, TConsumed> consumer)
         {
             return () =>
