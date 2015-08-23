@@ -1,6 +1,8 @@
-﻿namespace Wooga.Lambda.Network
+﻿using System;
+
+namespace Wooga.Lambda.Network
 {
-    public sealed class HttpMethod
+    public sealed class HttpMethod : IEquatable<HttpMethod>
     {
         public static readonly HttpMethod Connect = new HttpMethod("CONNECT");
         public static readonly HttpMethod Get = new HttpMethod("GET");
@@ -14,6 +16,11 @@
         private HttpMethod(string name)
         {
             Name = name;
+        }
+
+        public bool Equals(HttpMethod other)
+        {
+            return Name.Equals(other.Name);
         }
 
         public override string ToString()

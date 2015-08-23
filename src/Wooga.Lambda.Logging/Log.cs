@@ -25,6 +25,7 @@ namespace Wooga.Lambda.Logging
         }   
 
         public static readonly Log Shared = new Log();
+
         private readonly Agent<AgentMsg, Unit> _agent;
 
         private Log()

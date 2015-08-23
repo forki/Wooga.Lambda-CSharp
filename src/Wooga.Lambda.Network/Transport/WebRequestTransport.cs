@@ -7,7 +7,7 @@ using Wooga.Lambda.Control;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
-using Headers = System.Collections.Immutable.ImmutableList<Wooga.Lambda.Network.HttpHeader>;
+using Headers = System.Collections.Immutable.ImmutableDictionary<string,Wooga.Lambda.Network.HttpHeader>;
 using Body = System.Collections.Generic.IEnumerable<byte>;
 
 namespace Wooga.Lambda.Network.Transport
@@ -74,7 +74,7 @@ namespace Wooga.Lambda.Network.Transport
 
         private static HttpWebRequest AddHeaders(Headers self, HttpWebRequest request)
         {
-            return self.Aggregate(request,(headers, header) =>
+            return self.Values.Aggregate(request,(headers, header) =>
             {
                 Pattern<Unit>
                 .Match(header.Key)
@@ -95,7 +95,7 @@ namespace Wooga.Lambda.Network.Transport
 
         private static Headers OfWebHeaders(WebHeaderCollection webHeaders)
         {
-            return webHeaders.AllKeys.Aggregate(Headers.Empty,(headers, key) => headers.Add(new HttpHeader(key, webHeaders.Get(key))));
+            return webHeaders.AllKeys.Aggregate(Headers.Empty,(headers, key) => headers.Add(key,new HttpHeader(key, webHeaders.Get(key))));
         }
     }
 }
