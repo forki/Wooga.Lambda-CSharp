@@ -20,8 +20,6 @@ NUGET
     Octokit (0.14.0)
       Microsoft.Net.Http
     SourceLink.Fake (1.0.0)
-  remote: ../../devboy/Substance/bin
-  specs:
     Substance (0.0.9-beta)
     Substance.Collections (0.0.9-beta)
       Substance (>= 0.0.9-beta)

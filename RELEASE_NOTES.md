@@ -1,3 +1,7 @@
+#### 1.0.0-prerelease - Aug 23 2015
+* [Data] Removed Tuple & List
+* [Data] Substance provides ported datastructures from corefx 
+
 #### 0.6.8 - September 2 2015
 * [Control] Producer.ConsumeMany is now Produer.Map
 * [Control] Async consumer returns Maybe<TConsumed>
