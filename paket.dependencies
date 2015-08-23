@@ -1,5 +1,4 @@
 source https://nuget.org/api/v2
-source ../../devboy/Substance/bin
 
 nuget FSharp.Formatting
 nuget NUnit

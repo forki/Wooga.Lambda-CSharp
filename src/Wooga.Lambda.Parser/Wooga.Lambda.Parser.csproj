@@ -31,9 +31,6 @@
     <DocumentationFile>bin\Release\Wooga.Lambda.Parser.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Core" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="CharStream.cs" />
     <Compile Include="Combinators\Chars.cs" />
     <Compile Include="Combinators\Common.cs" />

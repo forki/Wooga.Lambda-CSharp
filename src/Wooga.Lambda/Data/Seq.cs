@@ -338,16 +338,13 @@ namespace Wooga.Lambda.Data
         public static IEnumerable<Tuple<T, T2,T3>> Zip3<T, T2, T3>(this IEnumerable<T> x, IEnumerable<T2> y, IEnumerable<T3> z)
         {
             var aa = x;
-                var bb = y;
-                var cc = z;
+            var bb = y;
+            var cc = z;
             while (true)
             {
                 var a = aa.TryFind(_ => true);
                 var b = bb.TryFind(_ => true);
                 var c = cc.TryFind(_ => true);
-                Console.WriteLine("a:{0}", a);
-                Console.WriteLine("b:{0}", b);
-                Console.WriteLine("c:{0}", c);
                 var r = c.Bind(cv => b.Bind(bv => a.Map(av => Tuple.Create(av, bv, cv))));
                 if (r.IsJust())
                 {
