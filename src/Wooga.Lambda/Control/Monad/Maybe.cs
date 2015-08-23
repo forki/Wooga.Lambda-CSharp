@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Wooga.Lambda.Control.Monad
 {
@@ -6,8 +9,10 @@ namespace Wooga.Lambda.Control.Monad
     /// The Maybe type encapsulates an optional value. A value of type Maybe 'T either contains a value of type 'T, or it is empty.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public struct Maybe<T>
+    public struct Maybe<T> : IStructuralEquatable, IStructuralComparable, IComparable
     {
+        internal static readonly Maybe<T> Nothing = new Maybe<T>(default(T), false);
+
         internal readonly T Value;
         internal readonly bool HasValue;
 
@@ -16,6 +21,50 @@ namespace Wooga.Lambda.Control.Monad
             Value = value;
             HasValue = hasValue;
         }
+
+        public override Boolean Equals(Object obj)
+        {
+            return ((IStructuralEquatable)this).Equals(obj, EqualityComparer<Object>.Default);
+        }
+
+        Boolean IStructuralEquatable.Equals(Object other, IEqualityComparer comparer)
+        {
+            if (other is Maybe<T> && HasValue == ((Maybe<T>)other).HasValue)
+            { 
+                return comparer.Equals(Value, ((Maybe<T>)other).Value);
+            }
+            return false;
+        }
+
+        Int32 IComparable.CompareTo(Object obj)
+        {
+            return ((IStructuralComparable)this).CompareTo(obj, Comparer<Object>.Default);
+        }
+
+        Int32 IStructuralComparable.CompareTo(Object other, IComparer comparer)
+        {
+            if (other == null) return 1;
+            
+            if (other is Maybe<T> && HasValue == ((Maybe<T>)other).HasValue)
+            {
+                return comparer.Compare(Value, ((Maybe<T>) other).Value);
+            }
+            else 
+            {
+                throw new ArgumentException();
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return ((IStructuralEquatable)this).GetHashCode(EqualityComparer<Object>.Default);
+        }
+
+        Int32 IStructuralEquatable.GetHashCode(IEqualityComparer comparer)
+        {
+            return comparer.GetHashCode(Value);
+        }
+
     }
 
     public static class Maybe
@@ -30,7 +79,7 @@ namespace Wooga.Lambda.Control.Monad
         /// <returns></returns>
         public static Maybe<T> Return<T>(T x)
         {
-            return x == null ? new Maybe<T>(default(T), false) : new Maybe<T>(x, true);
+            return x == null ? Maybe<T>.Nothing : new Maybe<T>(x, true);
         }
 
         /// <summary>
@@ -94,7 +143,7 @@ namespace Wooga.Lambda.Control.Monad
         /// <returns></returns>
         public static Maybe<T> Nothing<T>()
         {
-            return new Maybe<T>(default(T),false);
+            return Maybe<T>.Nothing;
         }
 
         /// <summary>
