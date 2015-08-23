@@ -47,6 +47,7 @@
     <Compile Include="Control\Monad\Either.cs" />
     <Compile Include="Control\Monad\Maybe.cs" />
     <Compile Include="Control\Retry.cs" />
+    <Compile Include="Data\Seq.cs" />
     <Compile Include="Data\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
