@@ -5,7 +5,6 @@ using Wooga.Lambda.Data;
 using Headers = System.Collections.Immutable.ImmutableList<Wooga.Lambda.Network.HttpHeader>;
 using Body = System.Collections.Generic.IEnumerable<byte>;
 
-
 namespace Wooga.Lambda.Network
 {
     public static class HttpHeaders
@@ -27,7 +26,7 @@ namespace Wooga.Lambda.Network
 
         public static Headers ToHttpHeaders(this Dictionary<string, string> xs)
         {
-            return xs.Fold((h,k,v) => h.Add(new HttpHeader(k,v)), Headers.Empty);
+            return xs.Aggregate(Headers.Empty,(h,kv) => h.Add(new HttpHeader(kv.Key,kv.Value)));
         }
 
         public static Headers Unique(this Headers xs)
