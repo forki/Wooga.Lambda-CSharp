@@ -58,6 +58,92 @@ namespace Wooga.Lambda.Tests.Control.Monad
     }
 
     [TestFixture]
+    public class EitherEqualityTests
+    {
+        [Test]
+        public void SucccessesAreEqual()
+        {
+            var x = Either.Success<string, int>("a");
+            var y = Either.Success<string, int>("a");
+            Assert.AreEqual(x,y);
+            Assert.IsTrue(x.Equals(y));
+        }
+
+        [Test]
+        public void SucccessesAreNotEqual()
+        {
+            var x = Either.Success<string, int>("a");
+            var y = Either.Success<string, int>("b");
+            Assert.AreNotEqual(x, y);
+            Assert.IsFalse(x.Equals(y));
+        }
+
+        [Test]
+        public void FailuresAreEqual()
+        {
+            var x = Either.Failure<string, int>(1);
+            var y = Either.Failure<string, int>(1);
+            Assert.AreEqual(x, y);
+            Assert.IsTrue(x.Equals(y));
+        }
+
+        [Test]
+        public void FailuresAreNotEqual()
+        {
+            var x = Either.Failure<string, int>(1);
+            var y = Either.Failure<string, int>(2);
+            Assert.AreNotEqual(x, y);
+            Assert.IsFalse(x.Equals(y));
+        }
+
+        [Test]
+        public void SucccessesAndFailureAreNotEqual()
+        {
+            var x = Either.Success<string, int>("a");
+            var y = Either.Failure<string, string>("a");
+            Assert.AreNotEqual(x, y);
+            Assert.IsFalse(x.Equals(y));
+        }
+
+        [Test]
+        public void SuccessesAreEqualWithNestedStructs()
+        {
+            var x = Either.Success<Tuple<string,Tuple<string,int>>,Unit>(Tuple.Create("a", Tuple.Create("b", 1)));
+            var y = Either.Success<Tuple<string,Tuple<string,int>>,Unit>(Tuple.Create("a", Tuple.Create("b", 1)));
+            Assert.AreEqual(x, y);
+            Assert.IsTrue(x.Equals(y));
+        }
+
+        [Test]
+        public void SuccessesAreNotEqualWithNestedStructs()
+        {
+            var x = Either.Success<Tuple<string, Tuple<string, int>>, Unit>(Tuple.Create("a", Tuple.Create("b", 1)));
+            var y = Either.Success<Tuple<string, Tuple<string, int>>, Unit>(Tuple.Create("a", Tuple.Create("b", 2)));
+            Assert.AreNotEqual(x, y);
+            Assert.IsFalse(x.Equals(y));
+        }
+
+        [Test]
+        public void FailuresAreEqualWithNestedStructs()
+        {
+            var x = Either.Failure<Unit,Tuple<string, Tuple<string, int>>>(Tuple.Create("a", Tuple.Create("b", 1)));
+            var y = Either.Failure<Unit,Tuple<string, Tuple<string, int>>>(Tuple.Create("a", Tuple.Create("b", 1)));
+            Assert.AreEqual(x, y);
+            Assert.IsTrue(x.Equals(y));
+        }
+
+        [Test]
+        public void FailuresAreNotEqualWithNestedStructs()
+        {
+            var x = Either.Failure<Unit, Tuple<string, Tuple<string, int>>>(Tuple.Create("a", Tuple.Create("b", 1)));
+            var y = Either.Failure<Unit, Tuple<string, Tuple<string, int>>>(Tuple.Create("a", Tuple.Create("b", 2)));
+            Assert.AreNotEqual(x, y);
+            Assert.IsFalse(x.Equals(y));
+        }
+
+    }
+
+    [TestFixture]
     public class EitherTryTests
     {
         [Test]
