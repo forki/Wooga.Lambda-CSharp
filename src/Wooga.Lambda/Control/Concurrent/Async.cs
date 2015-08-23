@@ -1,5 +1,7 @@
 using System;
 using System.CodeDom;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
@@ -148,28 +150,28 @@ namespace Wooga.Lambda.Control.Concurrent
         /// <typeparam name="T"></typeparam>
         /// <param name="ms"></param>
         /// <returns></returns>
-        public static Async<ImmutableList<T>> Parallel<T>(this ImmutableList<Async<T>> ms)
+        public static Async<IEnumerable<T>> Parallel<T>(this IEnumerable<Async<T>> ls)
         {
-            var empty = new ImmutableList<T>();
             return () =>
             {
-                var num = (uint) Math.Min(8, ms.Count); // 64 is maximum here
+                var ms = System.Collections.Immutable.ImmutableList.ToImmutableList(ls);
+                var num = Math.Min(8, ms.Count); // 64 is maximum here
                 if (num == 0)
                 {
-                    return empty;
+                    return System.Collections.Immutable.ImmutableList<T>.Empty;
                 }
 
-                var xs = ms.Take(num);
-                var rest = ms.RemoveRange(0, (int)num);
-                var asyncs = xs.Map(x =>
+                var xs = ms.GetRange(0,num);
+                var rest = ms.RemoveRange(0, num);
+                var asyncs = xs.Select(x =>
                 {
                     var handle = new AsyncEventHandle<T>();
                     x.Bind<T, Unit>(v => () => handle.Complete(v)).Start();
                     return handle;
                 });
-                WaitHandle.WaitAll(asyncs.Map(ah => (WaitHandle) ah.DoneEvent).ToArray());
-                var ps = asyncs.Map(x => x.Result());
-                return empty.AddRange(rest.Count > 0 ? ps.AddRange(rest.Parallel().RunSynchronously()) : ps);
+                WaitHandle.WaitAll(asyncs.Select(ah => (WaitHandle) ah.DoneEvent).ToArray());
+                var ps = asyncs.Select(x => x.Result());
+                return System.Collections.Immutable.ImmutableList<T>.Empty.AddRange(ps).AddRange(rest.Parallel().RunSynchronously());
             };
         }
 

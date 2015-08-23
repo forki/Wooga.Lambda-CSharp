@@ -1,18 +1,20 @@
 ﻿using System.Net;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
+using Headers = System.Collections.Immutable.ImmutableList<Wooga.Lambda.Network.HttpHeader>;
+using Body = System.Collections.Generic.IEnumerable<byte>;
 
 namespace Wooga.Lambda.Network
 {
     public struct HttpResponse
     {
         public HttpResponse(HttpRequest httpRequest)
-            : this(httpRequest, ImmutableList.Empty<HttpHeader>(), 0, Maybe.Nothing<ImmutableList<byte>>())
+            : this(httpRequest, Headers.Empty, 0, Maybe.Nothing<Body>())
         {
         }
 
-        public HttpResponse(HttpRequest httpRequest, ImmutableList<HttpHeader> httpHeaders, HttpStatusCode statusCode,
-            Maybe<ImmutableList<byte>> body) : this()
+        public HttpResponse(HttpRequest httpRequest, Headers httpHeaders, HttpStatusCode statusCode,
+            Maybe<Body> body) : this()
         {
             HttpRequest = httpRequest;
             HttpHeaders = httpHeaders;
@@ -20,12 +22,12 @@ namespace Wooga.Lambda.Network
             Body = body;
         }
 
-        public Maybe<ImmutableList<byte>> Body { get; private set; }
-        public ImmutableList<HttpHeader> HttpHeaders { get; private set; }
+        public Maybe<Body> Body { get; private set; }
+        public Headers HttpHeaders { get; private set; }
         public HttpRequest HttpRequest { get; private set; }
         public HttpStatusCode StatusCode { get; private set; }
 
-        public HttpResponse With(ImmutableList<HttpHeader> httpHeaders)
+        public HttpResponse With(Headers httpHeaders)
         {
             return new HttpResponse(HttpRequest, HttpHeaders.AddRange(httpHeaders), StatusCode, Body);
         }

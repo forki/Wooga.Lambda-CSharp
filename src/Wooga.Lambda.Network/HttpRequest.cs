@@ -1,29 +1,33 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using Wooga.Lambda.Control.Monad;
-using Wooga.Lambda.Data;
+using Headers = System.Collections.Immutable.ImmutableList<Wooga.Lambda.Network.HttpHeader>;
+using Body = System.Collections.Generic.IEnumerable<byte>;
+
 
 namespace Wooga.Lambda.Network
 {
     public struct HttpRequest
     {
-        public readonly Maybe<ImmutableList<byte>> Body;
+        public readonly Maybe<Body> Body;
         public readonly Uri Endpoint;
-        public readonly ImmutableList<HttpHeader> HttpHeaders;
+        public readonly Headers HttpHeaders;
         public readonly HttpMethod HttpMethod;
 
-        public HttpRequest(Uri endpoint, HttpMethod httpMethod, ImmutableList<HttpHeader> httpHeaders,
-            Maybe<ImmutableList<byte>> body)
+        public HttpRequest(Uri endpoint, HttpMethod httpMethod, Headers httpHeaders,
+            Maybe<Body> body)
         {
             Endpoint = endpoint;
             HttpMethod = httpMethod;
-            HttpHeaders = httpHeaders.Unique();
+            HttpHeaders = httpHeaders.Distinct().ToImmutableList();
             Body = body;
         }
 
         public static HttpRequest Basic(string url, HttpMethod httpMethod)
         {
-            return new HttpRequest(new Uri(url), httpMethod, ImmutableList.Empty<HttpHeader>(),
-                Maybe.Nothing<ImmutableList<byte>>());
+            return new HttpRequest(new Uri(url), httpMethod, Headers.Empty, Maybe.Nothing<Body>());
         }
     }
 
@@ -36,15 +40,15 @@ namespace Wooga.Lambda.Network
                 httpRequest.Body);
         }
 
-        public static HttpRequest WithBody(this HttpRequest httpRequest, ImmutableList<byte> body)
+        public static HttpRequest WithBody(this HttpRequest httpRequest, IEnumerable<byte> body)
         {
             return new HttpRequest(httpRequest.Endpoint, httpRequest.HttpMethod, httpRequest.HttpHeaders, CheckBody(body));
         }
 
-        private static Maybe<ImmutableList<byte>> CheckBody(ImmutableList<byte> body)
+        private static Maybe<Body> CheckBody(Body body)
         {
-            return body == null || body.Count == 0 
-                ? Maybe.Nothing<ImmutableList<byte>>() 
+            return body == null || !body.Any() 
+                ? Maybe.Nothing<Body>() 
                 : Maybe.Just(body);
         }
     }

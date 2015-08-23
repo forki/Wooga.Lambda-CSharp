@@ -6,6 +6,7 @@ using Wooga.Lambda.Control.Monad;
 
 namespace Wooga.Lambda.Data
 {
+    [Obsolete("Please use Substance.Collections.Immutable",false)]
     public static class ImmutableListExt
     {
         public static ImmutableList<T> Take<T>(this ImmutableList<T> xs, uint num)
@@ -56,6 +57,7 @@ namespace Wooga.Lambda.Data
         }
     }
 
+    [Obsolete("Please use Substance.Collections.Immutable", false)]
     public static class ImmutableList
     {
         public static ImmutableList<T> Empty<T>()
@@ -75,6 +77,7 @@ namespace Wooga.Lambda.Data
     }
 
     [Serializable]
+    [Obsolete("Please use Substance.Collections.Immutable", false)]
     public class ImmutableList<T> : IEnumerable<T>
     {
         private readonly IValueValidator<T> _optionalValueValidator;

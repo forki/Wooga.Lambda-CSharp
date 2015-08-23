@@ -1,7 +1,7 @@
 NUGET
   remote: https://nuget.org/api/v2
   specs:
-    FAKE (4.1.2)
+    FAKE (4.1.4)
     FSharp.Compiler.Service (1.4.0.1)
     FSharp.Formatting (2.10.0)
       FSharp.Compiler.Service (>= 0.0.87)
@@ -20,16 +20,17 @@ NUGET
     Octokit (0.14.0)
       Microsoft.Net.Http
     SourceLink.Fake (1.0.0)
-    Wooga.Lambda.Logging.Unity3D.Source (0.6.3)
-      Wooga.Lambda.Unity3D.Source
-    Wooga.Lambda.Network.Unity3D.Source (0.6.3)
-      Wooga.Lambda.Unity3D.Source
-    Wooga.Lambda.Parser.Unity3D.Source (0.6.3)
-    Wooga.Lambda.Storage.Unity3D.Source (0.6.3)
-      Wooga.Lambda.Unity3D.Source
-    Wooga.Lambda.Unity3D.Source (0.6.3)
+    Substance (0.0.1-beta)
+    Substance.Collections (0.0.1-beta)
+      Substance (>= 0.0.1-beta)
+    Substance.Collections.Generic (0.0.1-beta)
+      Substance (>= 0.0.1-beta)
+    Substance.Collections.Immutable (0.0.1-beta)
+      Substance (>= 0.0.1-beta)
+      Substance.Collections (>= 0.0.1-beta)
+      Substance.Collections.Generic (>= 0.0.1-beta)
 GITHUB
   remote: fsharp/FAKE
   specs:
-    modules/Octokit/Octokit.fsx (9d3ca81ab80e696a413d143d1f5a9edef6036809)
+    modules/Octokit/Octokit.fsx (56f47d2c0b59f9835c7339bd9a92d3e983ff6f93)
       Octokit
