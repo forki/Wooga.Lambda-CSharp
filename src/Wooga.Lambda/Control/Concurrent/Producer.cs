@@ -31,7 +31,7 @@ namespace Wooga.Lambda.Control.Concurrent
         {
             return () =>
             {
-                var consumed = ImmutableList.Empty<TConsumed>();
+                var consumed = System.Collections.Immutable.ImmutableList<TConsumed>.Empty;
                 var done = false;
                 while (!done)
                 {

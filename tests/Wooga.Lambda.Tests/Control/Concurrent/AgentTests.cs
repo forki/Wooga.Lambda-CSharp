@@ -1,9 +1,9 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Wooga.Lambda.Control.Concurrent;
-using Wooga.Lambda.Data;
+using Unit = Wooga.Lambda.Data.Unit;
 using TestAgent =
-    Wooga.Lambda.Control.Concurrent.Agent
-        <Wooga.Lambda.Data.ImmutableTuple<string, Wooga.Lambda.Control.Concurrent.AsyncReplyChannel<string>>, string>;
+    Wooga.Lambda.Control.Concurrent.Agent<System.Tuple<string, Wooga.Lambda.Control.Concurrent.AsyncReplyChannel<string>>, string>;
 
 namespace Wooga.Lambda.Tests.Control.Concurrent
 {
@@ -21,7 +21,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
                 ch.Reply(str + "-Ch");
                 return u;
             });
-            var reply = testAgent.PostAndAsyncReply(x => new ImmutableTuple<string, AsyncReplyChannel<string>>("Test2", x));
+            var reply = testAgent.PostAndAsyncReply(x => Tuple.Create("Test2", x));
             Assert.AreEqual("Test2-Ch", reply.RunSynchronously());
         }
 
@@ -36,7 +36,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
                 ch.Reply(str + "-Ch");
                 return u;
             });
-            var reply = testAgent.PostAndReply(x => new ImmutableTuple<string, AsyncReplyChannel<string>>("Test1", x));
+            var reply = testAgent.PostAndReply(x => Tuple.Create("Test1", x));
             Assert.AreEqual("Test1-Ch", reply);
         }
     }

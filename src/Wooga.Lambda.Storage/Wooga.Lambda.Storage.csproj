@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileSystem\AtomicExtensions.cs" />
@@ -48,6 +47,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="paket.references" />
     <None Include="paket.template" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

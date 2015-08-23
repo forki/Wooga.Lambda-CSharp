@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Wooga.Lambda.Control;
 using Wooga.Lambda.Control.Concurrent;
-using Wooga.Lambda.Data;
-using static Wooga.Lambda.Data.ImmutableList;
-using static Wooga.Lambda.Data.ImmutableTuple;
-using VirtualDirs = System.Collections.Generic.Dictionary<Wooga.Lambda.Storage.FileSystem.Location, Wooga.Lambda.Data.ImmutableTuple<System.Collections.Generic.List<Wooga.Lambda.Storage.FileSystem.Location>, System.Collections.Generic.List<Wooga.Lambda.Storage.FileSystem.Location>>>;
+using ImmutableList = System.Collections.Immutable.ImmutableList;
+using Unit = Wooga.Lambda.Data.Unit;
+using FileContent = System.Collections.Immutable.ImmutableList<byte>;
+using VirtualDirs = System.Collections.Generic.Dictionary<Wooga.Lambda.Storage.FileSystem.Location, System.Tuple<System.Collections.Generic.List<Wooga.Lambda.Storage.FileSystem.Location>, System.Collections.Generic.List<Wooga.Lambda.Storage.FileSystem.Location>>>;
 using VirtualFiles = System.Collections.Generic.Dictionary<Wooga.Lambda.Storage.FileSystem.Location, Wooga.Lambda.Storage.FileSystem.File>;
 namespace Wooga.Lambda.Storage.FileSystem
 {
@@ -19,24 +19,25 @@ namespace Wooga.Lambda.Storage.FileSystem
 
         private VirtualFileSystem()
         {
+            var x  = Tuple.Create("a", 1);
             NewDirAsync(Locate("/"));
         }
-
-        public  Location Locate(string s)
+        
+        public Location Locate(string s)
         {
-            var p = ("/" + s).Replace("//","/");
+            var p = ("/" + s).Replace("//", "/");
 
             var isWinDrive = PathMatch(@"^\w:\\.*");
             var isNixRoot = PathMatch(@"^\/.*");
             var isWinShare = PathMatch(@"^\\\\\w+");
 
             var parts =
-                Pattern<ImmutableTuple<ImmutableList<string>, string>>
+                Pattern<Tuple<System.Collections.Immutable.ImmutableList<string>, string>>
                     .Match(p)
-                    .Case(isWinDrive,_ =>  Tuple(List(p.Substring(0, 3)), p.Substring(3)))
-                    .Case(isNixRoot, _ =>  Tuple(List("/"), p.Substring(1)))
-                    .Case(isWinShare,_ =>  Tuple(List("\\\\"), p.Substring(2)))
-                    .Default(_ => Tuple(Empty<string>(), p))
+                    .Case(isWinDrive, _ => Tuple.Create(ImmutableList.Create(p.Substring(0, 3)), p.Substring(3)))
+                    .Case(isNixRoot, _ => Tuple.Create(ImmutableList.Create("/"), p.Substring(1)))
+                    .Case(isWinShare, _ => Tuple.Create(ImmutableList.Create("\\\\"), p.Substring(2)))
+                    .Default(_ => Tuple.Create(System.Collections.Immutable.ImmutableList<string>.Empty, p))
                     .Run();
 
             var ps = PathSplit(parts.Item2);
@@ -58,7 +59,7 @@ namespace Wooga.Lambda.Storage.FileSystem
             return () => files[p];
         }
 
-        public  Async<Unit> WriteFileAsync(Location p, ImmutableList<byte> c)
+        public  Async<Unit> WriteFileAsync(Location p, FileContent c)
         {
             return () =>
             {
@@ -67,11 +68,11 @@ namespace Wooga.Lambda.Storage.FileSystem
             };
         }
 
-        public  Async<Unit> AppendFileAsync(Location p, ImmutableList<byte> c)
+        public  Async<Unit> AppendFileAsync(Location p, FileContent c)
         {
             return () =>
             {
-                var file = files.ContainsKey(p) ? files[p] : File.Create(p,Empty<byte>());
+                var file = files.ContainsKey(p) ? files[p] : File.Create(p,FileContent.Empty);
                 files[p] = File.Create(p, file.Content.AddRange(c));
                 return Unit.Default;
             };
@@ -79,7 +80,7 @@ namespace Wooga.Lambda.Storage.FileSystem
 
         public  Async<Dir> GetDirAsync(Location p)
         {
-            return () => Dir.Create(p, dirs[p].Item1.ToArray().ToImmutableList(), dirs[p].Item2.ToArray().ToImmutableList());
+            return () => Dir.Create(p, ImmutableList.ToImmutableList(dirs[p].Item1), ImmutableList.ToImmutableList(dirs[p].Item2));
         }
 
         public  Async<bool> HasFileAsync(Location p)
@@ -96,7 +97,7 @@ namespace Wooga.Lambda.Storage.FileSystem
         {
             return () =>
             {
-                dirs[p] = new ImmutableTuple<List<Location>, List<Location>>(new List<Location>(), new List<Location>());
+                dirs[p] = Tuple.Create(new List<Location>(), new List<Location>());
                 return Unit.Default;
             };
         }
@@ -204,9 +205,9 @@ namespace Wooga.Lambda.Storage.FileSystem
             return new Regex(p, RegexOptions.None).IsMatch;
         }
 
-        private static ImmutableList<string> PathSplit(string p)
+        private static System.Collections.Immutable.ImmutableList<string> PathSplit(string p)
         {
-            return p.Split(new[] {'\\', '/'}, StringSplitOptions.RemoveEmptyEntries).ToImmutableList();
+            return ImmutableList.ToImmutableList(p.Split(new[] {'\\', '/'}, StringSplitOptions.RemoveEmptyEntries));
         }
     }
 }

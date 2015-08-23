@@ -1,6 +1,9 @@
 using System.Linq;
 using Wooga.Lambda.Control.Concurrent;
-using Wooga.Lambda.Data;
+using System.Collections.Immutable;
+using FileContent = System.Collections.Immutable.ImmutableList<byte>;
+using DirPath = System.Collections.Immutable.ImmutableList<Wooga.Lambda.Storage.FileSystem.Location>;
+using Unit = Wooga.Lambda.Data.Unit;
 
 namespace Wooga.Lambda.Storage.FileSystem
 {
@@ -14,8 +17,8 @@ namespace Wooga.Lambda.Storage.FileSystem
         Location Locate(Location p, string s);
         Location Parent(Location p);
         Async<File> GetFileAsync(Location p);
-        Async<Unit> WriteFileAsync(Location p, ImmutableList<byte> c);
-        Async<Unit> AppendFileAsync(Location p, ImmutableList<byte> c);
+        Async<Unit> WriteFileAsync(Location p, FileContent c);
+        Async<Unit> AppendFileAsync(Location p, FileContent c);
         Async<Dir> GetDirAsync(Location p);
         Async<bool> HasFileAsync(Location p);
         Async<bool> HasDirAsync(Location p);
@@ -33,15 +36,15 @@ namespace Wooga.Lambda.Storage.FileSystem
     /// </summary>
     public struct File
     {
-        public static File Create(Location location, ImmutableList<byte> content)
+        public static File Create(Location location, FileContent content)
         {
             return new File(location,content);
         }
 
-        public readonly ImmutableList<byte> Content;
+        public readonly FileContent Content;
         public readonly Location Location;
 
-        private File(Location location, ImmutableList<byte> content)
+        private File(Location location, FileContent content)
         {
             Location = location;
             Content = content;
@@ -53,16 +56,16 @@ namespace Wooga.Lambda.Storage.FileSystem
     /// </summary>
     public struct Dir
     {
-        public static Dir Create(Location location, ImmutableList<Location> dirs, ImmutableList<Location> files)
+        public static Dir Create(Location location, DirPath dirs, DirPath files)
         {
             return new Dir(location, dirs, files);
         }
 
-        public readonly ImmutableList<Location> Dirs;
-        public readonly ImmutableList<Location> Files;
+        public readonly DirPath Dirs;
+        public readonly DirPath Files;
         public readonly Location Location;
 
-        private Dir(Location location, ImmutableList<Location> dirs, ImmutableList<Location> files)
+        private Dir(Location location, DirPath dirs, DirPath files)
         {
             Location = location;
             Dirs = dirs;
@@ -94,7 +97,7 @@ namespace Wooga.Lambda.Storage.FileSystem
 
         public string FullName(Combinator pathCombinator)
         {
-            return Paths.Fold((s, p) => pathCombinator(s, p), "");
+            return Paths.Aggregate("",(s, p) => pathCombinator(s, p));
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using Wooga.Lambda.Control.Monad;
@@ -168,7 +169,7 @@ namespace Wooga.Lambda.Control.Concurrent
                     var handle = new AsyncEventHandle<T>();
                     x.Bind<T, Unit>(v => () => handle.Complete(v)).Start();
                     return handle;
-                });
+                }).ToImmutableList();
                 WaitHandle.WaitAll(asyncs.Select(ah => (WaitHandle) ah.DoneEvent).ToArray());
                 var ps = asyncs.Select(x => x.Result());
                 return System.Collections.Immutable.ImmutableList<T>.Empty.AddRange(ps).AddRange(rest.Parallel().RunSynchronously());

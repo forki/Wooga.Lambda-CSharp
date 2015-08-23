@@ -5,7 +5,8 @@
 using System;
 using System.IO;
 using System.Text;
-using Wooga.Lambda.Data;
+using System.Collections.Immutable;
+using System.Linq;
 
 namespace Wooga.Lambda.Parser
 {
@@ -88,7 +89,7 @@ namespace Wooga.Lambda.Parser
         /// <returns>   The current top-of-stack object. </returns>
         public ImmutableList<char> Peek(long count)
         {
-            var readChars = new ImmutableList<char>();
+            var readChars = ImmutableList<char>.Empty;
             if (BufferChars(CharsNeeded(count, Position)))
             {
                 memory.Seek(Position.Index, SeekOrigin.Begin);

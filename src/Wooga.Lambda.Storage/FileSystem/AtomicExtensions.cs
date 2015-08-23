@@ -3,12 +3,13 @@ using System.Linq;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
+using FileContent = System.Collections.Immutable.ImmutableList<byte>;
 
 namespace Wooga.Lambda.Storage.FileSystem
 {
     public static class AtomicExtensions
     {
-        public static Async<Unit> WriteFileAtomically(this FileSystem s, Location p, ImmutableList<byte> d,
+        public static Async<Unit> WriteFileAtomically(this FileSystem s, Location p, FileContent d,
             string t1 = ".atomic.new", string t2 = ".atomic.old")
         {
             return () =>
@@ -27,7 +28,7 @@ namespace Wooga.Lambda.Storage.FileSystem
             };
         }
 
-        public static Async<Unit> WriteNewFileThenMv(this FileSystem s, Location p, ImmutableList<byte> d, string t1, string t2)
+        public static Async<Unit> WriteNewFileThenMv(this FileSystem s, Location p, FileContent d, string t1, string t2)
         {
             return () =>
             {

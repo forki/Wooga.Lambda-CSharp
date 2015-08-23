@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Wooga.Lambda.Data
 {
+    [Obsolete("Please use Tuple in Substance.Collections", false)]
     public static class ImmutableTuple
     {
         public static ImmutableTuple<T1, T2> Tuple<T1, T2>(T1 x, T2 y)
@@ -25,6 +27,7 @@ namespace Wooga.Lambda.Data
     /// </summary>
     /// <typeparam name="T1">The type of the first value.</typeparam>
     /// <typeparam name="T2">The type of the second value.</typeparam>
+    [Obsolete("Please use Tuple in Substance.Collections", false)]
     public struct ImmutableTuple<T1, T2>
     {
         private static readonly IEqualityComparer<ImmutableTuple<T1, T2>> Item1Item2ComparerInstance =
@@ -90,6 +93,7 @@ namespace Wooga.Lambda.Data
     /// <typeparam name="T1">The type of the first value.</typeparam>
     /// <typeparam name="T2">The type of the second value.</typeparam>
     /// <typeparam name="T3">The type of the third value.</typeparam>
+    [Obsolete("Please use Tuple in Substance.Collections", false)]
     public struct ImmutableTuple<T1, T2, T3>
     {
         private static readonly IEqualityComparer<ImmutableTuple<T1, T2, T3>> Item1Item2Item3ComparerInstance =
@@ -164,6 +168,7 @@ namespace Wooga.Lambda.Data
     /// <typeparam name="T2">The type of the second value.</typeparam>
     /// <typeparam name="T3">The type of the third value.</typeparam>
     /// <typeparam name="T4">The type of the third value.</typeparam>
+    [Obsolete("Please use Tuple in Substance.Collections", false)]
     public struct ImmutableTuple<T1, T2, T3, T4>
     {
         private static readonly IEqualityComparer<ImmutableTuple<T1, T2, T3, T4>> ImmutableTupleComparerInstance =

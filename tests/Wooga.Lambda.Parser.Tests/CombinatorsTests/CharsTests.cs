@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using Wooga.Lambda.Data;
+﻿using System.Collections.Immutable;
+using NUnit.Framework;
 using Wooga.Lambda.Parser.Combinators;
 
 namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
@@ -10,7 +10,7 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         [Test]
         public void AnyOfShouldFailOnAnyNotGivenChar()
         {
-            var p = Chars.AnyOf(new ImmutableList<char>(new []{'a', 'b', 'c'}));
+            var p = Chars.AnyOf(ImmutableList.Create('a', 'b', 'c'));
             Assert.IsInstanceOf<Result<char>.Failure>(p((new CharStream("x"))));
             Assert.IsInstanceOf<Result<char>.Failure>(p((new CharStream("y"))));
             Assert.IsInstanceOf<Result<char>.Failure>(p((new CharStream("z"))));
@@ -19,7 +19,7 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         [Test]
         public void AnyOfShouldSuccedOnAnyGivenChar()
         {
-            var p = Chars.AnyOf(new ImmutableList<char>(new[] { 'a', 'b', 'c' }));
+            var p = Chars.AnyOf(ImmutableList.Create('a', 'b', 'c' ));
             Assert.IsInstanceOf<Result<char>.Success>(p((new CharStream("a"))));
             Assert.IsInstanceOf<Result<char>.Success>(p((new CharStream("b"))));
             Assert.IsInstanceOf<Result<char>.Success>(p((new CharStream("c"))));
@@ -44,7 +44,7 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         [Test]
         public void NoneOfShouldFailOnAnyGivenChar()
         {
-            var p = Chars.NoneOf(new ImmutableList<char>(new[] { 'a', 'b', 'c' }));
+            var p = Chars.NoneOf(ImmutableList.Create('a', 'b', 'c'));
             Assert.IsInstanceOf<Result<char>.Failure>(p((new CharStream("a"))));
             Assert.IsInstanceOf<Result<char>.Failure>(p((new CharStream("b"))));
             Assert.IsInstanceOf<Result<char>.Failure>(p((new CharStream("c"))));
@@ -53,7 +53,7 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         [Test]
         public void NoneOfShouldSuccedOnAnyNotGivenChar()
         {
-            var p = Chars.NoneOf(new ImmutableList<char>(new[] { 'a', 'b', 'c' }));
+            var p = Chars.NoneOf(ImmutableList.Create('a', 'b', 'c'));
             Assert.IsInstanceOf<Result<char>.Success>(p((new CharStream("x"))));
             Assert.IsInstanceOf<Result<char>.Success>(p((new CharStream("y"))));
             Assert.IsInstanceOf<Result<char>.Success>(p((new CharStream("z"))));
@@ -95,7 +95,7 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         [Test]
         public void SeqOfShouldFailOnCharsNotInSequence()
         {
-            var p = Chars.SeqOf(new ImmutableList<char>(new[] { 'a', 'b', 'c' }));
+            var p = Chars.SeqOf(ImmutableList.Create('a', 'b', 'c'));
             Assert.IsInstanceOf<Result<ImmutableList<char>>.Failure>(p((new CharStream("a"))));
             Assert.IsInstanceOf<Result<ImmutableList<char>>.Failure>(p((new CharStream("ab"))));
             Assert.IsInstanceOf<Result<ImmutableList<char>>.Failure>(p((new CharStream("x"))));
@@ -104,7 +104,7 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         [Test]
         public void SeqOfShouldIncrementPeekOnSuccess()
         {
-            var p = Chars.SeqOf(new ImmutableList<char>(new[] { 'a', 'b', 'c' }));
+            var p = Chars.SeqOf(ImmutableList.Create('a', 'b', 'c'));
             var r = p((new CharStream("abc")));
             Assert.AreEqual(3, r.Peek.Index);
         }
@@ -112,7 +112,7 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         [Test]
         public void SeqOfShouldReturnValueOnSuccess()
         {
-            var p = Chars.SeqOf(new ImmutableList<char>(new[] { 'a', 'b', 'c' }));
+            var p = Chars.SeqOf(ImmutableList.Create('a', 'b', 'c'));
             var r = p((new CharStream("abc")));
             var rs = ((Result<ImmutableList<char>>.Success)r);
             Assert.AreEqual(new[] {'a', 'b', 'c'}, rs.Value);
@@ -121,7 +121,7 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         [Test]
         public void SeqOfShouldSuccedOnSequenceOfGivenChars()
         {
-            var p = Chars.SeqOf(new ImmutableList<char>(new[] { 'a', 'b', 'c' }));
+            var p = Chars.SeqOf(ImmutableList.Create('a', 'b', 'c'));
             Assert.IsInstanceOf<Result<ImmutableList<char>>.Success>(p((new CharStream("abc"))));
         }
     }
