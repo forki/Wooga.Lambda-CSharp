@@ -1,4 +1,4 @@
-#### 0.6.8-prerelease - Aug 20 2015
+#### 0.6.8 - September 2 2015
 * [Control] Producer.ConsumeMany is now Produer.Map
 * [Control] Async consumer returns Maybe<TConsumed>
 
