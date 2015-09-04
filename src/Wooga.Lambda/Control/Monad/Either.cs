@@ -9,7 +9,7 @@ namespace Wooga.Lambda.Control.Monad
     /// </summary>
     /// <typeparam name="TSuccess"></typeparam>
     /// <typeparam name="TFailure"></typeparam>
-    public struct Either<TSuccess,TFailure> : IStructuralEquatable, IStructuralComparable, IComparable
+    public struct Either<TSuccess,TFailure> : IStructuralEquatable
     {
         internal TFailure FailureValue;
         internal TSuccess SuccessValue;
@@ -42,31 +42,6 @@ namespace Wooga.Lambda.Control.Monad
                 return false;
             }
             return false;
-        }
-
-        Int32 IComparable.CompareTo(Object obj)
-        {
-            return ((IStructuralComparable)this).CompareTo(obj, Comparer<Object>.Default);
-        }
-
-        Int32 IStructuralComparable.CompareTo(Object other, IComparer comparer)
-        {
-            if (other == null) return 1;
-
-            if (other is Either<TSuccess, TFailure>)
-            {
-                var otherE = ((Either<TSuccess, TFailure>) other);
-                if (IsSuccess && otherE.IsSuccess)
-                {
-                    return comparer.Compare(SuccessValue, otherE.SuccessValue);
-                }
-                else if (!IsSuccess && !otherE.IsSuccess)
-                {
-                    return comparer.Compare(FailureValue, otherE.FailureValue);
-                }
-            }
-            
-            throw new ArgumentException();
         }
 
         public override int GetHashCode()

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Wooga.Lambda.Network
 {
-    public struct HttpHeader : IStructuralEquatable, IStructuralComparable, IComparable
+    public struct HttpHeader : IStructuralEquatable
     {
         public static HttpHeader Create(string key, string value)
         {
@@ -48,15 +48,6 @@ namespace Wooga.Lambda.Network
         {
             return ((IStructuralEquatable) Header).GetHashCode(comparer);
         }
-
-        public int CompareTo(object other, IComparer comparer)
-        {
-            return ((IStructuralComparable) Header).CompareTo(other, comparer);
-        }
-
-        public int CompareTo(object obj)
-        {
-            return ((IComparable) Header).CompareTo(obj);
-        }
+        
     }
 }
