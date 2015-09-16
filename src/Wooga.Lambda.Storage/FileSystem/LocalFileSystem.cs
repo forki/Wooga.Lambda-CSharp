@@ -18,68 +18,43 @@ namespace Wooga.Lambda.Storage.FileSystem
             return new LocalFileSystem();
         }
 
-        private readonly Location.Combinator PathCombinator = Path.Combine;
-        private readonly Location.Seperator PathSeperator = p => p.Split(new[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
+        //private readonly Location.Seperator PathSeperator = p => p.Split(new[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
 
         private LocalFileSystem()
         {
         }
-        
-        public  Location Locate(string s)
+       
+        public Async<IEnumerable<byte>> ReadFileAsync(string p)
         {
-            var p = Path.GetFullPath(s);
-            var isWinDrive  = PathMatch(@"^\w:\\.*");
-            var isNixRoot   = PathMatch(@"^\/.*");
-            var isWinShare  = PathMatch(@"^\\\\\w+");
+            return () => FileAsIEnumerable(p);
 
-            Func<string, string, Location> splitRoot =
-                (root, rest) => Locate(Locate(Seq.Singleton(root)), rest);
-
-            return Pattern<Location>
-                    .Match(p)
-                    .Case(isWinDrive,   _ => splitRoot(p.Substring(0, 3), p.Substring(3)))
-                    .Case(isNixRoot,    _ => splitRoot("/", p.Substring(1)))
-                    .Case(isWinShare,   _ => splitRoot("\\\\", p.Substring(2)))
-                    .Default(           _ => Location.Create(PathCombinator,PathSeperator,p))
-                    .Run();
         }
 
-        public Location Locate(Location l, string s)
+        private IEnumerable<byte> FileAsIEnumerable(string p)
         {
-            return Location.Create(PathCombinator, PathSeperator, l, s);
+            using (FileStream stream = new FileStream(p, FileMode.Open))
+            {
+                for (int i = stream.ReadByte(); i != -1; i = stream.ReadByte())
+                    yield return (byte)i;
+            }
         }
 
-        private Location Locate(IEnumerable<string> ps)
-        {
-            return Location.Create(PathCombinator, PathSeperator, ps);
-        }
-
-        public Location Parent(Location l)
-        {
-            return Location.Parent(PathCombinator, PathSeperator, l);
-        }
-
-        public  Async<File> GetFileAsync(Location p)
-        {
-            return () => File.Create(p, System.IO.File.ReadAllBytes(p.FullName));
-        }
-
-        public  Async<Unit> WriteFileAsync(Location p, IEnumerable<byte> c)
+        public  Async<Unit> WriteFileAsync(string p, IEnumerable<byte> c)
         {
             return () =>
             {
-                System.IO.File.WriteAllBytes(p.FullName, c.ToArray());
+                System.IO.File.WriteAllBytes(p, c.ToArray());
                 return Unit.Default;
             };
         }
 
-        public  Async<Unit> AppendFileAsync(Location p, IEnumerable<byte> c)
+        public  Async<Unit> AppendFileAsync(string p, IEnumerable<byte> c)
         {
             return () =>
             {
                 var bytes = c.ToArray();
                 using (
-                var stream = new FileStream(p.FullName, FileMode.Append))
+                var stream = new FileStream(p, FileMode.Append))
                 {
                     stream.Write(bytes, 0, bytes.Length);
                 }
@@ -87,73 +62,73 @@ namespace Wooga.Lambda.Storage.FileSystem
             };
         }
 
-        public  Async<Dir> GetDirAsync(Location p)
+        public  Async<Dir> GetDirAsync(string p)
         {
             return () =>
             {
-                var path = p.FullName;
-                var fs = Directory.GetFiles(path).Select(Locate);
-                var ds = Directory.GetDirectories(path).Select(Locate);
-                return Dir.Create(Locate(path), ds, fs);
+                var path = p;
+                var fs = Directory.GetFiles(path);
+                var ds = Directory.GetDirectories(path);
+                return Dir.Create(path, ds, fs);
             };
         }
 
-        public  Async<bool> HasFileAsync(Location p)
+        public  Async<bool> HasFileAsync(string p)
         {
-            return () => System.IO.File.Exists(p.FullName);
+            return () => System.IO.File.Exists(p);
         }
 
-        public  Async<bool> HasDirAsync(Location p)
+        public  Async<bool> HasDirAsync(string p)
         {
-            return () => Directory.Exists(p.FullName);
+            return () => Directory.Exists(p);
         }
 
-        public  Async<Unit> NewDirAsync(Location p)
+        public  Async<Unit> NewDirAsync(string p)
         {
             return () =>
             {
-                Directory.CreateDirectory(p.FullName);
+                Directory.CreateDirectory(p);
                 return Unit.Default;
             };
         }
 
-        public  Async<Unit> RmDirAsync(Location p)
+        public  Async<Unit> RmDirAsync(string p)
         {
             return () =>
             {
-                Directory.Delete(p.FullName);
+                Directory.Delete(p);
                 return Unit.Default;
             };
         }
 
-        public  Async<Unit> RmFileAsync(Location p)
+        public  Async<Unit> RmFileAsync(string p)
         {
             return () =>
             {
-                System.IO.File.Delete(p.FullName);
+                System.IO.File.Delete(p);
                 return Unit.Default;
             };
         }
 
-        public Async<Unit> MvDirAsync(Location ps, Location pt)
+        public Async<Unit> MvDirAsync(string ps, string pt)
         {
             return () =>
             {
-                Directory.Move(ps.FullName, pt.FullName);
+                Directory.Move(ps, pt);
                 return Unit.Default;
             };
         }
 
-        public Async<Unit> MvFileAsync(Location ps, Location pt)
+        public Async<Unit> MvFileAsync(string ps, string pt)
         {
             return () =>
             {
-                System.IO.File.Move(ps.FullName, pt.FullName);
+                System.IO.File.Move(ps, pt);
                 return Unit.Default;
             };
         }
 
-        public Async<Unit> CpDirAsync(Location ps, Location pt)
+        public Async<Unit> CpDirAsync(string ps, string pt)
         {
             return () =>
             {
@@ -161,21 +136,21 @@ namespace Wooga.Lambda.Storage.FileSystem
                 NewDirAsync(pt).RunSynchronously();
                 foreach (var f in dir.Files)
                 {
-                    CpFileAsync(f, Locate(pt, f.Name)).RunSynchronously();
+                    CpFileAsync(f, Path.Combine(pt, f)).RunSynchronously();
                 }
                 foreach (var d in dir.Dirs)
                 {
-                    CpDirAsync(d, Locate(pt, d.Name)).RunSynchronously();
+                    CpDirAsync(d, Path.Combine(pt, d)).RunSynchronously();
                 }
                 return Unit.Default;
             };
         }
 
-        public Async<Unit> CpFileAsync(Location ps, Location pt)
+        public Async<Unit> CpFileAsync(string ps, string pt)
         {
             return () =>
             {
-                System.IO.File.Copy(ps.FullName, pt.FullName);
+                System.IO.File.Copy(ps, pt);
                 return Unit.Default;
             };
         }
