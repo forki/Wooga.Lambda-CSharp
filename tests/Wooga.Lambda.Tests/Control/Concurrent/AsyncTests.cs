@@ -92,7 +92,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
         {
             const int wait = 3;
             var rnd = new Random();
-            const int num = 1000;
+            const int num = 10000;
             var asyncs = ImmutableList<Async<int>>.Empty;
             for (var i = 0; i < num; i++)
             {

@@ -72,7 +72,7 @@ namespace Wooga.Lambda.Tests.Data
             public void Collect()
             {
                 var a = ImmutableList.Create("ab", "cd");
-                CollectionAssert.AreEqual(ImmutableList.Create('a','b','c','d'), a.Collect(s=>s.ToCharArray()));
+                CollectionAssert.AreEqual(ImmutableList.Create('a','b','c','d'), a.SelectMany(s=>s.ToCharArray()));
             }
         }
 
@@ -222,7 +222,7 @@ namespace Wooga.Lambda.Tests.Data
             {
                 var a = ImmutableList.Create("a","a","a");
                 var b = ImmutableList.Create("b", "b", "b");
-                Assert.IsTrue(Seq.ForAll2(a,b,(x,y)=>x=="a"&&y=="b"));
+                Assert.IsTrue(Seq.All(a,b,(x,y)=>x=="a"&&y=="b"));
             }
 
             [Test]
@@ -230,7 +230,7 @@ namespace Wooga.Lambda.Tests.Data
             {
                 var a = ImmutableList.Create("a", "a", "a");
                 var b = ImmutableList.Create("b", "b", "b");
-                Assert.IsFalse(Seq.ForAll2(a, b, (x, y) => x == "a" && y == "c"));
+                Assert.IsFalse(Seq.All(a, b, (x, y) => x == "a" && y == "c"));
             }
 
             [Test]
@@ -238,7 +238,7 @@ namespace Wooga.Lambda.Tests.Data
             {
                 var a = ImmutableList.Create("a", "a", "a");
                 var b = ImmutableList.Create("b", "b", "b");
-                Assert.IsFalse(Seq.ForAll2(a, b, (x, y) => x == "z" && y == "c"));
+                Assert.IsFalse(Seq.All(a, b, (x, y) => x == "z" && y == "c"));
             }
         }
 
@@ -296,7 +296,7 @@ namespace Wooga.Lambda.Tests.Data
                 var s = ImmutableList<Tuple<int,string>>.Empty;
                 var a = Seq.Init(4, _ => _);
                 var b = Seq.Init(4, _ => "a");
-                Seq.Iter2(a, b, (x, y) =>
+                Seq.Iter(a, b, (x, y) =>
                 {
                     s = s.Add(Tuple.Create(x, y));
                     return Unit.Default;
@@ -313,7 +313,7 @@ namespace Wooga.Lambda.Tests.Data
             {
                 var a = Seq.Init(4, _ => _);
                 var b = Seq.Init(4, _ => "a");
-                var r = Seq.Map2(a, b, Tuple.Create);
+                var r = Seq.Select(a, b, Tuple.Create);
                 CollectionAssert.AreEqual(ImmutableList.Create(Tuple.Create(0, "a"), Tuple.Create(1, "a"), Tuple.Create(2, "a"), Tuple.Create(3, "a")), r);
             }
 

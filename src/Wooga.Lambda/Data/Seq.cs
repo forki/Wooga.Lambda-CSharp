@@ -20,11 +20,6 @@ namespace Wooga.Lambda.Data
             return from a in x select f(a) into r where r.HasValue select r.Value;
         }
 
-        public static IEnumerable<U> Collect<T, U>(this IEnumerable<T> x, Func<T, IEnumerable<U>> f)
-        {
-            return x.SelectMany(f);
-        }
-
         public static IEnumerable<T> Concat<T>(this IEnumerable<IEnumerable<T>> x)
         {
             return x.SelectMany(a => a);
@@ -33,11 +28,6 @@ namespace Wooga.Lambda.Data
         public static IEnumerable<Tuple<K,int>> CountBy<T,K>(this IEnumerable<T> x, Func<T,K> f)
         {
             return x.GroupBy(f).Select(y=>Tuple.Create(y.Key,y.Count()));
-        }
-
-        public static IEnumerable<T> Delay<T>(Func<IEnumerable<T>> f)
-        {
-            return f();
         }
 
         public static IEnumerable<T> DistinctBy<T,K>(this IEnumerable<T> x, Func<T,K> f)
@@ -56,24 +46,9 @@ namespace Wooga.Lambda.Data
             return x.First();
         }
 
-        public static bool Exists<T>(this IEnumerable<T> x, Func<T,bool> f)
-        {
-            return x.Any(f);
-        }
-
         public static bool Exists2<T,T2>(this IEnumerable<T> x, IEnumerable<T2> y, Func<T,T2,bool> f)
         {
-            return x.Zip(y).Exists(kv => f(kv.Item1, kv.Item2));
-        }
-
-        public static IEnumerable<T> Filter<T>(this IEnumerable<T> x, Func<T, bool> f)
-        {
-            return x.Where(f);
-        }
-
-        public static T Find<T>(this IEnumerable<T> x, Func<T, bool> f)
-        {
-            return x.First(f);
+            return x.Zip(y).Any(kv => f(kv.Item1, kv.Item2));
         }
 
         public static int FindIndex<T>(this IEnumerable<T> x, Func<T, bool> f)
@@ -87,24 +62,9 @@ namespace Wooga.Lambda.Data
             throw new KeyNotFoundException();
         }
 
-        public static S Fold<T,S>(this IEnumerable<T> x, Func<S, T, S> f, S s)
-        {
-            return x.Aggregate(s, f);
-        }
-
-        public static bool ForAll<T>(this IEnumerable<T> x, Func<T, bool> f)
-        {
-            return x.All(f);
-        }
-
-        public static bool ForAll2<T, T2>(this IEnumerable<T> x, IEnumerable<T2> y, Func<T, T2, bool> f)
+        public static bool All<T, T2>(this IEnumerable<T> x, IEnumerable<T2> y, Func<T, T2, bool> f)
         {
             return x.Zip(y).All(kv => f(kv.Item1, kv.Item2));
-        }
-
-        public static T Head<T>(this IEnumerable<T> x)
-        {
-            return x.First();
         }
 
         public static IEnumerable<T> Init<T>(int c, Func<int,T> f)
@@ -125,11 +85,6 @@ namespace Wooga.Lambda.Data
             }
         }
 
-        public static bool IsEmpty<T>(this IEnumerable<T> x)
-        {
-            return !x.Any();
-        }
-
         public static Unit Iter<T>(this IEnumerable<T> x, Func<T,Unit> f)
         {
             foreach (var a in x)
@@ -139,7 +94,7 @@ namespace Wooga.Lambda.Data
             return Unit.Default;
         }
 
-        public static Unit Iter2<T,T2>(this IEnumerable<T> x, IEnumerable<T2> y, Func<T,T2,Unit> f)
+        public static Unit Iter<T,T2>(this IEnumerable<T> x, IEnumerable<T2> y, Func<T,T2,Unit> f)
         {
             return x.Zip(y).Iter(kv => f(kv.Item1, kv.Item2));
         }
@@ -155,19 +110,9 @@ namespace Wooga.Lambda.Data
             return Unit.Default;
         }
 
-        public static int Length<T>(this IEnumerable<T> x)
+        public static IEnumerable<T3> Select<T, T2, T3>(this IEnumerable<T> x, IEnumerable<T2> y, Func<T, T2, T3> f)
         {
-            return x.Count();
-        }
-
-        public static IEnumerable<T2> Map<T, T2>(this IEnumerable<T> x, Func<T, T2> f)
-        {
-            return x.Select(f);
-        }
-
-        public static IEnumerable<T3> Map2<T, T2, T3>(this IEnumerable<T> x, IEnumerable<T2> y, Func<T, T2, T3> f)
-        {
-            return x.Zip(y).Map(kv => f(kv.Item1, kv.Item2));
+            return x.Zip(y).Select(kv => f(kv.Item1, kv.Item2));
         }
 
         public static IEnumerable<T2> Mapi<T, T2>(this IEnumerable<T> x, Func<int, T, T2> f)
@@ -180,14 +125,9 @@ namespace Wooga.Lambda.Data
             }
         }
 
-        public static T Nth<T>(this IEnumerable<T> x, int c)
-        {
-            return x.ElementAt(c);
-        }
-
         public static IEnumerable<Tuple<T,T>> Pairwise<T>(this IEnumerable<T> x)
         {
-            if(x.Length()<2) throw new ArgumentException("Seq to small to build pairs.");
+            if(x.Count()<2) throw new ArgumentException("Seq to small to build pairs.");
             var a = x.First();
             foreach (var b in x.Skip(1))
             {
@@ -218,7 +158,7 @@ namespace Wooga.Lambda.Data
 
         public static T Reduce<T>(this IEnumerable<T> x, Func<T, T, T> f)
         {
-            return x.Fold(f, default(T));
+            return x.Aggregate(default(T), f);
         }
 
         public static IEnumerable<S> Scan<T, S>(this IEnumerable<T> x, Func<S, T, S> f, S s)
@@ -234,21 +174,6 @@ namespace Wooga.Lambda.Data
         public static IEnumerable<T> Singleton<T>(T x)
         {
             yield return x;
-        }
-
-        public static IEnumerable<T> Sort<T>(this IEnumerable<T> x)
-        {
-            return x.OrderBy(_ => _);
-        }
-
-        public static IEnumerable<T> SortBy<T,K>(this IEnumerable<T> x, Func<T,K> f)
-        {
-            return x.OrderBy(f);
-        }
-
-        public static List<T> ToList<T>(this IEnumerable<T> x)
-        {
-            return new List<T>(x);
         }
 
         public static IEnumerable<T> Truncate<T>(this IEnumerable<T> x, int c)
