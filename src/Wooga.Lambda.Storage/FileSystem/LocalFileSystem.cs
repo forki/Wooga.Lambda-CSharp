@@ -32,7 +32,7 @@ namespace Wooga.Lambda.Storage.FileSystem
 
         private IEnumerable<byte> FileAsIEnumerable(string p)
         {
-            using (FileStream stream = new FileStream(p, FileMode.Open))
+            using (var stream = new FileStream(p, FileMode.Open))
             {
                 for (int i = stream.ReadByte(); i != -1; i = stream.ReadByte())
                     yield return (byte)i;
@@ -43,7 +43,11 @@ namespace Wooga.Lambda.Storage.FileSystem
         {
             return () =>
             {
-                System.IO.File.WriteAllBytes(p, c.ToArray());
+                using (var stream = new FileStream(p, FileMode.OpenOrCreate))
+                {
+                    for (int i = stream.ReadByte(); i != -1; i = stream.ReadByte())
+                        stream.WriteByte((byte)i);
+                }
                 return Unit.Default;
             };
         }
@@ -52,11 +56,10 @@ namespace Wooga.Lambda.Storage.FileSystem
         {
             return () =>
             {
-                var bytes = c.ToArray();
-                using (
-                var stream = new FileStream(p, FileMode.Append))
+                using (var stream = new FileStream(p, FileMode.Append))
                 {
-                    stream.Write(bytes, 0, bytes.Length);
+                    for (int i = stream.ReadByte(); i != -1; i = stream.ReadByte())
+                        stream.WriteByte((byte)i);
                 }
                 return Unit.Default;
             };
@@ -153,12 +156,6 @@ namespace Wooga.Lambda.Storage.FileSystem
                 System.IO.File.Copy(ps, pt);
                 return Unit.Default;
             };
-        }
-
-        [Obsolete("Please use LocalFileSystem.Create", false)]
-        public static FileSystem Local()
-        {
-            return new LocalFileSystem();
         }
         
         private static Func<string, bool> PathMatch(string p)
