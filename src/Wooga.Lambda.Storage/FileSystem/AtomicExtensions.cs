@@ -4,7 +4,7 @@ using Wooga.Lambda.Control.Monad;
 using Wooga.Lambda.Data;
 using FileContent = System.Collections.Generic.IEnumerable<byte>;
 
-namespace Wooga.Lambda.Storage.FileSystem
+namespace Wooga.Lambda.Storage
 {
     public static class AtomicExtensions
     {

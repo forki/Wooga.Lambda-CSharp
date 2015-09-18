@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using Wooga.Lambda.Control.Concurrent;
 using Unit = Wooga.Lambda.Data.Unit;
 
-namespace Wooga.Lambda.Storage.FileSystem
+namespace Wooga.Lambda.Storage
 {
     public class LocalFileSystem : FileSystem
     {

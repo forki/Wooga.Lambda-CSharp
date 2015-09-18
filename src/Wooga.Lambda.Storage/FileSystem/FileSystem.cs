@@ -7,7 +7,7 @@ using System.Linq;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Data;
 
-namespace Wooga.Lambda.Storage.FileSystem
+namespace Wooga.Lambda.Storage
 {
     /// <summary>
     ///     FileSystem with asynchronous file operations

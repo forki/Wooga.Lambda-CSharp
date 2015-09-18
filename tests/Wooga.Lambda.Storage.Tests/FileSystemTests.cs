@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Runtime;
 using System.Text;
 using NUnit.Framework;
 using Wooga.Lambda.Control.Concurrent;
-using Wooga.Lambda.Storage.FileSystem;
+using Wooga.Lambda.Storage;
 
 namespace Wooga.Lambda.Storage.Tests
 {
@@ -14,20 +15,42 @@ namespace Wooga.Lambda.Storage.Tests
     [TestFixture]
     public class FileSystemTests
     {
-        private FileSystem.FileSystem fileSystem;
-
-        private string basePath;
-
         [SetUp]
         public void SetupFileSystem()
         {
-            fileSystem = LocalFileSystem.Create();
-            basePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            fileSystem.NewDirAsync(basePath).RunSynchronously();
+            
         }
 
-        [Test]
-        public void ShouldCreateAndDeleteDirectoryStructure()
+        static object[] ProvideFilesystem => new object[] {
+            ProvideLocalFilesystem,
+            ProvideVirtualFilesystem
+        };
+
+        static object[] ProvideLocalFilesystem
+        {
+            get
+            {
+                var localFileSystem = LocalFileSystem.Create();
+                var basePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                localFileSystem.NewDirAsync(basePath).RunSynchronously();
+                return new object[] { localFileSystem, basePath };
+            }
+        }
+
+        static object[] ProvideVirtualFilesystem
+        {
+            get
+            {
+                var localFileSystem = VirtualFileSystem.Create();
+                var basePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                localFileSystem.NewDirAsync(basePath).RunSynchronously();
+                return new object[] { localFileSystem, basePath };
+            }
+        }
+
+
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
+        public void ShouldCreateAndDeleteDirectoryStructure(FileSystem fileSystem, String basePath)
         {
             var innerPath = Path.Combine(basePath, Path.GetRandomFileName());
             var path = Path.Combine(innerPath, Path.GetRandomFileName());
@@ -42,8 +65,8 @@ namespace Wooga.Lambda.Storage.Tests
             Assert.IsTrue(fileSystem.HasDirAsync(innerPath).RunSynchronously());
         }
 
-        [Test]
-        public void ShouldCreateFileAndWriteAndReadContentAndDelete()
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
+        public void ShouldCreateFileAndWriteAndReadContentAndDelete(FileSystem fileSystem, String basePath)
         {
             var content = Guid.NewGuid().ToString();
             var path = Path.Combine(basePath, Path.GetRandomFileName());
@@ -60,8 +83,8 @@ namespace Wooga.Lambda.Storage.Tests
             Assert.IsFalse(fileSystem.HasFileAsync(path).RunSynchronously());
         }
 
-        [Test]
-        public void ShouldCreateFilesAndDirectoriesAndListThem()
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
+        public void ShouldCreateFilesAndDirectoriesAndListThem(FileSystem fileSystem, String basePath)
         {
             var filePath = Path.Combine(basePath, Path.GetRandomFileName());
             var dirPath = Path.Combine(basePath, Path.GetRandomFileName());
@@ -80,34 +103,34 @@ namespace Wooga.Lambda.Storage.Tests
             Assert.AreEqual(2, dir.Dirs.Count());
         }
 
-        [Test]
-        public void ShouldNotThrowOnRemovingFileThatDoesNotExist()
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
+        public void ShouldNotThrowOnRemovingFileThatDoesNotExist(FileSystem fileSystem, String basePath)
         {
             var filePath = Path.Combine(basePath, Path.GetRandomFileName());
 
             fileSystem.RmFileAsync(filePath).RunSynchronously();
         }
 
-        [Test]
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
         [ExpectedException(typeof(DirectoryNotFoundException))]
-        public void ShouldThrowOnRemovingDirectoryThatDoesNotExist()
+        public void ShouldThrowOnRemovingDirectoryThatDoesNotExist(FileSystem fileSystem, String basePath)
         {
             var filePath = Path.Combine(basePath, Path.GetRandomFileName());
 
             fileSystem.RmDirAsync(filePath).RunSynchronously();
         }
 
-        [Test]
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
         [ExpectedException(typeof(DirectoryNotFoundException))]
-        public void ShouldFailWritingToFileInDirectoryThatDoesNotExist()
+        public void ShouldFailWritingToFileInDirectoryThatDoesNotExist(FileSystem fileSystem, String basePath)
         {
             var filePath = Path.Combine(Path.Combine(basePath, Path.GetRandomFileName()), Path.GetRandomFileName());
 
             fileSystem.WriteFileAsync(filePath, "".ToEnumerableBytes()).RunSynchronously();
         }
 
-        [Test]
-        public void ShouldAppendToFile()
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
+        public void ShouldAppendToFile(FileSystem fileSystem, String basePath)
         {
             var content = Guid.NewGuid().ToString();
             var content2 = Guid.NewGuid().ToString();
@@ -120,8 +143,8 @@ namespace Wooga.Lambda.Storage.Tests
             Assert.AreEqual(content+content2, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
         }
 
-        [Test]
-        public void ShouldMoveFile()
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
+        public void ShouldMoveFile(FileSystem fileSystem, String basePath)
         {
             var content = Guid.NewGuid().ToString();
             var path = Path.Combine(basePath, Path.GetRandomFileName());
@@ -136,9 +159,9 @@ namespace Wooga.Lambda.Storage.Tests
             
         }
 
-        [Test]
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
         [ExpectedException(typeof(DirectoryNotFoundException))]
-        public void ShouldThrowMovingFileToNonExistentDestination()
+        public void ShouldThrowMovingFileToNonExistentDestination(FileSystem fileSystem, String basePath)
         {
             var content = Guid.NewGuid().ToString();
             var path = Path.Combine(basePath, Path.GetRandomFileName());
@@ -150,9 +173,9 @@ namespace Wooga.Lambda.Storage.Tests
             fileSystem.MvFileAsync(path, path2).RunSynchronously();
         }
 
-        [Test]
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
         [ExpectedException(typeof(IOException))]
-        public void ShouldThrowMovingFileToExistentFileDestination()
+        public void ShouldThrowMovingFileToExistentFileDestination(FileSystem fileSystem, String basePath)
         {
             var content = Guid.NewGuid().ToString();
             var content2 = Guid.NewGuid().ToString();
@@ -168,9 +191,9 @@ namespace Wooga.Lambda.Storage.Tests
             fileSystem.MvFileAsync(path, path2).RunSynchronously();
         }
 
-        [Test]
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
         [ExpectedException(typeof(IOException))]
-        public void ShouldThrowMovingFileToExistentDirectoryDestination()
+        public void ShouldThrowMovingFileToExistentDirectoryDestination(FileSystem fileSystem, String basePath)
         {
             var content = Guid.NewGuid().ToString();
             var path = Path.Combine(basePath, Path.GetRandomFileName());
@@ -184,8 +207,8 @@ namespace Wooga.Lambda.Storage.Tests
             fileSystem.MvFileAsync(path, path2).RunSynchronously();
         }
 
-        [Test]
-        public void ShouldMoveDirectoryWithContent()
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
+        public void ShouldMoveDirectoryWithContent(FileSystem fileSystem, String basePath)
         {
             var content = Guid.NewGuid().ToString();
             var path = Path.Combine(basePath, Path.GetRandomFileName());
@@ -213,8 +236,8 @@ namespace Wooga.Lambda.Storage.Tests
             Assert.AreEqual(content, fileSystem.ReadFileAsync(Path.Combine(path2, fileName)).RunSynchronously().EnumerableToString());
         }
 
-        [Test]
-        public void ShouldThrowMovingDirectoryToNonExistentDestination()
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
+        public void ShouldThrowMovingDirectoryToNonExistentDestination(FileSystem fileSystem, String basePath)
         {
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(Path.Combine(basePath, Path.GetRandomFileName()), Path.GetRandomFileName());
@@ -233,9 +256,9 @@ namespace Wooga.Lambda.Storage.Tests
             
         }
 
-        [Test]
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
         [ExpectedException(typeof(IOException))]
-        public void ShouldThrowMovingDirectoryToExistentFileDestination()
+        public void ShouldThrowMovingDirectoryToExistentFileDestination(FileSystem fileSystem, String basePath)
         {
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(basePath, Path.GetRandomFileName());
@@ -249,9 +272,9 @@ namespace Wooga.Lambda.Storage.Tests
             fileSystem.MvDirAsync(path, path2).RunSynchronously();
         }
 
-        [Test]
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
         [ExpectedException(typeof(IOException))]
-        public void ShouldThrowMovingDirectorToExistentDirectoryDestination()
+        public void ShouldThrowMovingDirectorToExistentDirectoryDestination(FileSystem fileSystem, String basePath)
         {
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(basePath, Path.GetRandomFileName());
@@ -265,8 +288,8 @@ namespace Wooga.Lambda.Storage.Tests
             fileSystem.MvDirAsync(path, path2).RunSynchronously();
         }
 
-        [Test]
-        public void ShouldCopyFile()
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
+        public void ShouldCopyFile(FileSystem fileSystem, String basePath)
         {
             var content = Guid.NewGuid().ToString();
             var path = Path.Combine(basePath, Path.GetRandomFileName());
@@ -281,9 +304,9 @@ namespace Wooga.Lambda.Storage.Tests
 
         }
 
-        [Test]
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
         [ExpectedException(typeof(DirectoryNotFoundException))]
-        public void ShouldThrowCopyingFileToNonExistentDestination()
+        public void ShouldThrowCopyingFileToNonExistentDestination(FileSystem fileSystem, String basePath)
         {
             var content = Guid.NewGuid().ToString();
             var path = Path.Combine(basePath, Path.GetRandomFileName());
@@ -295,9 +318,9 @@ namespace Wooga.Lambda.Storage.Tests
             fileSystem.CpFileAsync(path, path2).RunSynchronously();
         }
 
-        [Test]
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
         [ExpectedException(typeof(IOException))]
-        public void ShouldThrowCopyingFileToExistentFileDestination()
+        public void ShouldThrowCopyingFileToExistentFileDestination(FileSystem fileSystem, String basePath)
         {
             var content = Guid.NewGuid().ToString();
             var content2 = Guid.NewGuid().ToString();
@@ -313,8 +336,8 @@ namespace Wooga.Lambda.Storage.Tests
             fileSystem.CpFileAsync(path, path2).RunSynchronously();
         }
 
-        [Test]
-        public void ShouldThrowCopyingFileToExistentDirectoryDestination()
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
+        public void ShouldThrowCopyingFileToExistentDirectoryDestination(FileSystem fileSystem, String basePath)
         {
             var content = Guid.NewGuid().ToString();
             var path = Path.Combine(basePath, Path.GetRandomFileName());
@@ -334,8 +357,8 @@ namespace Wooga.Lambda.Storage.Tests
             }
         }
 
-        [Test]
-        public void ShouldCopyDirectoryWithContent()
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
+        public void ShouldCopyDirectoryWithContent(FileSystem fileSystem, String basePath)
         {
             var content = Guid.NewGuid().ToString();
             var content2 = Guid.NewGuid().ToString();
@@ -370,9 +393,9 @@ namespace Wooga.Lambda.Storage.Tests
             Assert.AreEqual(content, fileSystem.ReadFileAsync(filePath).RunSynchronously().EnumerableToString());
         }
 
-        [Test]
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
         [ExpectedException(typeof(DirectoryNotFoundException))]
-        public void ShouldThrowCopyingDirectoryToNonExistentDestination()
+        public void ShouldThrowCopyingDirectoryToNonExistentDestination(FileSystem fileSystem, String basePath)
         {
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(Path.Combine(Path.Combine(basePath, Path.GetRandomFileName()), Path.GetRandomFileName()), Path.GetRandomFileName());
@@ -383,9 +406,9 @@ namespace Wooga.Lambda.Storage.Tests
             fileSystem.CpDirAsync(path, path2).RunSynchronously();
         }
 
-        [Test]
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
         [ExpectedException(typeof(IOException))]
-        public void ShouldThrowCopyingDirectoryToExistentFileDestination()
+        public void ShouldThrowCopyingDirectoryToExistentFileDestination(FileSystem fileSystem, String basePath)
         {
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(basePath, Path.GetRandomFileName());
@@ -399,9 +422,9 @@ namespace Wooga.Lambda.Storage.Tests
             fileSystem.CpDirAsync(path, path2).RunSynchronously();
         }
 
-        [Test]
+        [Test, TestCaseSource(nameof(ProvideFilesystem))]
         [ExpectedException(typeof(IOException))]
-        public void ShouldThrowCopyingDirectoryToExistentDirectoryDestination()
+        public void ShouldThrowCopyingDirectoryToExistentDirectoryDestination(FileSystem fileSystem, String basePath)
         {
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(basePath, Path.GetRandomFileName());

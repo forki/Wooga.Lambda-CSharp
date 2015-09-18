@@ -6,7 +6,7 @@ using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Data;
 using FileContent = System.Collections.Generic.IEnumerable<byte>;
 
-namespace Wooga.Lambda.Storage.FileSystem
+namespace Wooga.Lambda.Storage
 {
     
     public class VirtualFileSystem : FileSystem
