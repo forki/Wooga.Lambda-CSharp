@@ -32,7 +32,7 @@ namespace Wooga.Lambda.Storage.FileSystem
         {
             return () =>
             {
-                var d = Root.GetNameInDirectory(p);
+                var d = Root.GetNameInExistingDirectory(p);
                 d.Item1.SetFile(d.Item2, c.ToList());
                 return Unit.Default;
             };
@@ -107,92 +107,6 @@ namespace Wooga.Lambda.Storage.FileSystem
         }
     }
 
-    internal static class TupleExtension
-    {
-        public static bool FileExists(this Tuple<VirtualDir, string> d)
-        {
-            return d != null && d.Item1.FileExists(d.Item2);
-        }
-
-        public static bool DirectoryExists(this Tuple<VirtualDir, string> d)
-        {
-            return d != null && d.Item1.DirectoryExists(d.Item2);
-        }
-
-        public static List<byte> GetFile(this Tuple<VirtualDir, string> d)
-        {
-            if (d == null || !d.FileExists())
-            {
-                throw new IOException("file does not exist");
-            }
-
-            return d.Item1.Files[d.Item2];
-        }
-
-        public static Unit DeleteFile(this Tuple<VirtualDir, string> d)
-        {
-            if (d != null)
-            {
-                d.Item1.DeleteFile(d.Item2);
-            }
-
-            return Unit.Default;
-        }
-
-        public static Unit MoveTo(this Tuple<VirtualDir, string> src, Tuple<VirtualDir, string> dest)
-        {
-            if (src == null)
-            {
-                throw new IOException("source directory does not exist");
-            }
-
-            if (!src.FileExists())
-            {
-                throw new IOException("source file does not exist");
-            }
-
-            if (dest == null)
-            {
-                throw new IOException("target directory does not exist");
-            }
-
-            if (dest.DirectoryExists() || dest.FileExists())
-            {
-                throw new IOException("destination already exists");
-            }
-
-            dest.Item1.Files[dest.Item2] = src.Item1.GetFile(src.Item2);
-            src.Item1.Files.Remove(src.Item2);
-            return Unit.Default;
-        }
-
-        public static Unit CopyTo(this Tuple<VirtualDir, string> src, Tuple<VirtualDir, string> dest)
-        {
-            if (src == null)
-            {
-                throw new IOException("source directory does not exist");
-            }
-
-            if (!src.FileExists())
-            {
-                throw new IOException("source file does not exist");
-            }
-
-            if (dest == null)
-            {
-                throw new IOException("target directory does not exist");
-            }
-
-            if (dest.DirectoryExists() || dest.FileExists())
-            {
-                throw new IOException("destination already exists");
-            }
-
-            dest.Item1.Files[dest.Item2] = src.Item1.GetFile(src.Item2);
-            return Unit.Default;
-        }
-    }
-
     internal class VirtualDir
     {
         internal Dictionary<string, List<byte>> Files = new Dictionary<string, List<byte>>();
@@ -235,7 +149,7 @@ namespace Wooga.Lambda.Storage.FileSystem
 
         public VirtualDir GetDirectory(string name)
         {
-            return Directories[name];
+            return GetDirectory(name.Split(Path.DirectorySeparatorChar));
         }
 
         public List<byte> GetFile(string name)
@@ -270,9 +184,13 @@ namespace Wooga.Lambda.Storage.FileSystem
         {
             if (Parent != null)
             {
+                if (Parent.Parent == null)
+                {
+                    return Name + Path.DirectorySeparatorChar;
+                }
                 return Path.Combine(Parent.GetPath(), Name);
             }
-            return Path.DirectorySeparatorChar.ToString();
+            return "";
         }
 
         internal void RemoveDir(VirtualDir virtualDir)
@@ -305,16 +223,99 @@ namespace Wooga.Lambda.Storage.FileSystem
 
     internal static class VirtualDirExtension
     {
-        public static Unit MoveTo(this VirtualDir dir, Tuple<VirtualDir, string> d)
+        public static bool FileExists(this Tuple<VirtualDir, string> d)
         {
-            if (dir == null)
+            return d != null && d.Item1.FileExists(d.Item2);
+        }
+
+        public static bool DirectoryExists(this Tuple<VirtualDir, string> d)
+        {
+            return d != null && d.Item1.DirectoryExists(d.Item2);
+        }
+
+        public static List<byte> GetFile(this Tuple<VirtualDir, string> d)
+        {
+            if (d == null || !d.FileExists())
+            {
+                throw new IOException("file does not exist");
+            }
+
+            return d.Item1.Files[d.Item2];
+        }
+
+        public static Unit DeleteFile(this Tuple<VirtualDir, string> d)
+        {
+            if (d != null)
+            {
+                d.Item1.DeleteFile(d.Item2);
+            }
+
+            return Unit.Default;
+        }
+
+        public static Unit MoveTo(this Tuple<VirtualDir, string> src, Tuple<VirtualDir, string> dest)
+        {
+            if (src == null)
+            {
+                throw new DirectoryNotFoundException("source directory does not exist");
+            }
+
+            if (!src.FileExists())
+            {
+                throw new IOException("source file does not exist");
+            }
+
+            if (dest == null)
+            {
+                throw new DirectoryNotFoundException("target directory does not exist");
+            }
+
+            if (dest.DirectoryExists() || dest.FileExists())
+            {
+                throw new IOException("destination already exists");
+            }
+
+            dest.Item1.Files[dest.Item2] = src.Item1.GetFile(src.Item2);
+            src.Item1.Files.Remove(src.Item2);
+            return Unit.Default;
+        }
+
+        public static Unit CopyTo(this Tuple<VirtualDir, string> src, Tuple<VirtualDir, string> dest)
+        {
+            if (src == null)
             {
                 throw new IOException("source directory does not exist");
             }
 
+            if (!src.FileExists())
+            {
+                throw new IOException("source file does not exist");
+            }
+
+            if (dest == null)
+            {
+                throw new DirectoryNotFoundException("target directory does not exist");
+            }
+
+            if (dest.DirectoryExists() || dest.FileExists())
+            {
+                throw new IOException("destination already exists");
+            }
+
+            dest.Item1.Files[dest.Item2] = src.Item1.GetFile(src.Item2);
+            return Unit.Default;
+        }
+
+        public static Unit MoveTo(this VirtualDir dir, Tuple<VirtualDir, string> d)
+        {
+            if (dir == null)
+            {
+                throw new DirectoryNotFoundException("source directory does not exist");
+            }
+
             if (d == null)
             {
-                throw new IOException("target directory does not exist");
+                throw new DirectoryNotFoundException("target directory does not exist");
             }
 
             if (d.Item1.DirectoryExists(d.Item2) || d.Item1.FileExists(d.Item2))
@@ -339,7 +340,7 @@ namespace Wooga.Lambda.Storage.FileSystem
 
             if (d == null)
             {
-                throw new IOException("target directory does not exist");
+                throw new DirectoryNotFoundException();
             }
 
             if (d.Item1.DirectoryExists(d.Item2) || d.Item1.FileExists(d.Item2))
@@ -369,14 +370,16 @@ namespace Wooga.Lambda.Storage.FileSystem
 
         public static Unit Remove(this VirtualDir dir)
         {
-            if (dir != null)
+            if (dir == null)
             {
-                if (dir.Parent != null)
-                {
-                    dir.Parent.RemoveDir(dir);
-                    dir.Parent = null;
-                }
+                throw new DirectoryNotFoundException();
             }
+            if (dir.Parent != null)
+            {
+                dir.Parent.RemoveDir(dir);
+                dir.Parent = null;
+            }
+            
             return Unit.Default;
         }
 
@@ -389,7 +392,7 @@ namespace Wooga.Lambda.Storage.FileSystem
         {
             if (dir == null)
             {
-                throw new Exception("directory does not exist");
+                return null;
             }
             if (!path.Any())
             {
@@ -399,7 +402,33 @@ namespace Wooga.Lambda.Storage.FileSystem
             {
                 return new Tuple<VirtualDir, string>(dir, path.Last());
             }
-            return dir.Directories[path.First()].GetNameInDirectory(path.Skip(1));
+            VirtualDir directory;
+            dir.Directories.TryGetValue(path.First(), out directory);
+            return directory.GetNameInDirectory(path.Skip(1));
+        }
+
+        public static Tuple<VirtualDir, string> GetNameInExistingDirectory(this VirtualDir dir, string path)
+        {
+            return dir.GetNameInExistingDirectory(path.Split(Path.DirectorySeparatorChar));
+        }
+
+        public static Tuple<VirtualDir, string> GetNameInExistingDirectory(this VirtualDir dir, IEnumerable<string> path)
+        {
+            if (dir == null)
+            {
+                throw new DirectoryNotFoundException("directory does not exist");
+            }
+            if (!path.Any())
+            {
+                throw new Exception("GetNameInDirectory called with an empty string");
+            }
+            if (path.Count() == 1)
+            {
+                return new Tuple<VirtualDir, string>(dir, path.Last());
+            }
+            VirtualDir directory;
+            dir.Directories.TryGetValue(path.First(), out directory);
+            return directory.GetNameInExistingDirectory(path.Skip(1));
         }
     }
 }

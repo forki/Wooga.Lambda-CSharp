@@ -99,7 +99,7 @@ namespace Wooga.Lambda.Storage.Tests
 
         [Test]
         [ExpectedException(typeof(DirectoryNotFoundException))]
-        public void ShouldFailWritingToFileInDirectortyThatDoesNotExist()
+        public void ShouldFailWritingToFileInDirectoryThatDoesNotExist()
         {
             var filePath = Path.Combine(Path.Combine(basePath, Path.GetRandomFileName()), Path.GetRandomFileName());
 
@@ -214,7 +214,6 @@ namespace Wooga.Lambda.Storage.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(DirectoryNotFoundException))]
         public void ShouldThrowMovingDirectoryToNonExistentDestination()
         {
             var path = Path.Combine(basePath, Path.GetRandomFileName());
@@ -222,8 +221,16 @@ namespace Wooga.Lambda.Storage.Tests
 
             fileSystem.NewDirAsync(path).RunSynchronously();
             Assert.IsTrue(fileSystem.HasDirAsync(path).RunSynchronously());
-
-            fileSystem.MvDirAsync(path, path2).RunSynchronously();
+            try
+            {
+                fileSystem.MvDirAsync(path, path2).RunSynchronously();
+                Assert.Fail("Should throw Exception");
+            }
+            catch (Exception e)
+            {
+                
+            }
+            
         }
 
         [Test]
@@ -307,7 +314,6 @@ namespace Wooga.Lambda.Storage.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(IOException))]
         public void ShouldThrowCopyingFileToExistentDirectoryDestination()
         {
             var content = Guid.NewGuid().ToString();
@@ -318,8 +324,14 @@ namespace Wooga.Lambda.Storage.Tests
             Assert.AreEqual(content, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
 
             fileSystem.NewDirAsync(path2).RunSynchronously();
-
-            fileSystem.CpFileAsync(path, path2).RunSynchronously();
+            try
+            {
+                fileSystem.CpFileAsync(path, path2).RunSynchronously();
+                Assert.Fail("Should throw Exception");
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         [Test]
