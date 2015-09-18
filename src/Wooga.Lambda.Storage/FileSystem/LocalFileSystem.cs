@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Wooga.Lambda.Control;
 using Wooga.Lambda.Control.Concurrent;
-using Wooga.Lambda.Data;
 using Unit = Wooga.Lambda.Data.Unit;
 
 namespace Wooga.Lambda.Storage.FileSystem
@@ -17,8 +14,6 @@ namespace Wooga.Lambda.Storage.FileSystem
         {
             return new LocalFileSystem();
         }
-
-        //private readonly Location.Seperator PathSeperator = p => p.Split(new[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
 
         private LocalFileSystem()
         {
@@ -45,8 +40,10 @@ namespace Wooga.Lambda.Storage.FileSystem
             {
                 using (var stream = new FileStream(p, FileMode.OpenOrCreate))
                 {
-                    for (int i = stream.ReadByte(); i != -1; i = stream.ReadByte())
-                        stream.WriteByte((byte)i);
+                    foreach (var i in c)
+                    {
+                        stream.WriteByte(i);
+                    }
                 }
                 return Unit.Default;
             };
@@ -58,8 +55,10 @@ namespace Wooga.Lambda.Storage.FileSystem
             {
                 using (var stream = new FileStream(p, FileMode.Append))
                 {
-                    for (int i = stream.ReadByte(); i != -1; i = stream.ReadByte())
-                        stream.WriteByte((byte)i);
+                    foreach (var i in c)
+                    {
+                        stream.WriteByte(i);
+                    }
                 }
                 return Unit.Default;
             };
@@ -78,7 +77,7 @@ namespace Wooga.Lambda.Storage.FileSystem
 
         public  Async<bool> HasFileAsync(string p)
         {
-            return () => System.IO.File.Exists(p);
+            return () => File.Exists(p);
         }
 
         public  Async<bool> HasDirAsync(string p)
@@ -136,14 +135,26 @@ namespace Wooga.Lambda.Storage.FileSystem
             return () =>
             {
                 var dir = GetDirAsync(ps).RunSynchronously();
+                if (HasDirAsync(pt).RunSynchronously() || HasFileAsync(pt).RunSynchronously())
+                {
+                    throw new IOException("target path already exists");
+                }
+
+                var pathElements = pt.Split(Path.DirectorySeparatorChar);
+                if (!HasDirAsync(String.Join(Path.DirectorySeparatorChar.ToString(),
+                        pathElements.Take(pathElements.Length - 1).ToArray())).RunSynchronously())
+                {
+                    throw new DirectoryNotFoundException("target directory does not exist");
+                }
+
                 NewDirAsync(pt).RunSynchronously();
                 foreach (var f in dir.Files)
                 {
-                    CpFileAsync(f, Path.Combine(pt, f)).RunSynchronously();
+                    CpFileAsync(f, Path.Combine(pt, Path.GetFileName(f))).RunSynchronously();
                 }
                 foreach (var d in dir.Dirs)
                 {
-                    CpDirAsync(d, Path.Combine(pt, d)).RunSynchronously();
+                    CpDirAsync(d, Path.Combine(pt, Path.GetFileName(d))).RunSynchronously();
                 }
                 return Unit.Default;
             };

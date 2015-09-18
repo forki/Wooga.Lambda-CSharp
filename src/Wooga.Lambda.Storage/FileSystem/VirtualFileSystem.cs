@@ -8,115 +8,7 @@ using FileContent = System.Collections.Generic.IEnumerable<byte>;
 
 namespace Wooga.Lambda.Storage.FileSystem
 {
-    internal class VirtualDir
-    {
-        internal Dictionary<string, List<byte>> Files = new Dictionary<string, List<byte>>();
-        internal Dictionary<string, VirtualDir> Directories = new Dictionary<string, VirtualDir>();
-        internal VirtualDir Parent;
-        public string Name;
-
-        public bool DirectoryExists(string element)
-        {
-            return Directories.ContainsKey(element);
-        }
-
-        public Unit CreateDirectory(string path)
-        {
-            CreateDirectory(path.Split(Path.PathSeparator));
-            return Unit.Default;
-        }
-
-        public VirtualDir CreateDirectory(IEnumerable<string> path)
-        {
-            if (!path.Any())
-            {
-                return this;
-            }
-            if (Files.ContainsKey(path.First()))
-            {
-                throw new Exception("file exists when creating directory");
-            }
-            if (!Directories.ContainsKey(path.First()))
-            {
-                Directories[path.First()] = new VirtualDir() { Parent = this, Name = path.First() };
-            }
-            return Directories[path.First()].CreateDirectory(path.Skip(1));
-        }
-
-        public bool FileExists(string name)
-        {
-            return Files.ContainsKey(name);
-        }
-
-        public VirtualDir GetDirectory(string name)
-        {
-            return Directories[name];
-        }
-
-        public List<byte> GetFile(string name)
-        {
-            if (!FileExists(name))
-            {
-                throw new IOException(name + " does not exist");
-            }
-
-            return Files[name];
-        }
-
-        public void SetFile(string name, List<byte> content)
-        {
-            Files[name] = content;
-        }
-
-        public VirtualDir GetDirectory(IEnumerable<string> path)
-        {
-            if (!path.Any())
-            {
-                return this;
-            }
-            if (Directories.ContainsKey(path.First()))
-            {
-                return Directories[path.First()].GetDirectory(path.Skip(1));
-            }
-            return null;
-        }
-
-        internal string GetPath()
-        {
-            if (Parent != null)
-            {
-                return Path.Combine(Parent.GetPath(), Name);
-            }
-            return Path.PathSeparator.ToString();
-        }
-
-        internal void RemoveDir(VirtualDir virtualDir)
-        {
-            Directories.Remove(virtualDir.Name);
-        }
-
-        public void DeleteFile(string name)
-        {
-            Files.Remove(name);
-        }
-
-        public VirtualDir Clone()
-        {
-            var dir = new VirtualDir();
-            foreach (var sd in Directories)
-            {
-                dir.Directories[sd.Key] = sd.Value.Clone();
-            }
-
-            foreach (var sf in Files)
-            {
-                dir.Files[sf.Key] = sf.Value.ConvertAll(_ => _);
-            }
-
-            return dir;
-        }
-    }
-
+    
     public class VirtualFileSystem : FileSystem
     {
         private readonly VirtualDir Root;
@@ -166,7 +58,7 @@ namespace Wooga.Lambda.Storage.FileSystem
 
         public Async<Dir> GetDirAsync(string p)
         {
-            return () => Root.GetDirectory(p.Split(Path.PathSeparator)).ToDir();
+            return () => Root.GetDirectory(p.Split(Path.DirectorySeparatorChar)).ToDir();
         }
 
         public Async<bool> HasFileAsync(string p)
@@ -301,6 +193,116 @@ namespace Wooga.Lambda.Storage.FileSystem
         }
     }
 
+    internal class VirtualDir
+    {
+        internal Dictionary<string, List<byte>> Files = new Dictionary<string, List<byte>>();
+        internal Dictionary<string, VirtualDir> Directories = new Dictionary<string, VirtualDir>();
+        internal VirtualDir Parent;
+        public string Name;
+
+        public bool DirectoryExists(string element)
+        {
+            return Directories.ContainsKey(element);
+        }
+
+        public Unit CreateDirectory(string path)
+        {
+            CreateDirectory(path.Split(Path.DirectorySeparatorChar));
+            return Unit.Default;
+        }
+
+        public VirtualDir CreateDirectory(IEnumerable<string> path)
+        {
+            if (!path.Any())
+            {
+                return this;
+            }
+            if (Files.ContainsKey(path.First()))
+            {
+                throw new Exception("file exists when creating directory");
+            }
+            if (!Directories.ContainsKey(path.First()))
+            {
+                Directories[path.First()] = new VirtualDir() { Parent = this, Name = path.First() };
+            }
+            return Directories[path.First()].CreateDirectory(path.Skip(1));
+        }
+
+        public bool FileExists(string name)
+        {
+            return Files.ContainsKey(name);
+        }
+
+        public VirtualDir GetDirectory(string name)
+        {
+            return Directories[name];
+        }
+
+        public List<byte> GetFile(string name)
+        {
+            if (!FileExists(name))
+            {
+                throw new IOException(name + " does not exist");
+            }
+
+            return Files[name];
+        }
+
+        public void SetFile(string name, List<byte> content)
+        {
+            Files[name] = content;
+        }
+
+        public VirtualDir GetDirectory(IEnumerable<string> path)
+        {
+            if (!path.Any())
+            {
+                return this;
+            }
+            if (Directories.ContainsKey(path.First()))
+            {
+                return Directories[path.First()].GetDirectory(path.Skip(1));
+            }
+            return null;
+        }
+
+        internal string GetPath()
+        {
+            if (Parent != null)
+            {
+                return Path.Combine(Parent.GetPath(), Name);
+            }
+            return Path.DirectorySeparatorChar.ToString();
+        }
+
+        internal void RemoveDir(VirtualDir virtualDir)
+        {
+            Directories.Remove(virtualDir.Name);
+        }
+
+        public void DeleteFile(string name)
+        {
+            Files.Remove(name);
+        }
+
+        public VirtualDir Clone()
+        {
+            var dir = new VirtualDir();
+            foreach (var sd in Directories)
+            {
+                dir.Directories[sd.Key] = sd.Value.Clone();
+            }
+
+            foreach (var sf in Files)
+            {
+                dir.Files[sf.Key] = sf.Value.ConvertAll(_ => _);
+            }
+
+            return dir;
+        }
+    }
+
+
     internal static class VirtualDirExtension
     {
         public static Unit MoveTo(this VirtualDir dir, Tuple<VirtualDir, string> d)
@@ -380,7 +382,7 @@ namespace Wooga.Lambda.Storage.FileSystem
 
         public static Tuple<VirtualDir, string> GetNameInDirectory(this VirtualDir dir, string path)
         {
-            return dir.GetNameInDirectory(path.Split(Path.PathSeparator));
+            return dir.GetNameInDirectory(path.Split(Path.DirectorySeparatorChar));
         }
 
         public static Tuple<VirtualDir, string> GetNameInDirectory(this VirtualDir dir, IEnumerable<string> path)
