@@ -38,6 +38,7 @@
     <Compile Include="FileSystem\AtomicExtensions.cs" />
     <Compile Include="FileSystem\FileSystem.cs" />
     <Compile Include="FileSystem\LocalFileSystem.cs" />
+    <Compile Include="FileSystem\TextFileExtensions.cs" />
     <Compile Include="FileSystem\VirtualFileSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

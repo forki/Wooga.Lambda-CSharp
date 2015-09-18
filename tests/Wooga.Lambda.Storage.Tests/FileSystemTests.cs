@@ -73,11 +73,11 @@ namespace Wooga.Lambda.Storage.Tests
             Assert.IsFalse(fileSystem.HasDirAsync(path).RunSynchronously());
             Assert.IsFalse(fileSystem.HasFileAsync(path).RunSynchronously());
 
-            fileSystem.WriteFileAsync(path, content.ToEnumerableBytes()).RunSynchronously();
+            fileSystem.WriteTextFileAsync(path, content).RunSynchronously();
             Assert.IsFalse(fileSystem.HasDirAsync(path).RunSynchronously());
             Assert.IsTrue(fileSystem.HasFileAsync(path).RunSynchronously());
 
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(path).RunSynchronously());
 
             fileSystem.RmFileAsync(path).RunSynchronously();
             Assert.IsFalse(fileSystem.HasFileAsync(path).RunSynchronously());
@@ -91,7 +91,7 @@ namespace Wooga.Lambda.Storage.Tests
             var dir2Path = Path.Combine(basePath, Path.GetRandomFileName());
             var deeperDirPath = Path.Combine(dirPath, Path.GetRandomFileName());
 
-            fileSystem.WriteFileAsync(filePath, "".ToEnumerableBytes()).RunSynchronously();
+            fileSystem.WriteTextFileAsync(filePath, "").RunSynchronously();
             fileSystem.NewDirAsync(dir2Path).RunSynchronously();
             fileSystem.NewDirAsync(deeperDirPath).RunSynchronously();
 
@@ -126,7 +126,7 @@ namespace Wooga.Lambda.Storage.Tests
         {
             var filePath = Path.Combine(Path.Combine(basePath, Path.GetRandomFileName()), Path.GetRandomFileName());
 
-            fileSystem.WriteFileAsync(filePath, "".ToEnumerableBytes()).RunSynchronously();
+            fileSystem.WriteTextFileAsync(filePath, "").RunSynchronously();
         }
 
         [Test, TestCaseSource(nameof(ProvideFilesystem))]
@@ -136,11 +136,11 @@ namespace Wooga.Lambda.Storage.Tests
             var content2 = Guid.NewGuid().ToString();
             var path = Path.Combine(basePath, Path.GetRandomFileName());
 
-            fileSystem.WriteFileAsync(path, content.ToEnumerableBytes()).RunSynchronously();
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
+            fileSystem.WriteTextFileAsync(path, content).RunSynchronously();
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(path).RunSynchronously());
 
-            fileSystem.AppendFileAsync(path, content2.ToEnumerableBytes()).RunSynchronously();
-            Assert.AreEqual(content+content2, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
+            fileSystem.AppendTextFileAsync(path, content2).RunSynchronously();
+            Assert.AreEqual(content+content2, fileSystem.ReadTextFileAsync(path).RunSynchronously());
         }
 
         [Test, TestCaseSource(nameof(ProvideFilesystem))]
@@ -150,11 +150,11 @@ namespace Wooga.Lambda.Storage.Tests
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(basePath, Path.GetRandomFileName());
 
-            fileSystem.WriteFileAsync(path, content.ToEnumerableBytes()).RunSynchronously();
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
+            fileSystem.WriteTextFileAsync(path, content).RunSynchronously();
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(path).RunSynchronously());
 
             fileSystem.MvFileAsync(path, path2).RunSynchronously();
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(path2).RunSynchronously().EnumerableToString());
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(path2).RunSynchronously());
             Assert.IsFalse(fileSystem.HasFileAsync(path).RunSynchronously());
             
         }
@@ -167,8 +167,8 @@ namespace Wooga.Lambda.Storage.Tests
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(Path.Combine(basePath, Path.GetRandomFileName()), Path.GetRandomFileName());
 
-            fileSystem.WriteFileAsync(path, content.ToEnumerableBytes()).RunSynchronously();
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
+            fileSystem.WriteTextFileAsync(path, content).RunSynchronously();
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(path).RunSynchronously());
 
             fileSystem.MvFileAsync(path, path2).RunSynchronously();
         }
@@ -182,11 +182,11 @@ namespace Wooga.Lambda.Storage.Tests
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(basePath, Path.GetRandomFileName());
 
-            fileSystem.WriteFileAsync(path, content.ToEnumerableBytes()).RunSynchronously();
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
+            fileSystem.WriteTextFileAsync(path, content).RunSynchronously();
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(path).RunSynchronously());
 
-            fileSystem.WriteFileAsync(path2, content2.ToEnumerableBytes()).RunSynchronously();
-            Assert.AreEqual(content2, fileSystem.ReadFileAsync(path2).RunSynchronously().EnumerableToString());
+            fileSystem.WriteTextFileAsync(path2, content2).RunSynchronously();
+            Assert.AreEqual(content2, fileSystem.ReadTextFileAsync(path2).RunSynchronously());
 
             fileSystem.MvFileAsync(path, path2).RunSynchronously();
         }
@@ -199,8 +199,8 @@ namespace Wooga.Lambda.Storage.Tests
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(basePath, Path.GetRandomFileName());
 
-            fileSystem.WriteFileAsync(path, content.ToEnumerableBytes()).RunSynchronously();
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
+            fileSystem.WriteTextFileAsync(path, content).RunSynchronously();
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(path).RunSynchronously());
 
             fileSystem.NewDirAsync(path2).RunSynchronously();
 
@@ -220,7 +220,7 @@ namespace Wooga.Lambda.Storage.Tests
             var dirPath = Path.Combine(path, deeperDirName);
 
             fileSystem.NewDirAsync(dirPath).RunSynchronously();
-            fileSystem.WriteFileAsync(filePath, content.ToEnumerableBytes()).RunSynchronously();
+            fileSystem.WriteTextFileAsync(filePath, content).RunSynchronously();
 
             Assert.IsTrue(fileSystem.HasDirAsync(dirPath).RunSynchronously());
             Assert.IsTrue(fileSystem.HasFileAsync(filePath).RunSynchronously());
@@ -233,7 +233,7 @@ namespace Wooga.Lambda.Storage.Tests
             Assert.IsTrue(fileSystem.HasDirAsync(Path.Combine(path2, deeperDirName)).RunSynchronously());
             Assert.IsTrue(fileSystem.HasFileAsync(Path.Combine(path2, fileName)).RunSynchronously());
 
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(Path.Combine(path2, fileName)).RunSynchronously().EnumerableToString());
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(Path.Combine(path2, fileName)).RunSynchronously());
         }
 
         [Test, TestCaseSource(nameof(ProvideFilesystem))]
@@ -266,7 +266,7 @@ namespace Wooga.Lambda.Storage.Tests
             fileSystem.NewDirAsync(path).RunSynchronously();
             Assert.IsTrue(fileSystem.HasDirAsync(path).RunSynchronously());
 
-            fileSystem.WriteFileAsync(path2, "".ToEnumerableBytes()).RunSynchronously();
+            fileSystem.WriteTextFileAsync(path2, "").RunSynchronously();
             Assert.IsTrue(fileSystem.HasFileAsync(path2).RunSynchronously());
 
             fileSystem.MvDirAsync(path, path2).RunSynchronously();
@@ -295,11 +295,11 @@ namespace Wooga.Lambda.Storage.Tests
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(basePath, Path.GetRandomFileName());
 
-            fileSystem.WriteFileAsync(path, content.ToEnumerableBytes()).RunSynchronously();
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
+            fileSystem.WriteTextFileAsync(path, content).RunSynchronously();
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(path).RunSynchronously());
 
             fileSystem.CpFileAsync(path, path2).RunSynchronously();
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(path2).RunSynchronously().EnumerableToString());
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(path2).RunSynchronously());
             Assert.IsTrue(fileSystem.HasFileAsync(path).RunSynchronously());
 
         }
@@ -312,8 +312,8 @@ namespace Wooga.Lambda.Storage.Tests
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(Path.Combine(basePath, Path.GetRandomFileName()), Path.GetRandomFileName());
 
-            fileSystem.WriteFileAsync(path, content.ToEnumerableBytes()).RunSynchronously();
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
+            fileSystem.WriteTextFileAsync(path, content).RunSynchronously();
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(path).RunSynchronously());
 
             fileSystem.CpFileAsync(path, path2).RunSynchronously();
         }
@@ -327,11 +327,11 @@ namespace Wooga.Lambda.Storage.Tests
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(basePath, Path.GetRandomFileName());
 
-            fileSystem.WriteFileAsync(path, content.ToEnumerableBytes()).RunSynchronously();
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
+            fileSystem.WriteTextFileAsync(path, content).RunSynchronously();
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(path).RunSynchronously());
 
-            fileSystem.WriteFileAsync(path2, content2.ToEnumerableBytes()).RunSynchronously();
-            Assert.AreEqual(content2, fileSystem.ReadFileAsync(path2).RunSynchronously().EnumerableToString());
+            fileSystem.WriteTextFileAsync(path2, content2).RunSynchronously();
+            Assert.AreEqual(content2, fileSystem.ReadTextFileAsync(path2).RunSynchronously());
 
             fileSystem.CpFileAsync(path, path2).RunSynchronously();
         }
@@ -343,8 +343,8 @@ namespace Wooga.Lambda.Storage.Tests
             var path = Path.Combine(basePath, Path.GetRandomFileName());
             var path2 = Path.Combine(basePath, Path.GetRandomFileName());
 
-            fileSystem.WriteFileAsync(path, content.ToEnumerableBytes()).RunSynchronously();
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(path).RunSynchronously().EnumerableToString());
+            fileSystem.WriteTextFileAsync(path, content).RunSynchronously();
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(path).RunSynchronously());
 
             fileSystem.NewDirAsync(path2).RunSynchronously();
             try
@@ -371,7 +371,7 @@ namespace Wooga.Lambda.Storage.Tests
             var dirPath = Path.Combine(path, deeperDirName);
 
             fileSystem.NewDirAsync(dirPath).RunSynchronously();
-            fileSystem.WriteFileAsync(filePath, content.ToEnumerableBytes()).RunSynchronously();
+            fileSystem.WriteTextFileAsync(filePath, content).RunSynchronously();
 
             Assert.IsTrue(fileSystem.HasDirAsync(dirPath).RunSynchronously());
             Assert.IsTrue(fileSystem.HasFileAsync(filePath).RunSynchronously());
@@ -384,13 +384,13 @@ namespace Wooga.Lambda.Storage.Tests
             Assert.IsTrue(fileSystem.HasDirAsync(Path.Combine(path2, deeperDirName)).RunSynchronously());
             Assert.IsTrue(fileSystem.HasFileAsync(Path.Combine(path2, fileName)).RunSynchronously());
 
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(Path.Combine(path2, fileName)).RunSynchronously().EnumerableToString());
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(filePath).RunSynchronously().EnumerableToString());
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(Path.Combine(path2, fileName)).RunSynchronously());
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(filePath).RunSynchronously());
 
-            fileSystem.WriteFileAsync(Path.Combine(path2, fileName), content2.ToEnumerableBytes()).RunSynchronously();
+            fileSystem.WriteTextFileAsync(Path.Combine(path2, fileName), content2).RunSynchronously();
 
-            Assert.AreEqual(content2, fileSystem.ReadFileAsync(Path.Combine(path2, fileName)).RunSynchronously().EnumerableToString());
-            Assert.AreEqual(content, fileSystem.ReadFileAsync(filePath).RunSynchronously().EnumerableToString());
+            Assert.AreEqual(content2, fileSystem.ReadTextFileAsync(Path.Combine(path2, fileName)).RunSynchronously());
+            Assert.AreEqual(content, fileSystem.ReadTextFileAsync(filePath).RunSynchronously());
         }
 
         [Test, TestCaseSource(nameof(ProvideFilesystem))]
@@ -416,7 +416,7 @@ namespace Wooga.Lambda.Storage.Tests
             fileSystem.NewDirAsync(path).RunSynchronously();
             Assert.IsTrue(fileSystem.HasDirAsync(path).RunSynchronously());
 
-            fileSystem.WriteFileAsync(path2, "".ToEnumerableBytes()).RunSynchronously();
+            fileSystem.WriteTextFileAsync(path2, "").RunSynchronously();
             Assert.IsTrue(fileSystem.HasFileAsync(path2).RunSynchronously());
 
             fileSystem.CpDirAsync(path, path2).RunSynchronously();
@@ -436,24 +436,6 @@ namespace Wooga.Lambda.Storage.Tests
             Assert.IsTrue(fileSystem.HasDirAsync(path2).RunSynchronously());
 
             fileSystem.CpDirAsync(path, path2).RunSynchronously();
-        }
-    }
-    
-    internal static class Conversions
-    {
-        public static IEnumerable<byte> ToEnumerableBytes(this string input)
-        {
-            return Encoding.UTF8.GetBytes(input);
-        }
-
-        public static string EnumerableToString(this IEnumerable<byte> input)
-        {
-            var stream = new MemoryStream();
-            foreach (var b in input)
-            {
-                stream.WriteByte(b);
-            }
-            return Encoding.UTF8.GetString(stream.ToArray());
         }
     }
 }

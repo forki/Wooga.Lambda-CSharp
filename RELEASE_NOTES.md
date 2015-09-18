@@ -1,4 +1,4 @@
-#### 1.0.0-prerelease - Aug 23 2015
+#### 0.7.0-prerelease - Aug 23 2015
 * [Data] Removed Tuple & List
 * [Data] Substance provides ported datastructures from corefx 
 
