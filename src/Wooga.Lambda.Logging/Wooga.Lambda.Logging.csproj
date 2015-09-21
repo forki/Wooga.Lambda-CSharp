@@ -34,6 +34,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Log.cs" />
+    <Content Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Wooga.Lambda\Wooga.Lambda.csproj">
