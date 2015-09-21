@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -28,9 +29,11 @@ namespace Wooga.Lambda.Network.Transport
             {
                 using (var postStream = webRequest.GetRequestStream())
                 {
-                    var body = httpRequest.Body.ValueOr(new byte[0]).ToArray();
-                    postStream.Write(body.ToArray(), 0, body.Count());
-                    postStream.Close(); 
+                    foreach (byte b in httpRequest.Body.ValueOr(new byte[0]))
+                    {
+                        postStream.WriteByte(b);    
+                    }
+                    postStream.Close();
                 }
             }
             return webRequest;
