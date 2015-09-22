@@ -1,100 +1,74 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Configuration;
 using System.Linq;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Data;
 
-namespace Wooga.Lambda.Storage.FileSystem
+namespace Wooga.Lambda.Storage
 {
     /// <summary>
     ///     FileSystem with asynchronous file operations
     /// </summary>
     public interface FileSystem
     {
-        Location.Combinator PathCombinator { get; }
-        Location Locate(string s);
-        Location Locate(Location p, string s);
-        Location Parent(Location p);
-        Async<File> GetFileAsync(Location p);
-        Async<Unit> WriteFileAsync(Location p, ImmutableList<byte> c);
-        Async<Unit> AppendFileAsync(Location p, ImmutableList<byte> c);
-        Async<Dir> GetDirAsync(Location p);
-        Async<bool> HasFileAsync(Location p);
-        Async<bool> HasDirAsync(Location p);
-        Async<Unit> NewDirAsync(Location p);
-        Async<Unit> RmDirAsync(Location p);
-        Async<Unit> RmFileAsync(Location p);
-        Async<Unit> MvDirAsync(Location ps, Location pt);
-        Async<Unit> MvFileAsync(Location ps, Location pt);
-        Async<Unit> CpDirAsync(Location ps, Location pt);
-        Async<Unit> CpFileAsync(Location ps, Location pt);
-    }
-
-    /// <summary>
-    ///     File with Location and Content
-    /// </summary>
-    public struct File
-    {
-        public static File Create(Location location, ImmutableList<byte> content)
-        {
-            return new File(location,content);
-        }
-
-        public readonly ImmutableList<byte> Content;
-        public readonly Location Location;
-
-        private File(Location location, ImmutableList<byte> content)
-        {
-            Location = location;
-            Content = content;
-        }
+        Async<IEnumerable<byte>> ReadFileAsync(string p);
+        Async<Unit> WriteFileAsync(string p, IEnumerable<byte> c);
+        Async<Unit> AppendFileAsync(string p, IEnumerable<byte> c);
+        Async<Dir>  GetDirAsync(string p);
+        Async<bool> HasFileAsync(string p);
+        Async<bool> HasDirAsync(string p);
+        Async<Unit> NewDirAsync(string p);
+        Async<Unit> RmDirAsync(string p);
+        Async<Unit> RmFileAsync(string p);
+        Async<Unit> MvDirAsync(string ps, string pt);
+        Async<Unit> MvFileAsync(string ps, string pt);
+        Async<Unit> CpDirAsync(string ps, string pt);
+        Async<Unit> CpFileAsync(string ps, string pt);
     }
 
     /// <summary>
     ///     Dir with Paths to its Files and Dirs
     /// </summary>
-    public struct Dir
+    public struct Dir : IStructuralEquatable, IEquatable<Dir>
     {
-        public static Dir Create(Location location, ImmutableList<Location> dirs, ImmutableList<Location> files)
+        internal static Dir Create(string location, IEnumerable<string> dirs, IEnumerable<string> files)
         {
             return new Dir(location, dirs, files);
         }
 
-        public readonly ImmutableList<Location> Dirs;
-        public readonly ImmutableList<Location> Files;
-        public readonly Location Location;
+        public readonly IEnumerable<string> Dirs;
+        public readonly IEnumerable<string> Files;
+        public readonly string Location;
 
-        private Dir(Location location, ImmutableList<Location> dirs, ImmutableList<Location> files)
+        private Dir(string location, IEnumerable<string> dirs, IEnumerable<string> files)
         {
             Location = location;
             Dirs = dirs;
             Files = files;
         }
-    }
 
-    /// <summary>
-    ///     FileSystem Location based on a List    
-    /// </summary>
-    public struct Location
-    {
-        public static Location Create(ImmutableList<string> paths)
+        public bool Equals(object other, IEqualityComparer comparer)
         {
-            return new Location(paths);
+            if (other is Dir)
+            {
+                return comparer.Equals(Location, ((Dir)other).Location)
+                    && comparer.Equals(Dirs, ((Dir)other).Dirs)
+                    && comparer.Equals(Files, ((Dir)other).Files);
+            }
+            return false;
         }
 
-        public delegate string Combinator(string a, string b);
-
-        public readonly ImmutableList<string> Paths;
-
-        private Location(ImmutableList<string> paths)
+        public int GetHashCode(IEqualityComparer comparer)
         {
-            Paths = paths;
-            Name = Paths.Last();
+            return comparer.GetHashCode(this);
         }
 
-        public string Name { get; }
-
-        public string FullName(Combinator pathCombinator)
+        public bool Equals(Dir other)
         {
-            return Paths.Fold((s, p) => pathCombinator(s, p), "");
+            return ((IStructuralEquatable)this).Equals(other, EqualityComparer<Object>.Default);
         }
     }
 }

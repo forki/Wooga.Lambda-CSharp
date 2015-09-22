@@ -72,6 +72,64 @@ namespace Wooga.Lambda.Tests.Control.Monad
     }
 
     [TestFixture]
+    public class MaybeEqualityTests
+    {
+        [Test]
+        public void JustsAreEqual()
+        {
+            var x = Maybe.Just<string>("a");
+            var y = Maybe.Just<string>("a");
+            Assert.AreEqual(x,y);
+            Assert.IsTrue(x.Equals(y));
+        }
+
+        [Test]
+        public void JustsAreNotEqual()
+        {
+            var x = Maybe.Just<string>("a");
+            var y = Maybe.Just<string>("b");
+            Assert.AreNotEqual(x, y);
+            Assert.IsFalse(x.Equals(y));
+        }
+
+        [Test]
+        public void NothingsAreEqual()
+        {
+            var x = Maybe.Nothing<int>();
+            var y = Maybe.Nothing<int>();
+            Assert.AreEqual(x, y);
+            Assert.IsTrue(x.Equals(y));
+        }
+
+        [Test]
+        public void JustAndNothingAreNotEqual()
+        {
+            var x = Maybe.Just<string>("a");
+            var y = Maybe.Nothing<string>();
+            Assert.AreNotEqual(x, y);
+            Assert.IsFalse(x.Equals(y));
+        }
+
+        [Test]
+        public void JustsAreEqualWithNestedStructs()
+        {
+            var x = Maybe.Just(Tuple.Create("a", Tuple.Create("b", 1)));
+            var y = Maybe.Just(Tuple.Create("a", Tuple.Create("b", 1)));
+            Assert.AreEqual(x, y);
+            Assert.IsTrue(x.Equals(y));
+        }
+
+        [Test]
+        public void JustsAreNotEqualWithNestedStructs()
+        {
+            var x = Maybe.Just(Tuple.Create("a", Tuple.Create("b", 1)));
+            var y = Maybe.Just(Tuple.Create("a", Tuple.Create("b", 2)));
+            Assert.AreNotEqual(x, y);
+            Assert.IsFalse(x.Equals(y));
+        }
+    }
+
+    [TestFixture]
     public class MaybeMonadTests
     {
         [Test]

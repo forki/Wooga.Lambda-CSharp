@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Wooga.Lambda.Control.Monad
 {
@@ -7,7 +9,7 @@ namespace Wooga.Lambda.Control.Monad
     /// </summary>
     /// <typeparam name="TSuccess"></typeparam>
     /// <typeparam name="TFailure"></typeparam>
-    public struct Either<TSuccess,TFailure>
+    public struct Either<TSuccess,TFailure> : IStructuralEquatable
     {
         internal TFailure FailureValue;
         internal TSuccess SuccessValue;
@@ -18,6 +20,45 @@ namespace Wooga.Lambda.Control.Monad
             FailureValue = failureValue;
             SuccessValue = successValue;
             IsSuccess = isSuccess;
+        }
+
+        public override Boolean Equals(Object obj)
+        {
+            return ((IStructuralEquatable)this).Equals(obj, EqualityComparer<Object>.Default);
+        }
+
+        Boolean IStructuralEquatable.Equals(Object other, IEqualityComparer comparer)
+        {
+            if (other is Either<TSuccess, TFailure>)
+            {
+                if (IsSuccess && ((Either<TSuccess, TFailure>) other).IsSuccess)
+                {
+                    return comparer.Equals(SuccessValue, ((Either<TSuccess, TFailure>)other).SuccessValue);
+                }
+                else if (!IsSuccess && !((Either<TSuccess, TFailure>) other).IsSuccess)
+                {
+                    return comparer.Equals(FailureValue, ((Either<TSuccess, TFailure>)other).FailureValue);
+                }
+                return false;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return ((IStructuralEquatable)this).GetHashCode(EqualityComparer<Object>.Default);
+        }
+
+        Int32 IStructuralEquatable.GetHashCode(IEqualityComparer comparer)
+        {
+            if (IsSuccess)
+            {
+                return comparer.GetHashCode(SuccessValue);
+            }
+            else
+            {
+                return comparer.GetHashCode(FailureValue);
+            }
         }
     }
 

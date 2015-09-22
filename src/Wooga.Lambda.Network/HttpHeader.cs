@@ -1,19 +1,53 @@
-﻿namespace Wooga.Lambda.Network
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Wooga.Lambda.Network
 {
-    public struct HttpHeader
+    public struct HttpHeader : IStructuralEquatable
     {
-        public readonly string Key;
-        public readonly string Value;
-
-        public HttpHeader(string key, string value)
+        public static HttpHeader Create(string key, string value)
         {
-            Key = key;
-            Value = value;
+            return new HttpHeader(key,value);
         }
 
-        public string HeaderString
+        public string Key { get { return Header.Item1; } }
+        public string Value { get { return Header.Item2; } }
+        private readonly Tuple<string, string> Header;
+
+        public HttpHeader(string key, string value) : this(Tuple.Create(key, value))
         {
-            get { return $"{Key}: {Value}"; }
         }
+
+        public HttpHeader(Tuple<string,string> header)
+        {
+            Header = header;
+        }
+
+        public override Boolean Equals(Object obj)
+        {
+            return ((IStructuralEquatable)Header).Equals(obj, EqualityComparer<Object>.Default);
+        }
+
+        public override int GetHashCode()
+        {
+            return ((IStructuralEquatable)this).GetHashCode(EqualityComparer<Object>.Default);
+        }
+
+        int IStructuralEquatable.GetHashCode(IEqualityComparer comparer)
+        {
+            return ((IStructuralEquatable)Header).GetHashCode(comparer);
+        }
+
+        public bool Equals(object other, IEqualityComparer comparer)
+        {
+            return ((IStructuralEquatable) Header).Equals(other, comparer);
+        }
+
+        public int GetHashCode(IEqualityComparer comparer)
+        {
+            return ((IStructuralEquatable) Header).GetHashCode(comparer);
+        }
+        
     }
 }

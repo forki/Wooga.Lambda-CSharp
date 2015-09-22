@@ -1,51 +1,95 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using Wooga.Lambda.Control.Monad;
-using Wooga.Lambda.Data;
+using Headers = System.Collections.Immutable.ImmutableDictionary<string,Wooga.Lambda.Network.HttpHeader>;
+using Body = System.Collections.Generic.IEnumerable<byte>;
 
 namespace Wooga.Lambda.Network
 {
-    public struct HttpRequest
+    public struct HttpRequest : IStructuralEquatable, IEquatable<HttpRequest>
     {
-        public readonly Maybe<ImmutableList<byte>> Body;
+        public static HttpRequest Create(string url, HttpMethod httpMethod)
+        {
+            return new HttpRequest(new Uri(url), httpMethod, Headers.Empty, Maybe.Nothing<Body>());
+        }
+
+        public static HttpRequest Create(Uri endpoint, HttpMethod httpMethod)
+        {
+            return new HttpRequest(endpoint, httpMethod, Headers.Empty, Maybe.Nothing<Body>());
+        }
+
+        public static HttpRequest Create(string url, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body)
+        {
+            return new HttpRequest(new Uri(url), httpMethod, httpHeaders, body);
+        }
+
+        public static HttpRequest Create(Uri endpoint, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body)
+        {
+            return new HttpRequest(endpoint, httpMethod, httpHeaders, body);
+        }
+
+        public readonly Maybe<Body> Body;
         public readonly Uri Endpoint;
-        public readonly ImmutableList<HttpHeader> HttpHeaders;
+        public readonly Headers HttpHeaders;
         public readonly HttpMethod HttpMethod;
 
-        public HttpRequest(Uri endpoint, HttpMethod httpMethod, ImmutableList<HttpHeader> httpHeaders,
-            Maybe<ImmutableList<byte>> body)
+        public HttpRequest(Uri endpoint, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body)
         {
             Endpoint = endpoint;
             HttpMethod = httpMethod;
-            HttpHeaders = httpHeaders.Unique();
+            HttpHeaders = httpHeaders;
             Body = body;
         }
 
-        public static HttpRequest Basic(string url, HttpMethod httpMethod)
+        public HttpRequest With(Headers httpHeaders)
         {
-            return new HttpRequest(new Uri(url), httpMethod, ImmutableList.Empty<HttpHeader>(),
-                Maybe.Nothing<ImmutableList<byte>>());
-        }
-    }
-
-    public static class HttpRequestExt
-    {
-        public static HttpRequest WithHeaders(this HttpRequest httpRequest, ImmutableList<HttpHeader> httpHeaders)
-        {
-            return new HttpRequest(httpRequest.Endpoint, httpRequest.HttpMethod,
-                httpRequest.HttpHeaders.AddRange(httpHeaders),
-                httpRequest.Body);
+            return Create(Endpoint, HttpMethod, HttpHeaders.AddRange(httpHeaders), Body);
         }
 
-        public static HttpRequest WithBody(this HttpRequest httpRequest, ImmutableList<byte> body)
+        public HttpRequest With(Body body)
         {
-            return new HttpRequest(httpRequest.Endpoint, httpRequest.HttpMethod, httpRequest.HttpHeaders, CheckBody(body));
+            return Create(Endpoint, HttpMethod, HttpHeaders, Validate(body));
         }
 
-        private static Maybe<ImmutableList<byte>> CheckBody(ImmutableList<byte> body)
+        private Maybe<Body> Validate(Body body)
         {
-            return body == null || body.Count == 0 
-                ? Maybe.Nothing<ImmutableList<byte>>() 
-                : Maybe.Just(body);
+            return body == null || !body.Any() ? Maybe.Nothing<Body>() : Maybe.Just(body);
+        }
+
+        public bool Equals(HttpRequest other)
+        {
+            return ((IStructuralEquatable) this).Equals(other, EqualityComparer<Object>.Default);
+        }
+
+        public override Boolean Equals(Object obj)
+        {
+            return ((IStructuralEquatable)this).Equals(obj, EqualityComparer<Object>.Default);
+        }
+
+        Boolean IStructuralEquatable.Equals(Object other, IEqualityComparer comparer)
+        {
+            if (other is HttpRequest)
+            {
+                var otherH = ((HttpRequest) other);
+                return comparer.Equals(Body, otherH.Body)
+                       && comparer.Equals(Endpoint, otherH.Endpoint)
+                       && comparer.Equals(HttpMethod, otherH.HttpMethod)
+                       && comparer.Equals(HttpHeaders, otherH.HttpHeaders);
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return ((IStructuralEquatable)this).GetHashCode(EqualityComparer<Object>.Default);
+        }
+        
+        Int32 IStructuralEquatable.GetHashCode(IEqualityComparer comparer)
+        {
+            return comparer.GetHashCode(this);
         }
     }
 }

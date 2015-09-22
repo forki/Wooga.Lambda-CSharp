@@ -1,5 +1,6 @@
-﻿using NUnit.Framework;
-using Wooga.Lambda.Data;
+﻿using System;
+using NUnit.Framework;
+using System.Collections.Immutable;
 using Wooga.Lambda.Parser.Combinators;
 
 namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
@@ -52,7 +53,7 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         {
             var p = Common.Zero<int>().Many();
             var r = ((Result<ImmutableList<int>>.Success)p((new CharStream("a"))));
-            Assert.AreEqual(new ImmutableList<int>(), r.Value);
+            Assert.AreEqual(ImmutableList<int>.Empty, r.Value);
         }
 
         [Test]
@@ -60,7 +61,7 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         {
             var p = Chars.Eq('a').Many();
             var r = ((Result<ImmutableList<char>>.Success)p((new CharStream("aaaa"))));
-            var immutableList = new ImmutableList<char>(new []{ 'a', 'a', 'a', 'a' });
+            var immutableList = ImmutableList.Create('a', 'a', 'a', 'a');
             Assert.AreEqual(immutableList, r.Value);
         }
 
@@ -108,8 +109,8 @@ namespace Wooga.Lambda.Parser.Tests.CombinatorsTests
         public void TakeBothUsesBothParserResults()
         {
             var p = Common.Return(20).TakeBoth(Common.Return(30));
-            var r = ((Result<ImmutableTuple<int,int>>.Success)p((new CharStream("a"))));
-            Assert.AreEqual(ImmutableTuple.Tuple(20,30), r.Value);
+            var r = ((Result<Tuple<int,int>>.Success)p((new CharStream("a"))));
+            Assert.AreEqual(Tuple.Create(20,30), r.Value);
         }
 
         [Test]

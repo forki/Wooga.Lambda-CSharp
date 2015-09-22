@@ -3,7 +3,8 @@
 // summary:	Implements the characters class
 
 using System;
-using Wooga.Lambda.Data;
+using System.Collections.Immutable;
+using System.Linq;
 
 namespace Wooga.Lambda.Parser.Combinators
 {
@@ -56,7 +57,7 @@ namespace Wooga.Lambda.Parser.Combinators
         /// <returns>   A Parser&lt;char&gt; </returns>
         public static Parser<char> Newline()
         {
-            return AnyOf(new ImmutableList<char> {'\n', '\r'});
+            return AnyOf(ImmutableList.Create('\n', '\r'));
         }
 
         /// <summary>   Gets any. </summary>
@@ -87,7 +88,7 @@ namespace Wooga.Lambda.Parser.Combinators
         /// <returns>   A list of. </returns>
         public static Parser<ImmutableList<char>> SeqOf(ImmutableList<char> cs)
         {
-            return cs.Fold((p, c) => p.Bind(r => Eq(c).Then(r.Add(c))), Common.Return(new ImmutableList<char>()));
+            return cs.Aggregate(Common.Return(ImmutableList<char>.Empty),(p, c) => p.Bind(r => Eq(c).Then(r.Add(c))));
         }
     }
 }

@@ -1,212 +1,434 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Wooga.Lambda.Control;
+using System.IO;
+using System.Linq;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Data;
-using static Wooga.Lambda.Data.ImmutableList;
-using static Wooga.Lambda.Data.ImmutableTuple;
-using VirtualDirs = System.Collections.Generic.Dictionary<Wooga.Lambda.Storage.FileSystem.Location, Wooga.Lambda.Data.ImmutableTuple<System.Collections.Generic.List<Wooga.Lambda.Storage.FileSystem.Location>, System.Collections.Generic.List<Wooga.Lambda.Storage.FileSystem.Location>>>;
-using VirtualFiles = System.Collections.Generic.Dictionary<Wooga.Lambda.Storage.FileSystem.Location, Wooga.Lambda.Storage.FileSystem.File>;
-namespace Wooga.Lambda.Storage.FileSystem
+using FileContent = System.Collections.Generic.IEnumerable<byte>;
+
+namespace Wooga.Lambda.Storage
 {
+    
     public class VirtualFileSystem : FileSystem
     {
-        public readonly VirtualDirs dirs = new VirtualDirs();
-        public readonly VirtualFiles files = new VirtualFiles();
-
-        public Location.Combinator PathCombinator { get { return (a,b)=>(a+"/"+b).Replace("//", "/"); } }
+        private readonly VirtualDir Root;
 
         private VirtualFileSystem()
         {
-            NewDirAsync(Locate("/"));
+            Root = new VirtualDir();
         }
 
-        public  Location Locate(string s)
-        {
-            var p = ("/" + s).Replace("//","/");
-
-            var isWinDrive = PathMatch(@"^\w:\\.*");
-            var isNixRoot = PathMatch(@"^\/.*");
-            var isWinShare = PathMatch(@"^\\\\\w+");
-
-            var parts =
-                Pattern<ImmutableTuple<ImmutableList<string>, string>>
-                    .Match(p)
-                    .Case(isWinDrive,_ =>  Tuple(List(p.Substring(0, 3)), p.Substring(3)))
-                    .Case(isNixRoot, _ =>  Tuple(List("/"), p.Substring(1)))
-                    .Case(isWinShare,_ =>  Tuple(List("\\\\"), p.Substring(2)))
-                    .Default(_ => Tuple(Empty<string>(), p))
-                    .Run();
-
-            var ps = PathSplit(parts.Item2);
-            return Location.Create(parts.Item1.AddRange(ps));
-        }
-
-        public  Location Locate(Location p, string s)
-        {
-            return Location.Create(p.Paths.Add(s));
-        }
-
-        public Location Parent(Location p)
-        {
-            return p.Paths.Count > 1 ? Locate(Location.Create(p.Paths.RemoveAt(p.Paths.Count-1)),".") : p;
-        }
-
-        public  Async<File> GetFileAsync(Location p)
-        {
-            return () => files[p];
-        }
-
-        public  Async<Unit> WriteFileAsync(Location p, ImmutableList<byte> c)
-        {
-            return () =>
-            {
-                files[p] = File.Create(p, c);
-                return Unit.Default;
-            };
-        }
-
-        public  Async<Unit> AppendFileAsync(Location p, ImmutableList<byte> c)
-        {
-            return () =>
-            {
-                var file = files.ContainsKey(p) ? files[p] : File.Create(p,Empty<byte>());
-                files[p] = File.Create(p, file.Content.AddRange(c));
-                return Unit.Default;
-            };
-        }
-
-        public  Async<Dir> GetDirAsync(Location p)
-        {
-            return () => Dir.Create(p, dirs[p].Item1.ToArray().ToImmutableList(), dirs[p].Item2.ToArray().ToImmutableList());
-        }
-
-        public  Async<bool> HasFileAsync(Location p)
-        {
-            return () => files.ContainsKey(p);
-        }
-
-        public  Async<bool> HasDirAsync(Location p)
-        {
-            return () => dirs.ContainsKey(p);
-        }
-
-        public  Async<Unit> NewDirAsync(Location p)
-        {
-            return () =>
-            {
-                dirs[p] = new ImmutableTuple<List<Location>, List<Location>>(new List<Location>(), new List<Location>());
-                return Unit.Default;
-            };
-        }
-
-        public  Async<Unit> RmDirAsync(Location p)
-        {
-            return () =>
-            {
-                var dir = GetDirAsync(p).RunSynchronously();
-                foreach (var f in dir.Files)
-                {
-                    RmFileAsync(f);
-                }
-                foreach (var d in dir.Dirs)
-                {
-                    RmDirAsync(d);
-                }
-                RmDirAsync(p);
-                return Unit.Default;
-            };
-        }
-
-        public  Async<Unit> RmFileAsync(Location p)
-        {
-            return () =>
-            {
-                files.Remove(p);
-                return Unit.Default;
-            };
-        }
-
-        public Async<Unit> MvDirAsync(Location ps, Location pt)
-        {
-            return () =>
-            {
-                var dir = GetDirAsync(ps).RunSynchronously();
-                NewDirAsync(pt).RunSynchronously();
-                foreach (var f in dir.Files)
-                {
-                    MvFileAsync(f, Locate(pt, f.Name)).RunSynchronously();
-                    RmFileAsync(f);
-                }
-                foreach (var d in dir.Dirs)
-                {
-                    MvDirAsync(d, Locate(pt, d.Name)).RunSynchronously();
-                }
-                foreach (var d in dir.Dirs)
-                {
-                    RmDirAsync(d);
-                }
-                return Unit.Default;
-            };
-        }
-
-        public Async<Unit> MvFileAsync(Location ps, Location pt)
-        {
-            return () =>
-            {
-                var file = files[ps];
-                files[pt] = file;
-                files.Remove(ps);
-                return Unit.Default;
-            };
-        }
-
-        public Async<Unit> CpDirAsync(Location ps, Location pt)
-        {
-            return () =>
-            {
-                var dir = GetDirAsync(ps).RunSynchronously();
-                NewDirAsync(pt).RunSynchronously();
-                foreach (var f in dir.Files)
-                {
-                    CpFileAsync(f, Locate(pt, f.Name)).RunSynchronously();
-                }
-                foreach (var d in dir.Dirs)
-                {
-                    CpDirAsync(d, Locate(pt, d.Name)).RunSynchronously();
-                }
-                return Unit.Default;
-            };
-        }
-
-        public Async<Unit> CpFileAsync(Location ps, Location pt)
-        {
-            return () =>
-            {
-                files[pt] = files[ps];
-                return Unit.Default;
-            };
-        }
-
-        public static FileSystem Virtual()
+        public static FileSystem Create()
         {
             return new VirtualFileSystem();
         }
 
-        private static string FullName(Location p)
+        public Async<FileContent> ReadFileAsync(string p)
         {
-            return p.FullName((a,b)=>$"{a}/{b}");
+            return () => Root.GetNameInDirectory(p).GetFile();
         }
 
-        private static Func<string, bool> PathMatch(string p)
+        public Async<Unit> WriteFileAsync(string p, FileContent c)
         {
-            return new Regex(p, RegexOptions.None).IsMatch;
+            return () =>
+            {
+                var d = Root.GetNameInExistingDirectory(p);
+                d.Item1.SetFile(d.Item2, c.ToList());
+                return Unit.Default;
+            };
         }
 
-        private static ImmutableList<string> PathSplit(string p)
+        public Async<Unit> AppendFileAsync(string p, FileContent c)
         {
-            return p.Split(new[] {'\\', '/'}, StringSplitOptions.RemoveEmptyEntries).ToImmutableList();
+            return () =>
+            {
+                var d = Root.GetNameInDirectory(p);
+                if (d.FileExists())
+                {
+                    var contents = d.GetFile();
+                    contents.AddRange(c);
+                }
+                else
+                {
+                    WriteFileAsync(p, c).RunSynchronously();
+                }
+                return Unit.Default;
+            };
+        }
+
+        public Async<Dir> GetDirAsync(string p)
+        {
+            return () => Root.GetDirectory(p.Split(Path.DirectorySeparatorChar)).ToDir();
+        }
+
+        public Async<bool> HasFileAsync(string p)
+        {
+            return () => Root.GetNameInDirectory(p).FileExists();
+        }
+
+        public Async<bool> HasDirAsync(string p)
+        {
+            return () => Root.GetDirectory(p) != null;
+        }
+
+        public Async<Unit> NewDirAsync(string p)
+        {
+            return () => Root.CreateDirectory(p);
+        }
+
+        public Async<Unit> RmDirAsync(string p)
+        {
+            return () => Root.GetDirectory(p).Remove();
+        }
+
+        public Async<Unit> RmFileAsync(string p)
+        {
+            return () => Root.GetNameInDirectory(p).DeleteFile();
+        }
+
+        public Async<Unit> MvDirAsync(string ps, string pt)
+        {
+            return () => Root.GetDirectory(ps).MoveTo(Root.GetNameInDirectory(pt));
+        }
+
+        public Async<Unit> MvFileAsync(string ps, string pt)
+        {
+            return () => Root.GetNameInDirectory(ps).MoveTo(Root.GetNameInDirectory(pt));
+        }
+
+        public Async<Unit> CpDirAsync(string ps, string pt)
+        {
+            return () => Root.GetDirectory(ps).CopyTo(Root.GetNameInDirectory(pt));
+        }
+
+        public Async<Unit> CpFileAsync(string ps, string pt)
+        {
+            return () => Root.GetNameInDirectory(ps).CopyTo(Root.GetNameInDirectory(pt));
+        }
+    }
+
+    internal class VirtualDir
+    {
+        internal Dictionary<string, List<byte>> Files = new Dictionary<string, List<byte>>();
+        internal Dictionary<string, VirtualDir> Directories = new Dictionary<string, VirtualDir>();
+        internal VirtualDir Parent;
+        public string Name;
+
+        public bool DirectoryExists(string element)
+        {
+            return Directories.ContainsKey(element);
+        }
+
+        public Unit CreateDirectory(string path)
+        {
+            CreateDirectory(path.Split(Path.DirectorySeparatorChar));
+            return Unit.Default;
+        }
+
+        public VirtualDir CreateDirectory(IEnumerable<string> path)
+        {
+            if (!path.Any())
+            {
+                return this;
+            }
+            if (Files.ContainsKey(path.First()))
+            {
+                throw new Exception("file exists when creating directory");
+            }
+            if (!Directories.ContainsKey(path.First()))
+            {
+                Directories[path.First()] = new VirtualDir() { Parent = this, Name = path.First() };
+            }
+            return Directories[path.First()].CreateDirectory(path.Skip(1));
+        }
+
+        public bool FileExists(string name)
+        {
+            return Files.ContainsKey(name);
+        }
+
+        public VirtualDir GetDirectory(string name)
+        {
+            return GetDirectory(name.Split(Path.DirectorySeparatorChar));
+        }
+
+        public List<byte> GetFile(string name)
+        {
+            if (!FileExists(name))
+            {
+                throw new IOException(name + " does not exist");
+            }
+
+            return Files[name];
+        }
+
+        public void SetFile(string name, List<byte> content)
+        {
+            Files[name] = content;
+        }
+
+        public VirtualDir GetDirectory(IEnumerable<string> path)
+        {
+            if (!path.Any())
+            {
+                return this;
+            }
+            if (Directories.ContainsKey(path.First()))
+            {
+                return Directories[path.First()].GetDirectory(path.Skip(1));
+            }
+            return null;
+        }
+
+        internal string GetPath()
+        {
+            if (Parent != null)
+            {
+                if (Parent.Parent == null)
+                {
+                    return Name + Path.DirectorySeparatorChar;
+                }
+                return Path.Combine(Parent.GetPath(), Name);
+            }
+            return "";
+        }
+
+        internal void RemoveDir(VirtualDir virtualDir)
+        {
+            Directories.Remove(virtualDir.Name);
+        }
+
+        public void DeleteFile(string name)
+        {
+            Files.Remove(name);
+        }
+
+        public VirtualDir Clone()
+        {
+            var dir = new VirtualDir();
+            foreach (var sd in Directories)
+            {
+                dir.Directories[sd.Key] = sd.Value.Clone();
+            }
+
+            foreach (var sf in Files)
+            {
+                dir.Files[sf.Key] = sf.Value.ConvertAll(_ => _);
+            }
+
+            return dir;
+        }
+    }
+
+
+    internal static class VirtualDirExtension
+    {
+        public static bool FileExists(this Tuple<VirtualDir, string> d)
+        {
+            return d != null && d.Item1.FileExists(d.Item2);
+        }
+
+        public static bool DirectoryExists(this Tuple<VirtualDir, string> d)
+        {
+            return d != null && d.Item1.DirectoryExists(d.Item2);
+        }
+
+        public static List<byte> GetFile(this Tuple<VirtualDir, string> d)
+        {
+            if (d == null || !d.FileExists())
+            {
+                throw new IOException("file does not exist");
+            }
+
+            return d.Item1.Files[d.Item2];
+        }
+
+        public static Unit DeleteFile(this Tuple<VirtualDir, string> d)
+        {
+            if (d != null)
+            {
+                d.Item1.DeleteFile(d.Item2);
+            }
+
+            return Unit.Default;
+        }
+
+        public static Unit MoveTo(this Tuple<VirtualDir, string> src, Tuple<VirtualDir, string> dest)
+        {
+            if (src == null)
+            {
+                throw new DirectoryNotFoundException("source directory does not exist");
+            }
+
+            if (!src.FileExists())
+            {
+                throw new IOException("source file does not exist");
+            }
+
+            if (dest == null)
+            {
+                throw new DirectoryNotFoundException("target directory does not exist");
+            }
+
+            if (dest.DirectoryExists() || dest.FileExists())
+            {
+                throw new IOException("destination already exists");
+            }
+
+            dest.Item1.Files[dest.Item2] = src.Item1.GetFile(src.Item2);
+            src.Item1.Files.Remove(src.Item2);
+            return Unit.Default;
+        }
+
+        public static Unit CopyTo(this Tuple<VirtualDir, string> src, Tuple<VirtualDir, string> dest)
+        {
+            if (src == null)
+            {
+                throw new IOException("source directory does not exist");
+            }
+
+            if (!src.FileExists())
+            {
+                throw new IOException("source file does not exist");
+            }
+
+            if (dest == null)
+            {
+                throw new DirectoryNotFoundException("target directory does not exist");
+            }
+
+            if (dest.DirectoryExists() || dest.FileExists())
+            {
+                throw new IOException("destination already exists");
+            }
+
+            dest.Item1.Files[dest.Item2] = src.Item1.GetFile(src.Item2);
+            return Unit.Default;
+        }
+
+        public static Unit MoveTo(this VirtualDir dir, Tuple<VirtualDir, string> d)
+        {
+            if (dir == null)
+            {
+                throw new DirectoryNotFoundException("source directory does not exist");
+            }
+
+            if (d == null)
+            {
+                throw new DirectoryNotFoundException("target directory does not exist");
+            }
+
+            if (d.Item1.DirectoryExists(d.Item2) || d.Item1.FileExists(d.Item2))
+            {
+                throw new IOException("name in target exists");
+            }
+
+            dir.Parent.Directories.Remove(dir.Name);
+            dir.Name = d.Item2;
+            dir.Parent = d.Item1;
+            d.Item1.Directories[dir.Name] = dir;
+
+            return Unit.Default;
+        }
+
+        public static Unit CopyTo(this VirtualDir dir, Tuple<VirtualDir, string> d)
+        {
+            if (dir == null)
+            {
+                throw new IOException("source directory does not exist");
+            }
+
+            if (d == null)
+            {
+                throw new DirectoryNotFoundException();
+            }
+
+            if (d.Item1.DirectoryExists(d.Item2) || d.Item1.FileExists(d.Item2))
+            {
+                throw new IOException("name in target exists");
+            }
+
+            var newDir = dir.Clone();
+            newDir.Name = d.Item2;
+            newDir.Parent = d.Item1;
+            d.Item1.Directories[newDir.Name] = newDir;
+
+            return Unit.Default;
+        }
+
+        public static Dir ToDir(this VirtualDir dir)
+        {
+            if (dir == null)
+            {
+                throw new IOException("does not exist");
+            }
+            var path = dir.GetPath();
+            var fs = dir.Files.Select(x => Path.Combine(path, x.Key));
+            var ds = dir.Directories.Select(x => Path.Combine(path, x.Key));
+            return Dir.Create(path, ds, fs);
+        }
+
+        public static Unit Remove(this VirtualDir dir)
+        {
+            if (dir == null)
+            {
+                throw new DirectoryNotFoundException();
+            }
+            if (dir.Parent != null)
+            {
+                dir.Parent.RemoveDir(dir);
+                dir.Parent = null;
+            }
+            
+            return Unit.Default;
+        }
+
+        public static Tuple<VirtualDir, string> GetNameInDirectory(this VirtualDir dir, string path)
+        {
+            return dir.GetNameInDirectory(path.Split(Path.DirectorySeparatorChar));
+        }
+
+        public static Tuple<VirtualDir, string> GetNameInDirectory(this VirtualDir dir, IEnumerable<string> path)
+        {
+            if (dir == null)
+            {
+                return null;
+            }
+            if (!path.Any())
+            {
+                throw new Exception("GetNameInDirectory called with an empty string");
+            }
+            if (path.Count() == 1)
+            {
+                return new Tuple<VirtualDir, string>(dir, path.Last());
+            }
+            VirtualDir directory;
+            dir.Directories.TryGetValue(path.First(), out directory);
+            return directory.GetNameInDirectory(path.Skip(1));
+        }
+
+        public static Tuple<VirtualDir, string> GetNameInExistingDirectory(this VirtualDir dir, string path)
+        {
+            return dir.GetNameInExistingDirectory(path.Split(Path.DirectorySeparatorChar));
+        }
+
+        public static Tuple<VirtualDir, string> GetNameInExistingDirectory(this VirtualDir dir, IEnumerable<string> path)
+        {
+            if (dir == null)
+            {
+                throw new DirectoryNotFoundException("directory does not exist");
+            }
+            if (!path.Any())
+            {
+                throw new Exception("GetNameInDirectory called with an empty string");
+            }
+            if (path.Count() == 1)
+            {
+                return new Tuple<VirtualDir, string>(dir, path.Last());
+            }
+            VirtualDir directory;
+            dir.Directories.TryGetValue(path.First(), out directory);
+            return directory.GetNameInExistingDirectory(path.Skip(1));
         }
     }
 }

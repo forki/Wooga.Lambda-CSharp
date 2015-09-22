@@ -9,10 +9,6 @@ nuget Newtonsoft.Json
 
 github fsharp/FAKE modules/Octokit/Octokit.fsx
 
-# Unity3D
-
-nuget Wooga.Lambda.Unity3D.Source
-nuget Wooga.Lambda.Logging.Unity3D.Source
-nuget Wooga.Lambda.Network.Unity3D.Source
-nuget Wooga.Lambda.Storage.Unity3D.Source
-nuget Wooga.Lambda.Parser.Unity3D.Source
+nuget Substance.Collections beta
+nuget Substance.Collections.Generic beta
+nuget Substance.Collections.Immutable beta

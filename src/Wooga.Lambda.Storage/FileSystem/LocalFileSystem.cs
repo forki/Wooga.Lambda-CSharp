@@ -1,193 +1,177 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Wooga.Lambda.Control;
 using Wooga.Lambda.Control.Concurrent;
-using Wooga.Lambda.Data;
-using static Wooga.Lambda.Data.ImmutableList;
-using static Wooga.Lambda.Data.ImmutableTuple;
+using Unit = Wooga.Lambda.Data.Unit;
 
-namespace Wooga.Lambda.Storage.FileSystem
+namespace Wooga.Lambda.Storage
 {
     public class LocalFileSystem : FileSystem
     {
-        private LocalFileSystem()
-        {
-        }
-
-        public Location.Combinator PathCombinator { get { return Path.Combine; } }
-
-        public  Location Locate(string s)
-        {
-            var p = Path.GetFullPath(s);
-
-            var isWinDrive = PathMatch(@"^\w:\\.*");
-            var isNixRoot = PathMatch(@"^\/.*");
-            var isWinShare = PathMatch(@"^\\\\\w+");
-
-            var parts =
-                Pattern<ImmutableTuple<ImmutableList<string>, string>>
-                    .Match(p)
-                    .Case(isWinDrive,_ =>  Tuple(List(p.Substring(0,3)), p.Substring(3)))
-                    .Case(isNixRoot, _ =>  Tuple(List("/"), p.Substring(1)))
-                    .Case(isWinShare,_ =>  Tuple(List("\\\\"), p.Substring(2)))
-                    .Default(_ => Tuple(Empty<string>(), p))
-                    .Run();
-
-            var ps = PathSplit(parts.Item2);
-            return Location.Create(parts.Item1.AddRange(ps));
-        }
-
-        public  Location Locate(Location p, string s)
-        {
-            return Location.Create(p.Paths.Add(s));
-        }
-
-        public Location Parent(Location p)
-        {
-            return p.Paths.Count > 1 ? Locate(Location.Create(p.Paths.RemoveAt(p.Paths.Count-1)),".") : p;
-        }
-
-        public  Async<File> GetFileAsync(Location p)
-        {
-            return () => File.Create(p, System.IO.File.ReadAllBytes(FullName(p)).ToImmutableList());
-        }
-
-        public  Async<Unit> WriteFileAsync(Location p, ImmutableList<byte> c)
-        {
-            return () =>
-            {
-                System.IO.File.WriteAllBytes(FullName(p), c.ToArray());
-                return Unit.Default;
-            };
-        }
-
-        public  Async<Unit> AppendFileAsync(Location p, ImmutableList<byte> c)
-        {
-            return () =>
-            {
-                var bytes = c.ToArray();
-                using (
-                var stream = new FileStream(FullName(p), FileMode.Append))
-                {
-                    stream.Write(bytes, 0, bytes.Length);
-                }
-                return Unit.Default;
-            };
-        }
-
-        public  Async<Dir> GetDirAsync(Location p)
-        {
-            return () =>
-            {
-                var path = FullName(p);
-                var fs = Directory.GetFiles(path).ToImmutableList().Map(Locate);
-                var ds = Directory.GetDirectories(path).ToImmutableList().Map(Locate);
-                return Dir.Create(Locate(path), ds, fs);
-            };
-        }
-
-        public  Async<bool> HasFileAsync(Location p)
-        {
-            return () => System.IO.File.Exists(FullName(p));
-        }
-
-        public  Async<bool> HasDirAsync(Location p)
-        {
-            return () => Directory.Exists(FullName(p));
-        }
-
-        public  Async<Unit> NewDirAsync(Location p)
-        {
-            return () =>
-            {
-                Directory.CreateDirectory(FullName(p));
-                return Unit.Default;
-            };
-        }
-
-        public  Async<Unit> RmDirAsync(Location p)
-        {
-            return () =>
-            {
-                Directory.Delete(FullName(p));
-                return Unit.Default;
-            };
-        }
-
-        public  Async<Unit> RmFileAsync(Location p)
-        {
-            return () =>
-            {
-                System.IO.File.Delete(FullName(p));
-                return Unit.Default;
-            };
-        }
-
-        public Async<Unit> MvDirAsync(Location ps, Location pt)
-        {
-            return () =>
-            {
-                Directory.Move(FullName(ps), FullName(pt));
-                return Unit.Default;
-            };
-        }
-
-        public Async<Unit> MvFileAsync(Location ps, Location pt)
-        {
-            return () =>
-            {
-                System.IO.File.Move(FullName(ps), FullName(pt));
-                return Unit.Default;
-            };
-        }
-
-        public Async<Unit> CpDirAsync(Location ps, Location pt)
-        {
-            return () =>
-            {
-                var dir = GetDirAsync(ps).RunSynchronously();
-                NewDirAsync(pt).RunSynchronously();
-                foreach (var f in dir.Files)
-                {
-                    CpFileAsync(f, Locate(pt, f.Name)).RunSynchronously();
-                }
-                foreach (var d in dir.Dirs)
-                {
-                    CpDirAsync(d, Locate(pt, d.Name)).RunSynchronously();
-                }
-                return Unit.Default;
-            };
-        }
-
-        public Async<Unit> CpFileAsync(Location ps, Location pt)
-        {
-            return () =>
-            {
-                System.IO.File.Copy(FullName(ps), FullName(pt));
-                return Unit.Default;
-            };
-        }
-
-        public static FileSystem Local()
+        public static FileSystem Create()
         {
             return new LocalFileSystem();
         }
 
-        private static string FullName(Location p)
+        private LocalFileSystem()
         {
-            return p.FullName(Path.Combine);
+        }
+       
+        public Async<IEnumerable<byte>> ReadFileAsync(string p)
+        {
+            return () => FileAsIEnumerable(p);
+
         }
 
+        private IEnumerable<byte> FileAsIEnumerable(string p)
+        {
+            using (var stream = new FileStream(p, FileMode.Open))
+            {
+                for (int i = stream.ReadByte(); i != -1; i = stream.ReadByte())
+                    yield return (byte)i;
+            }
+        }
+
+        public  Async<Unit> WriteFileAsync(string p, IEnumerable<byte> c)
+        {
+            return () =>
+            {
+                using (var stream = new FileStream(p, FileMode.OpenOrCreate))
+                {
+                    foreach (var i in c)
+                    {
+                        stream.WriteByte(i);
+                    }
+                }
+                return Unit.Default;
+            };
+        }
+
+        public  Async<Unit> AppendFileAsync(string p, IEnumerable<byte> c)
+        {
+            return () =>
+            {
+                using (var stream = new FileStream(p, FileMode.Append))
+                {
+                    foreach (var i in c)
+                    {
+                        stream.WriteByte(i);
+                    }
+                }
+                return Unit.Default;
+            };
+        }
+
+        public  Async<Dir> GetDirAsync(string p)
+        {
+            return () =>
+            {
+                var path = p;
+                var fs = Directory.GetFiles(path);
+                var ds = Directory.GetDirectories(path);
+                return Dir.Create(path, ds, fs);
+            };
+        }
+
+        public  Async<bool> HasFileAsync(string p)
+        {
+            return () => File.Exists(p);
+        }
+
+        public  Async<bool> HasDirAsync(string p)
+        {
+            return () => Directory.Exists(p);
+        }
+
+        public  Async<Unit> NewDirAsync(string p)
+        {
+            return () =>
+            {
+                Directory.CreateDirectory(p);
+                return Unit.Default;
+            };
+        }
+
+        public  Async<Unit> RmDirAsync(string p)
+        {
+            return () =>
+            {
+                Directory.Delete(p);
+                return Unit.Default;
+            };
+        }
+
+        public  Async<Unit> RmFileAsync(string p)
+        {
+            return () =>
+            {
+                System.IO.File.Delete(p);
+                return Unit.Default;
+            };
+        }
+
+        public Async<Unit> MvDirAsync(string ps, string pt)
+        {
+            return () =>
+            {
+                Directory.Move(ps, pt);
+                return Unit.Default;
+            };
+        }
+
+        public Async<Unit> MvFileAsync(string ps, string pt)
+        {
+            return () =>
+            {
+                System.IO.File.Move(ps, pt);
+                return Unit.Default;
+            };
+        }
+
+        public Async<Unit> CpDirAsync(string ps, string pt)
+        {
+            return () =>
+            {
+                var dir = GetDirAsync(ps).RunSynchronously();
+                if (HasDirAsync(pt).RunSynchronously() || HasFileAsync(pt).RunSynchronously())
+                {
+                    throw new IOException("target path already exists");
+                }
+
+                var pathElements = pt.Split(Path.DirectorySeparatorChar);
+                if (!HasDirAsync(String.Join(Path.DirectorySeparatorChar.ToString(),
+                        pathElements.Take(pathElements.Length - 1).ToArray())).RunSynchronously())
+                {
+                    throw new DirectoryNotFoundException("target directory does not exist");
+                }
+
+                NewDirAsync(pt).RunSynchronously();
+                foreach (var f in dir.Files)
+                {
+                    CpFileAsync(f, Path.Combine(pt, Path.GetFileName(f))).RunSynchronously();
+                }
+                foreach (var d in dir.Dirs)
+                {
+                    CpDirAsync(d, Path.Combine(pt, Path.GetFileName(d))).RunSynchronously();
+                }
+                return Unit.Default;
+            };
+        }
+
+        public Async<Unit> CpFileAsync(string ps, string pt)
+        {
+            return () =>
+            {
+                System.IO.File.Copy(ps, pt);
+                return Unit.Default;
+            };
+        }
+        
         private static Func<string, bool> PathMatch(string p)
         {
             return new Regex(p, RegexOptions.None).IsMatch;
-        }
-
-        private static ImmutableList<string> PathSplit(string p)
-        {
-            return p.Split(new[] {'\\', '/'}, StringSplitOptions.RemoveEmptyEntries).ToImmutableList();
         }
     }
 }

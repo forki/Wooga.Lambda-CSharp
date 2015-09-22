@@ -1,4 +1,5 @@
-using Wooga.Lambda.Data;
+using System.Collections.Immutable;
+using System.Linq;
 
 namespace Wooga.Lambda.Parser.Combinators
 {
@@ -20,7 +21,7 @@ namespace Wooga.Lambda.Parser.Combinators
         /// <returns>   A Parser&lt;string&gt; </returns>
         public static Parser<string> Eq(string s)
         {
-            return Chars.SeqOf(new ImmutableList<char>(s.ToCharArray())).ToStringsParser();
+            return Chars.SeqOf(s.ToCharArray().ToImmutableList()).ToStringsParser();
         }
     }
 }

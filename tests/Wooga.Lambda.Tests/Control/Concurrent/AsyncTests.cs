@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
-using Wooga.Lambda.Data;
+using Unit = Wooga.Lambda.Data.Unit;
 
 namespace Wooga.Lambda.Tests.Control.Concurrent
 {
@@ -19,7 +20,9 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
                 .Return(() =>
                 {
                     throw new Exception("exception");
+#pragma warning disable 162
                     return Unit.Default;
+#pragma warning restore 162
                 })
                 .Catch()
                 .RunSynchronously();
@@ -55,7 +58,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
         [Test]
         public void RunParallelWithEmptyShouldBeFine()
         {
-            var asyncs = new ImmutableList<Async<int>>();
+            var asyncs = ImmutableList<Async<int>>.Empty;
             var vals = asyncs.Parallel().RunSynchronously();
             Assert.AreEqual(vals.Distinct().Count(), 0, "Nothing shoul have happened");
         }
@@ -66,7 +69,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
             const int wait = 3;
             var rnd = new Random();
             const int num = 4;
-            var asyncs = new ImmutableList<Async<int>>();
+            var asyncs = ImmutableList<Async<int>>.Empty;
             for (var i = 0; i < num; i++)
             {
                 asyncs = asyncs.Add(() =>
@@ -89,9 +92,8 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
         {
             const int wait = 3;
             var rnd = new Random();
-            //TODO: 1000 parallel items hang on CLR
-            const int num = 100;
-            var asyncs = new ImmutableList<Async<int>>();
+            const int num = 10000;
+            var asyncs = ImmutableList<Async<int>>.Empty;
             for (var i = 0; i < num; i++)
             {
                 asyncs = asyncs.Add(() =>
@@ -104,8 +106,7 @@ namespace Wooga.Lambda.Tests.Control.Concurrent
             }
 
             var vals = asyncs.Parallel().RunSynchronously();
-            Assert.True(!vals.Contains(Thread.CurrentThread.ManagedThreadId),
-                "Used threads are different from the launcher thread.");
+            Assert.True(!vals.Contains(Thread.CurrentThread.ManagedThreadId),"Used threads are different from the launcher thread.");
             Assert.GreaterOrEqual(vals.Distinct().Count(), 2, "Used threads are multiple worker threads.");
         }
 

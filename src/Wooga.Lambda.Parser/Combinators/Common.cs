@@ -3,8 +3,8 @@
 // summary:	Implements the common class
 
 using System;
+using System.Collections.Immutable;
 using Wooga.Lambda.Control;
-using Wooga.Lambda.Data;
 
 namespace Wooga.Lambda.Parser.Combinators
 {
@@ -69,9 +69,9 @@ namespace Wooga.Lambda.Parser.Combinators
             return l.Bind(r.Then);
         }
 
-        public static Parser<ImmutableTuple<R, R2>> TakeBoth<R, R2>(this Parser<R> l, Parser<R2> r)
+        public static Parser<Tuple<R, R2>> TakeBoth<R, R2>(this Parser<R> l, Parser<R2> r)
         {
-            return l.Bind(lv => r.Bind<R2, ImmutableTuple<R, R2>>(rv => c => Result.Succeed(ImmutableTuple.Tuple(lv, rv),c.Position)));
+            return l.Bind(lv => r.Bind<R2, Tuple<R, R2>>(rv => c => Result.Succeed(Tuple.Create(lv, rv),c.Position)));
         }
 
         public static Parser<R> Or<R>(this Parser<R> l, Parser<R> r)
@@ -102,7 +102,7 @@ namespace Wooga.Lambda.Parser.Combinators
         /// <returns>   A list of. </returns>
         public static Parser<ImmutableList<R>> Many<R>(this Parser<R> p)
         {
-            return _Many(p, new ImmutableList<R>());
+            return _Many(p, ImmutableList<R>.Empty);
         }
 
         /// <summary>   A Parser&lt;R&gt; extension method that many 1. </summary>
@@ -111,7 +111,7 @@ namespace Wooga.Lambda.Parser.Combinators
         /// <returns>   A list of. </returns>
         public static Parser<ImmutableList<R>> Many1<R>(this Parser<R> p)
         {
-            return _Many(p, new ImmutableList<R>(), 1, 1);
+            return _Many(p, ImmutableList<R>.Empty, 1, 1);
         }
     }
 }

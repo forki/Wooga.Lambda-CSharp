@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Immutable;
+using System.Linq;
 using NUnit.Framework;
 using Wooga.Lambda.Control.Concurrent;
 using Wooga.Lambda.Control.Monad;
-using Wooga.Lambda.Data;
+using Unit = Wooga.Lambda.Data.Unit;
 
 namespace Wooga.Lambda.Control
 {
@@ -25,7 +27,6 @@ namespace Wooga.Lambda.Control
             {
                 x++;
                 throw new Exception("rrr");
-                return 0;
             };
 
             var r = job
@@ -44,7 +45,6 @@ namespace Wooga.Lambda.Control
             {
                 x++;
                 throw new Exception("rrr");
-                return 0;
             };
 
             var r = job
@@ -60,7 +60,7 @@ namespace Wooga.Lambda.Control
         {
             Async<int> job = () => { throw new Exception("rrr"); };
 
-            var delays = new ImmutableList<long>();
+            var delays = ImmutableList<long>.Empty;
             var r = job
                 .Retry(Retry.Strategy.Default.LimitRetries(5).DelayRetries(10)
                     .OnDelay(os => s =>
@@ -80,7 +80,6 @@ namespace Wooga.Lambda.Control
             Async<int> job = () =>
             {
                 throw new Exception("rrr");
-                return 0;
             };
 
             var r = job
@@ -95,7 +94,7 @@ namespace Wooga.Lambda.Control
         public static void FailedJobWithExponentialBackoffShouldIncreaseDelay()
         {
             const uint D = 10;
-            var delays = new ImmutableList<long>();
+            var delays = ImmutableList<long>.Empty;
             var strategy = Retry.Strategy.Default
                 .DelayRetries(D)
                 .LimitRetries(5)

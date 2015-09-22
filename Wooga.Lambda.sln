@@ -45,6 +45,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Logging", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Storage", "src\Wooga.Lambda.Storage\Wooga.Lambda.Storage.csproj", "{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Network.Tests", "tests\Wooga.Lambda.Network.Tests\Wooga.Lambda.Network.Tests.csproj", "{05F69CC9-742B-4D9B-8744-FEA0C1982B03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wooga.Lambda.Storage.Tests", "tests\Wooga.Lambda.Storage.Tests\Wooga.Lambda.Storage.Tests.csproj", "{24DD1304-30B8-491E-A9C2-E5135429DF03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +83,14 @@ Global
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ABB3A90-7F62-42EC-9068-C2F14FFCBFA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05F69CC9-742B-4D9B-8744-FEA0C1982B03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05F69CC9-742B-4D9B-8744-FEA0C1982B03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05F69CC9-742B-4D9B-8744-FEA0C1982B03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05F69CC9-742B-4D9B-8744-FEA0C1982B03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24DD1304-30B8-491E-A9C2-E5135429DF03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24DD1304-30B8-491E-A9C2-E5135429DF03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24DD1304-30B8-491E-A9C2-E5135429DF03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24DD1304-30B8-491E-A9C2-E5135429DF03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,5 +100,7 @@ Global
 		{8E6D5255-776D-4B61-85F9-73C37AA1FB9A} = {A6A6AF7D-D6E3-442D-9B1E-58CC91879BE1}
 		{A4C35F19-C520-4912-8F3C-DE7E6324E6FE} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
 		{D651D213-21E5-4225-8E47-B44DF5D502A6} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
+		{05F69CC9-742B-4D9B-8744-FEA0C1982B03} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
+		{24DD1304-30B8-491E-A9C2-E5135429DF03} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
 	EndGlobalSection
 EndGlobal
