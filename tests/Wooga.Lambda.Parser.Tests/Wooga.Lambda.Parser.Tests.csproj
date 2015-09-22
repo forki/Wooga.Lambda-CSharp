@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
-    <Content Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CombinatorsTests\StringsTests.cs" />
