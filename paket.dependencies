@@ -7,7 +7,7 @@ nuget FAKE
 nuget SourceLink.Fake
 nuget Newtonsoft.Json
 
-github fsharp/FAKE modules/Octokit/Octokit.fsx
+github wooga/FAKE modules/Octokit/Octokit.fsx
 
 nuget Substance.Collections beta
 nuget Substance.Collections.Generic beta
