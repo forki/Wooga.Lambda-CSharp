@@ -10,9 +10,11 @@ namespace Wooga.Lambda.Network
 {
     public struct HttpRequest : IStructuralEquatable, IEquatable<HttpRequest>
     {
+        private static readonly TimeSpan DefaultTimeOut = TimeSpan.FromSeconds(100.0); 
+
         public static HttpRequest Create(string url, HttpMethod httpMethod)
         {
-            return new HttpRequest(new Uri(url), httpMethod, Headers.Empty, Maybe.Nothing<Body>(), TimeSpan.MaxValue);
+            return new HttpRequest(new Uri(url), httpMethod, Headers.Empty, Maybe.Nothing<Body>(), DefaultTimeOut);
         }
 
         public static HttpRequest Create(string url, HttpMethod httpMethod, TimeSpan timeSpan)
@@ -22,7 +24,7 @@ namespace Wooga.Lambda.Network
 
         public static HttpRequest Create(Uri endpoint, HttpMethod httpMethod)
         {
-            return new HttpRequest(endpoint, httpMethod, Headers.Empty, Maybe.Nothing<Body>(), TimeSpan.MaxValue);
+            return new HttpRequest(endpoint, httpMethod, Headers.Empty, Maybe.Nothing<Body>(), DefaultTimeOut);
         }
 
         public static HttpRequest Create(Uri endpoint, HttpMethod httpMethod, TimeSpan timeSpan)
@@ -32,7 +34,7 @@ namespace Wooga.Lambda.Network
 
         public static HttpRequest Create(string url, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body)
         {
-            return new HttpRequest(new Uri(url), httpMethod, httpHeaders, body, TimeSpan.MaxValue);
+            return new HttpRequest(new Uri(url), httpMethod, httpHeaders, body, DefaultTimeOut);
         }
 
         public static HttpRequest Create(string url, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body, TimeSpan timeSpan)
@@ -42,7 +44,7 @@ namespace Wooga.Lambda.Network
 
         public static HttpRequest Create(Uri endpoint, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body)
         {
-            return new HttpRequest(endpoint, httpMethod, httpHeaders, body, TimeSpan.MaxValue);
+            return new HttpRequest(endpoint, httpMethod, httpHeaders, body, DefaultTimeOut);
         }
 
         public static HttpRequest Create(Uri endpoint, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body, TimeSpan timeSpan)
