@@ -25,6 +25,7 @@ namespace Wooga.Lambda.Network.Transport
             var webRequest = WebRequest.Create(httpRequest.Endpoint) as HttpWebRequest;
             webRequest = AddHeaders(httpRequest.HttpHeaders, webRequest);
             webRequest.Method = httpRequest.HttpMethod.Name;
+            webRequest.Timeout = (int)httpRequest.TimeOut.TotalMilliseconds;
             if (httpRequest.Body.IsJust())
             {
                 using (var postStream = webRequest.GetRequestStream())
@@ -54,7 +55,14 @@ namespace Wooga.Lambda.Network.Transport
                 }
                 catch (WebException webException)
                 {
-                    return webException.Response as HttpWebResponse;
+                    if (webException.Response != null)
+                    {
+                        return webException.Response as HttpWebResponse;
+                    }
+                    else
+                    {
+                        throw webException;
+                    }
                 }
             };
         }

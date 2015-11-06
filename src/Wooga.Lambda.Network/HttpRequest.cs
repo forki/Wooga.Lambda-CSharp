@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Wooga.Lambda.Control.Monad;
 using Headers = System.Collections.Immutable.ImmutableDictionary<string,Wooga.Lambda.Network.HttpHeader>;
@@ -11,37 +10,61 @@ namespace Wooga.Lambda.Network
 {
     public struct HttpRequest : IStructuralEquatable, IEquatable<HttpRequest>
     {
+        private static readonly TimeSpan DefaultTimeOut = TimeSpan.FromSeconds(100.0); 
+
         public static HttpRequest Create(string url, HttpMethod httpMethod)
         {
-            return new HttpRequest(new Uri(url), httpMethod, Headers.Empty, Maybe.Nothing<Body>());
+            return new HttpRequest(new Uri(url), httpMethod, Headers.Empty, Maybe.Nothing<Body>(), DefaultTimeOut);
+        }
+
+        public static HttpRequest Create(string url, HttpMethod httpMethod, TimeSpan timeSpan)
+        {
+            return new HttpRequest(new Uri(url), httpMethod, Headers.Empty, Maybe.Nothing<Body>(), timeSpan);
         }
 
         public static HttpRequest Create(Uri endpoint, HttpMethod httpMethod)
         {
-            return new HttpRequest(endpoint, httpMethod, Headers.Empty, Maybe.Nothing<Body>());
+            return new HttpRequest(endpoint, httpMethod, Headers.Empty, Maybe.Nothing<Body>(), DefaultTimeOut);
+        }
+
+        public static HttpRequest Create(Uri endpoint, HttpMethod httpMethod, TimeSpan timeSpan)
+        {
+            return new HttpRequest(endpoint, httpMethod, Headers.Empty, Maybe.Nothing<Body>(), timeSpan);
         }
 
         public static HttpRequest Create(string url, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body)
         {
-            return new HttpRequest(new Uri(url), httpMethod, httpHeaders, body);
+            return new HttpRequest(new Uri(url), httpMethod, httpHeaders, body, DefaultTimeOut);
+        }
+
+        public static HttpRequest Create(string url, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body, TimeSpan timeSpan)
+        {
+            return new HttpRequest(new Uri(url), httpMethod, httpHeaders, body, timeSpan);
         }
 
         public static HttpRequest Create(Uri endpoint, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body)
         {
-            return new HttpRequest(endpoint, httpMethod, httpHeaders, body);
+            return new HttpRequest(endpoint, httpMethod, httpHeaders, body, DefaultTimeOut);
+        }
+
+        public static HttpRequest Create(Uri endpoint, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body, TimeSpan timeSpan)
+        {
+            return new HttpRequest(endpoint, httpMethod, httpHeaders, body, timeSpan);
         }
 
         public readonly Maybe<Body> Body;
         public readonly Uri Endpoint;
         public readonly Headers HttpHeaders;
         public readonly HttpMethod HttpMethod;
+        public readonly TimeSpan TimeOut;
 
-        public HttpRequest(Uri endpoint, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body)
+        public HttpRequest(Uri endpoint, HttpMethod httpMethod, Headers httpHeaders, Maybe<Body> body, TimeSpan timeOut)
         {
             Endpoint = endpoint;
             HttpMethod = httpMethod;
             HttpHeaders = httpHeaders;
             Body = body;
+            TimeOut = timeOut;
         }
 
         public HttpRequest With(Headers httpHeaders)
@@ -77,7 +100,8 @@ namespace Wooga.Lambda.Network
                 return comparer.Equals(Body, otherH.Body)
                        && comparer.Equals(Endpoint, otherH.Endpoint)
                        && comparer.Equals(HttpMethod, otherH.HttpMethod)
-                       && comparer.Equals(HttpHeaders, otherH.HttpHeaders);
+                       && comparer.Equals(HttpHeaders, otherH.HttpHeaders)
+                       && comparer.Equals(TimeOut, otherH.TimeOut);
             }
             return false;
         }
@@ -86,7 +110,7 @@ namespace Wooga.Lambda.Network
         {
             return ((IStructuralEquatable)this).GetHashCode(EqualityComparer<Object>.Default);
         }
-        
+
         Int32 IStructuralEquatable.GetHashCode(IEqualityComparer comparer)
         {
             return comparer.GetHashCode(this);
