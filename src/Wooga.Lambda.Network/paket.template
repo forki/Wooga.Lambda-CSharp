@@ -1,4 +1,5 @@
-type project
+type file
+id Wooga.Lambda.Network
 owners
     wooga
 authors
@@ -19,3 +20,9 @@ summary
     Functional primitives for Unity3D
 description
     Functional primitives for Unity3D - inspired by csharp-monads, Haskell & F#
+files
+    **/*.cs ==> content/Wooga.Lambda.Network
+    !../**/AssemblyInfo.cs
+dependencies
+    Wooga.Lambda
+    Wooga.SDK.Logging

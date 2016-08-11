@@ -1,13 +1,9 @@
 source https://nuget.org/api/v2
 
-nuget FSharp.Formatting
 nuget NUnit
 nuget NUnit.Runners
-nuget FAKE
-nuget SourceLink.Fake
 nuget Newtonsoft.Json
 
-github wooga/FAKE modules/Octokit/Octokit.fsx
 
 nuget Substance.Collections beta
 nuget Substance.Collections.Generic beta

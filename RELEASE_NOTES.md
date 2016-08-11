@@ -1,3 +1,9 @@
+#### 0.8.0 - 11 August 2016
+* Convert Lambda.Network to source package (investigating unity spookiness)
+* Adding logging to network failure
+* Reduce network timeout
+* internal wooga release
+
 #### 0.7.0 - Aug 23 2015
 * [Data] Removed Tuple & List
 * [Data] Substance provides ported datastructures from corefx 
