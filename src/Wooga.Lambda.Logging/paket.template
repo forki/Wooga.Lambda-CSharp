@@ -1,4 +1,5 @@
 type project
+id Wooga.Lambda.Logging
 owners
     wooga
 authors 
