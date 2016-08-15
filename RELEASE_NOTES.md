@@ -1,3 +1,6 @@
+#### 0.8.1 - 15 August 2016
+* Remove duplicate lambda dll from packages.
+
 #### 0.8.0 - 11 August 2016
 * Convert Lambda.Network to source package (investigating unity spookiness)
 * Adding logging to network failure
